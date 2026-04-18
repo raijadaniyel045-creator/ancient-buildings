@@ -8,7 +8,8 @@ export default defineNuxtConfig({
     '@nuxtjs/i18n',
     '@pinia/nuxt',
     '@tresjs/nuxt',
-    'nuxt-auth-utils'
+    'nuxt-auth-utils',
+    '@nuxt/content'
   ],
 
   devtools: {
@@ -16,6 +17,10 @@ export default defineNuxtConfig({
   },
 
   css: ['~/assets/css/main.css'],
+
+  content: {
+    experimental: { nativeSqlite: true }
+  },
 
   routeRules: {
     '/': { prerender: true }
@@ -34,15 +39,15 @@ export default defineNuxtConfig({
 
   i18n: {
     locales: [
-      { code: 'cn', name: 'Chinese' },
-      { code: 'en', name: 'English' }
+      { code: 'cn', name: 'Chinese', file: 'cn.json' },
+      { code: 'en', name: 'English', file: 'en.json' }
     ],
     defaultLocale: 'cn'
   },
 
   icon: {
     serverBundle: {
-      collections: ['uil', 'mdi'] // <!--- this
+      collections: ['uil', 'mdi']
     }
   }
 })

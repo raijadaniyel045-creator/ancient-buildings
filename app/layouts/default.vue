@@ -1,10 +1,10 @@
 <template>
   <div>
-    <AbHeader/>
+    <AbHeader />
     <UMain>
-      <slot/>
+      <slot />
     </UMain>
-    <AbFooter/>
+    <AbFooter />
   </div>
 </template>
 
