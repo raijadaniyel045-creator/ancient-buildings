@@ -4,6 +4,7 @@ export default defineNuxtConfig({
     '@nuxt/eslint',
     '@nuxt/ui',
     '@nuxt/image',
+    '@nuxt/icon',
     '@nuxtjs/i18n',
     '@pinia/nuxt',
     '@tresjs/nuxt',
@@ -28,6 +29,20 @@ export default defineNuxtConfig({
         commaDangle: 'never',
         braceStyle: '1tbs'
       }
+    }
+  },
+
+  i18n: {
+    locales: [
+      { code: 'cn', name: 'Chinese' },
+      { code: 'en', name: 'English' }
+    ],
+    defaultLocale: 'cn'
+  },
+
+  icon: {
+    serverBundle: {
+      collections: ['uil', 'mdi'] // <!--- this
     }
   }
 })
