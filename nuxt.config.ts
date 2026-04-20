@@ -10,7 +10,7 @@ export default defineNuxtConfig({
     '@tresjs/nuxt',
     'nuxt-auth-utils',
     '@nuxt/content',
-    '@vueuse/nuxt'
+    'nuxt-echarts'
   ],
 
   devtools: {
@@ -28,6 +28,27 @@ export default defineNuxtConfig({
   },
 
   compatibilityDate: '2025-01-15',
+
+  echarts: {
+    // 导入所有图表类型
+    charts: [
+      'LineChart', 'BarChart', 'PieChart', 'ScatterChart',
+      'RadarChart', 'MapChart', 'TreeChart', 'GraphChart',
+      'GaugeChart', 'FunnelChart', 'ParallelChart', 'SankeyChart',
+      'BoxplotChart', 'CandlestickChart', 'EffectScatterChart',
+      'LinesChart', 'HeatmapChart', 'PictorialBarChart',
+      'ThemeRiverChart', 'SunburstChart', 'CustomChart'
+    ],
+    // 导入所有常用组件
+    components: [
+      'GridComponent', 'LegendComponent', 'TooltipComponent',
+      'TitleComponent', 'VisualMapComponent', 'DataZoomComponent',
+      'MarkPointComponent', 'MarkLineComponent', 'MarkAreaComponent',
+      'ToolboxComponent', 'BrushComponent', 'GeoComponent',
+      'ParallelComponent', 'CalendarComponent', 'GraphicComponent',
+      'TimelineComponent', 'DatasetComponent', 'TransformComponent'
+    ]
+  },
 
   eslint: {
     config: {

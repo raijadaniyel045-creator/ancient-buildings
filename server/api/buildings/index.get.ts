@@ -16,7 +16,7 @@ export default defineEventHandler(async (event) => {
   const dynastyList = [...new Set(allBuildings.flatMap(b => b.dynasty || []))]
   const categoryList = [...new Set(allBuildings.flatMap(b => b.category || []))]
 
-  // 4. 过滤：根据 tags（要求每个 tag 都存在于 building 的 province/dynasty/category 中）
+  // 4. 过滤：根据 tags（要求每个 tag 都存在于 building 的 province/dynasty/category 中或存在于building的name或desc）
   let filtered = allBuildings
   if (tags.length) {
     filtered = allBuildings.filter((building) => {
@@ -25,7 +25,11 @@ export default defineEventHandler(async (event) => {
         ...(building.dynasty || []),
         ...(building.category || [])
       ]
-      return tags.every(tag => buildingTags.includes(tag))
+      return tags.every((tag) => {
+        if (buildingTags.includes(tag)) return true
+        return (building.name && building.name.includes(tag))
+          || (building.desc && building.desc.includes(tag))
+      })
     })
   }
 

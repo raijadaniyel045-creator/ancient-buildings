@@ -1,5 +1,7 @@
 <template>
-  <div>
+  <div
+    class="bg-[#fdfaf5]"
+  >
     <AbHeader />
     <UMain>
       <slot />

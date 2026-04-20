@@ -1,5 +1,5 @@
 <template>
-  <div class="min-h-[calc(100vh-112px)] bg-[#fdfaf5] text-black pb-12">
+  <div class="min-h-[calc(100vh-112px)] text-black pb-12">
     <div class="w-full bg-[#8b2b2b] text-white py-12 px-6 shadow-md relative overflow-hidden">
       <div class="max-w-7xl mx-auto flex flex-col md:flex-row justify-between items-center gap-6 relative z-10">
         <div>
@@ -37,7 +37,7 @@
             </h3>
             <ULink
               class="text-sm font-medium text-gray-400 hover:text-[#8b2b2b] transition-colors border border-gray-200 px-3 py-1 rounded-full"
-              @click="tags.splice(0, tags.length)"
+              @click="clear"
             >
               重置
             </ULink>
@@ -114,7 +114,7 @@
               </p>
               <button
                 class="mt-4 text-[#8b2b2b] hover:underline underline-offset-4"
-                @click="tags.splice(0, tags.length)"
+                @click="clear"
               >
                 清除筛选条件
               </button>
@@ -243,6 +243,11 @@ function toggleTag(tag: string) {
   }
   page.value = 1
   refresh()
+}
+
+function clear() {
+  tags.value = []
+  page.value = 1
 }
 
 function updateUrl() {
