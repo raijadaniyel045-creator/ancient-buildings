@@ -12,8 +12,8 @@
       <template #right>
         <ULocaleSelect
           :model-value="locale"
-          :locales="Object.values(locales)"
-          @update:model-value="setLocale($event)"
+          :locales="locales as any"
+          @update:model-value="setLocale($event as any)"
         />
       </template>
     </UFooter>

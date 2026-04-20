@@ -18,8 +18,8 @@
       <USeparator class="my-6" />
       <ULocaleSelect
         :model-value="locale"
-        :locales="Object.values(locales)"
-        @update:model-value="setLocale($event)"
+        :locales="locales as any"
+        @update:model-value="setLocale($event as any)"
       />
     </template>
     <template #right>
@@ -37,8 +37,8 @@
       </UButton>
       <ULocaleSelect
         :model-value="locale"
-        :locales="Object.values(locales)"
-        @update:model-value="setLocale($event)"
+        :locales="locales as any"
+        @update:model-value="setLocale($event as any)"
       />
     </template>
   </UHeader>
