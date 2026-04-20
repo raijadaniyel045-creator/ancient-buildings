@@ -1,0 +1,22 @@
+{
+  "id": "5-0104-1-104",
+  "name": "成都平原史前城址",
+  "level": "national",
+  "batch": 5,
+  "category": "archaeological-sites",
+  "province": "四川省",
+  "city": "新津县",
+  "district": "",
+  "address": "",
+  "era": "新石器时代",
+  "description": "",
+  "historical_value": "",
+  "sources": [
+    "维基百科-第五批全国重点文物保护单位"
+  ],
+  "last_updated": "2026-03-06",
+  "data_quality": "basic",
+  "contributors": [
+    "iBo"
+  ]
+}

@@ -1,0 +1,22 @@
+{
+  "id": "4-0059-2-003",
+  "name": "虢国墓地",
+  "level": "national",
+  "batch": 4,
+  "category": "ancient-tombs",
+  "province": "河南省",
+  "city": "三门峡市",
+  "district": "",
+  "address": "",
+  "era": "周",
+  "description": "",
+  "historical_value": "",
+  "sources": [
+    "维基百科-第四批全国重点文物保护单位"
+  ],
+  "last_updated": "2026-03-06",
+  "data_quality": "basic",
+  "contributors": [
+    "iBo"
+  ]
+}

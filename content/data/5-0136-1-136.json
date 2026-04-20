@@ -1,0 +1,22 @@
+{
+  "id": "5-0136-1-136",
+  "name": "米兰遗址",
+  "level": "national",
+  "batch": 5,
+  "category": "archaeological-sites",
+  "province": "新疆维吾尔自治区",
+  "city": "若羌县",
+  "district": "",
+  "address": "",
+  "era": "汉至唐",
+  "description": "",
+  "historical_value": "",
+  "sources": [
+    "维基百科-第五批全国重点文物保护单位"
+  ],
+  "last_updated": "2026-03-06",
+  "data_quality": "basic",
+  "contributors": [
+    "iBo"
+  ]
+}

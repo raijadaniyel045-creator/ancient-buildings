@@ -1,0 +1,22 @@
+{
+  "id": "5-0070-1-070",
+  "name": "孟庄遗址",
+  "level": "national",
+  "batch": 5,
+  "category": "archaeological-sites",
+  "province": "河南省",
+  "city": "辉县市",
+  "district": "",
+  "address": "",
+  "era": "新石器时代至周",
+  "description": "",
+  "historical_value": "",
+  "sources": [
+    "维基百科-第五批全国重点文物保护单位"
+  ],
+  "last_updated": "2026-03-06",
+  "data_quality": "basic",
+  "contributors": [
+    "iBo"
+  ]
+}

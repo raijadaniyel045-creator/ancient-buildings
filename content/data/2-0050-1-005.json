@@ -1,0 +1,22 @@
+{
+  "id": "2-0050-1-005",
+  "name": "周原遗址",
+  "level": "national",
+  "batch": 2,
+  "category": "archaeological-sites",
+  "province": "陕西省",
+  "city": "扶风县",
+  "district": "",
+  "address": "",
+  "era": "西周",
+  "description": "",
+  "historical_value": "",
+  "sources": [
+    "维基百科-第二批全国重点文物保护单位"
+  ],
+  "last_updated": "2026-03-06",
+  "data_quality": "basic",
+  "contributors": [
+    "iBo"
+  ]
+}

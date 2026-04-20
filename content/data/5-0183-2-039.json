@@ -1,0 +1,22 @@
+{
+  "id": "5-0183-2-039",
+  "name": "西汉帝陵",
+  "level": "national",
+  "batch": 5,
+  "category": "ancient-tombs",
+  "province": "陕西省",
+  "city": "咸阳市",
+  "district": "",
+  "address": "",
+  "era": "西汉",
+  "description": "",
+  "historical_value": "",
+  "sources": [
+    "维基百科-第五批全国重点文物保护单位"
+  ],
+  "last_updated": "2026-03-06",
+  "data_quality": "basic",
+  "contributors": [
+    "iBo"
+  ]
+}

@@ -1,0 +1,22 @@
+{
+  "id": "5-0072-1-072",
+  "name": "府城遗址",
+  "level": "national",
+  "batch": 5,
+  "category": "archaeological-sites",
+  "province": "河南省",
+  "city": "焦作市",
+  "district": "",
+  "address": "",
+  "era": "商",
+  "description": "",
+  "historical_value": "",
+  "sources": [
+    "维基百科-第五批全国重点文物保护单位"
+  ],
+  "last_updated": "2026-03-06",
+  "data_quality": "basic",
+  "contributors": [
+    "iBo"
+  ]
+}

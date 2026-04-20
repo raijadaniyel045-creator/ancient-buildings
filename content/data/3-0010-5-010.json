@@ -1,0 +1,22 @@
+{
+  "id": "3-0010-5-010",
+  "name": "李大钊故居",
+  "level": "national",
+  "batch": 3,
+  "category": "modern-historic",
+  "province": "河北省",
+  "city": "乐亭县",
+  "district": "",
+  "address": "",
+  "era": "1889年",
+  "description": "",
+  "historical_value": "",
+  "sources": [
+    "维基百科-第三批全国重点文物保护单位"
+  ],
+  "last_updated": "2026-03-06",
+  "data_quality": "basic",
+  "contributors": [
+    "iBo"
+  ]
+}

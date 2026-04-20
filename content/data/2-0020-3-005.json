@@ -1,0 +1,22 @@
+{
+  "id": "2-0020-3-005",
+  "name": "开元寺",
+  "level": "national",
+  "batch": 2,
+  "category": "ancient-buildings",
+  "province": "福建省",
+  "city": "泉州市",
+  "district": "",
+  "address": "",
+  "era": "宋至清",
+  "description": "",
+  "historical_value": "",
+  "sources": [
+    "维基百科-第二批全国重点文物保护单位"
+  ],
+  "last_updated": "2026-03-06",
+  "data_quality": "basic",
+  "contributors": [
+    "iBo"
+  ]
+}
