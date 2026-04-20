@@ -12,7 +12,9 @@ export default defineContentConfig({
         dynasty: z.array(z.string()),
         category: z.array(z.string()),
         img: z.string(),
-        desc: z.string()
+        desc: z.string(),
+        title: z.string(),
+        subtitle: z.string()
       }),
       indexes: [
         { columns: ['province'] },

@@ -35,7 +35,6 @@
         />
         <span>{{ t('login.register') }}</span>
       </UButton>
-      <UColorModeButton />
       <ULocaleSelect
         :model-value="locale"
         :locales="Object.values(locales)"

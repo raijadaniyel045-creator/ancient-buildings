@@ -10,7 +10,6 @@
         </p>
       </template>
       <template #right>
-        <UColorModeButton />
         <ULocaleSelect
           :model-value="locale"
           :locales="Object.values(locales)"

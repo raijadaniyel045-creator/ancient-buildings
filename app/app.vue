@@ -1,5 +1,5 @@
 <template>
-  <UApp :locale="locale">
+  <UApp>
     <NuxtLayout>
       <NuxtPage />
     </NuxtLayout>
@@ -7,7 +7,7 @@
 </template>
 
 <script setup>
-const { t, locale } = useI18n()
+const { t } = useI18n()
 
 useHead({
   meta:
