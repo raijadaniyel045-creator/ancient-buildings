@@ -24,180 +24,180 @@
       </div>
     </div>
     <UPage
-      class="max-w-7xl mx-auto px-6 py-10 flex flex-col lg:flex-row gap-10"
+      class="mx-auto px-6 py-10 gap-10"
     >
       <template #left>
-        <UPageAside class="w-full lg:w-70 shrink-0">
-          <div class="bg-white p-6 rounded-xl shadow-sm border border-[#e8dfcf] top-32.5">
-            <div class="flex items-center justify-between mb-6 pb-4 border-b border-gray-100">
-              <h3 class="text-xl font-bold font-serif text-[#8b2b2b] flex items-center gap-2">
-                <UIcon
-                  name="i-lucide-filter"
-                  class="w-5 h-5"
-                /> 高级筛选
-              </h3>
-              <ULink
-                class="text-sm font-medium text-gray-400 hover:text-[#8b2b2b] transition-colors border border-gray-200 px-3 py-1 rounded-full"
-                @click="tags.splice(0, tags.length)"
-              >
-                重置
-              </ULink>
-            </div>
-            <template v-if="provinceList.length > 0">
-              <div class="mb-8">
-                <h4 class="text-sm font-bold text-gray-800 mb-4 tracking-widest">
-                  所属地域
-                </h4>
-                <div class="flex flex-wrap gap-2">
-                  <ULink
-                    v-for="prov in provinceList"
-                    :key="prov"
-                    class="px-3.5 py-1.5 text-sm rounded-full transition-all border"
-                    :class="tags.includes(prov) ? 'bg-[#8b2b2b] border-[#8b2b2b] text-white shadow-md' : 'bg-transparent border-gray-200 text-gray-600 hover:border-gray-400'"
-                    @click="toggleTag(prov)"
-                  >
-                    {{ prov }}
-                  </ULink>
-                </div>
-              </div>
-            </template>
-            <template v-if="dynastyList.length > 0">
-              <div class="mb-8">
-                <h4 class="text-sm font-bold text-gray-800 mb-4 tracking-widest">
-                  建制朝代
-                </h4>
-                <div class="flex flex-wrap gap-2">
-                  <ULink
-                    v-for="dyna in dynastyList"
-                    :key="dyna"
-                    class="px-3.5 py-1.5 text-sm rounded-full transition-all border"
-                    :class="tags.includes(dyna) ? 'bg-[#8b2b2b] border-[#8b2b2b] text-white shadow-md' : 'bg-transparent border-gray-200 text-gray-600 hover:border-gray-400'"
-                    @click="toggleTag(dyna)"
-                  >
-                    {{ dyna }}
-                  </ULink>
-                </div>
-              </div>
-            </template>
-            <template v-if="categoryList.length > 0">
-              <div class="mb-8">
-                <h4 class="text-sm font-bold text-gray-800 mb-4 tracking-widest">
-                  建筑类别
-                </h4>
-                <div class="flex flex-wrap gap-2">
-                  <ULink
-                    v-for="cate in categoryList"
-                    :key="cate"
-                    class="px-3.5 py-1.5 text-sm rounded-full transition-all border"
-                    :class="tags.includes(cate) ? 'bg-[#8b2b2b] border-[#8b2b2b] text-white shadow-md' : 'bg-transparent border-gray-200 text-gray-600 hover:border-gray-400'"
-                    @click="toggleTag(cate)"
-                  >
-                    {{ cate }}
-                  </ULink>
-                </div>
-              </div>
-            </template>
+        <UPageAside class="bg-white p-6 rounded-xl shadow-sm border border-[#e8dfcf] top-32.5">
+          <div class="flex items-center justify-between mb-6 pb-4 border-b border-gray-100">
+            <h3 class="text-xl font-bold font-serif text-[#8b2b2b] flex items-center gap-2">
+              <UIcon
+                name="i-lucide-filter"
+                class="w-5 h-5"
+              /> 高级筛选
+            </h3>
+            <ULink
+              class="text-sm font-medium text-gray-400 hover:text-[#8b2b2b] transition-colors border border-gray-200 px-3 py-1 rounded-full"
+              @click="tags.splice(0, tags.length)"
+            >
+              重置
+            </ULink>
           </div>
+          <template v-if="provinceList.length > 0">
+            <div class="mb-8">
+              <h4 class="text-sm font-bold text-gray-800 mb-4 tracking-widest">
+                所属地域
+              </h4>
+              <div class="flex flex-wrap gap-2">
+                <ULink
+                  v-for="prov in provinceList"
+                  :key="prov"
+                  class="px-3.5 py-1.5 text-sm rounded-full transition-all border"
+                  :class="tags.includes(prov) ? 'bg-[#8b2b2b] border-[#8b2b2b] text-white shadow-md' : 'bg-transparent border-gray-200 text-gray-600 hover:border-gray-400'"
+                  @click="toggleTag(prov)"
+                >
+                  {{ prov }}
+                </ULink>
+              </div>
+            </div>
+          </template>
+          <template v-if="dynastyList.length > 0">
+            <div class="mb-8">
+              <h4 class="text-sm font-bold text-gray-800 mb-4 tracking-widest">
+                建制朝代
+              </h4>
+              <div class="flex flex-wrap gap-2">
+                <ULink
+                  v-for="dyna in dynastyList"
+                  :key="dyna"
+                  class="px-3.5 py-1.5 text-sm rounded-full transition-all border"
+                  :class="tags.includes(dyna) ? 'bg-[#8b2b2b] border-[#8b2b2b] text-white shadow-md' : 'bg-transparent border-gray-200 text-gray-600 hover:border-gray-400'"
+                  @click="toggleTag(dyna)"
+                >
+                  {{ dyna }}
+                </ULink>
+              </div>
+            </div>
+          </template>
+          <template v-if="categoryList.length > 0">
+            <div class="mb-8">
+              <h4 class="text-sm font-bold text-gray-800 mb-4 tracking-widest">
+                建筑类别
+              </h4>
+              <div class="flex flex-wrap gap-2">
+                <ULink
+                  v-for="cate in categoryList"
+                  :key="cate"
+                  class="px-3.5 py-1.5 text-sm rounded-full transition-all border"
+                  :class="tags.includes(cate) ? 'bg-[#8b2b2b] border-[#8b2b2b] text-white shadow-md' : 'bg-transparent border-gray-200 text-gray-600 hover:border-gray-400'"
+                  @click="toggleTag(cate)"
+                >
+                  {{ cate }}
+                </ULink>
+              </div>
+            </div>
+          </template>
         </UPageAside>
       </template>
       <template #default>
-        <div class="mb-4 text-gray-500 font-serif text-sm">
-          已找到 <span class="text-[#8b2b2b] font-bold text-lg">{{ filteredBuildings.length }}</span> 处相关古建筑
-        </div>
-        <template v-if="filteredBuildings.length === 0">
-          <div class="py-24 bg-white rounded-xl border border-[#e8dfcf] text-center text-gray-500 font-serif">
-            <UIcon
-              name="i-lucide-box-select"
-              class="w-16 h-16 mx-auto mb-4 text-gray-300"
-            />
-            <p class="text-xl">
-              未能找到符合筛选条件的古建数据。
-            </p>
-            <button
-              class="mt-4 text-[#8b2b2b] hover:underline underline-offset-4"
-              @click="tags.splice(0, tags.length)"
-            >
-              清除筛选条件
-            </button>
+        <UPageBody>
+          <div class="mb-4 text-gray-500 font-serif text-sm">
+            已找到 <span class="text-[#8b2b2b] font-bold text-lg">{{ filteredBuildings.length }}</span> 处相关古建筑
           </div>
-        </template>
-        <template v-else>
-          <UPageColumns>
-            <ULink
-              v-for="(b) in paginatedBuildings"
-              :key="b.id"
-              class="bg-white rounded-xl overflow-hidden border border-[#e8dfcf] shadow-sm hover:shadow-2xl transition-all duration-300 group cursor-pointer flex flex-col h-full"
-              :to="localePath(b.path)"
-            >
-              <div class="h-56 overflow-hidden relative border-b border-[#e8dfcf]">
-                <NuxtImg
-                  :src="b.img"
-                  fit="cover"
-                  class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700"
-                  placeholder
-                />
-                <div class="absolute inset-0 bg-linear-to-t from-black/80 via-transparent to-transparent opacity-60 group-hover:opacity-90 transition-opacity" />
-
-                <!-- Badges atop image -->
-                <div class="absolute top-3 right-3 flex gap-2">
-                  <span
-                    v-for="(c, ci) in b.category"
-                    :key="c+ci"
-                    class="bg-black/60 text-white text-xs px-2.5 py-1 rounded-sm backdrop-blur-md border border-white/20"
-                  >
-                    {{ c }}
-                  </span>
-                  <span
-                    v-for="(d, di) in b.dynasty"
-                    :key="d+di"
-                    class="bg-amber-600/80 text-white text-xs px-2.5 py-1 rounded-sm backdrop-blur-md border border-amber-400/20"
-                  >
-                    {{ d }}
-                  </span>
-                </div>
-                <div class="absolute bottom-3 left-3 flex items-center text-white/90 text-sm font-light z-10 transition-transform group-hover:-translate-y-1">
-                  <UIcon
-                    name="i-lucide-map-pin"
-                    class="w-4 h-4 mr-1 text-red-500"
+          <template v-if="filteredBuildings.length === 0">
+            <div class="py-24 bg-white rounded-xl border border-[#e8dfcf] text-center text-gray-500 font-serif">
+              <UIcon
+                name="i-lucide-box-select"
+                class="w-16 h-16 mx-auto mb-4 text-gray-300"
+              />
+              <p class="text-xl">
+                未能找到符合筛选条件的古建数据。
+              </p>
+              <button
+                class="mt-4 text-[#8b2b2b] hover:underline underline-offset-4"
+                @click="tags.splice(0, tags.length)"
+              >
+                清除筛选条件
+              </button>
+            </div>
+          </template>
+          <template v-else>
+            <UPageColumns>
+              <ULink
+                v-for="(b) in paginatedBuildings"
+                :key="b.id"
+                class="bg-white rounded-xl overflow-hidden border border-[#e8dfcf] shadow-sm hover:shadow-2xl transition-all duration-300 group cursor-pointer flex flex-col h-full"
+                :to="localePath(b.path)"
+              >
+                <div class="h-56 overflow-hidden relative border-b border-[#e8dfcf]">
+                  <NuxtImg
+                    :src="b.img"
+                    fit="cover"
+                    class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700"
+                    placeholder
                   />
-                  <span
-                    v-for="(p, pi) in b.province"
-                    :key="p+pi"
-                    class="mx-0.5"
-                  >
-                    {{ p }}
-                  </span>
-                </div>
-              </div>
-              <div class="p-5 flex-1 flex flex-col relative bg-[#fcfcfa]">
-                <h3 class="text-2xl font-bold font-serif text-[#8b2b2b] mb-2 group-hover:text-amber-700 transition-colors">
-                  {{ b.name }}
-                </h3>
-                <p class="text-sm text-gray-600 leading-relaxed font-light mb-4 flex-1 line-clamp-3">
-                  {{ b.desc }}
-                </p>
+                  <div class="absolute inset-0 bg-linear-to-t from-black/80 via-transparent to-transparent opacity-60 group-hover:opacity-90 transition-opacity" />
 
-                <div class="pt-4 border-t border-gray-100 flex justify-between items-center group-hover:border-amber-100 transition-colors">
-                  <span class="text-[10px] text-gray-400 font-mono">ID: {{ b.title }}</span>
-                  <span class="text-sm text-[#8b2b2b] font-medium flex items-center gap-1 group-hover:gap-2 transition-all">
-                    查看详情 <UIcon
-                      name="i-lucide-arrow-right"
-                      class="w-3.5 h-3.5"
+                  <!-- Badges atop image -->
+                  <div class="absolute top-3 right-3 flex gap-2">
+                    <span
+                      v-for="(c, ci) in b.category"
+                      :key="c+ci"
+                      class="bg-black/60 text-white text-xs px-2.5 py-1 rounded-sm backdrop-blur-md border border-white/20"
+                    >
+                      {{ c }}
+                    </span>
+                    <span
+                      v-for="(d, di) in b.dynasty"
+                      :key="d+di"
+                      class="bg-amber-600/80 text-white text-xs px-2.5 py-1 rounded-sm backdrop-blur-md border border-amber-400/20"
+                    >
+                      {{ d }}
+                    </span>
+                  </div>
+                  <div class="absolute bottom-3 left-3 flex items-center text-white/90 text-sm font-light z-10 transition-transform group-hover:-translate-y-1">
+                    <UIcon
+                      name="i-lucide-map-pin"
+                      class="w-4 h-4 mr-1 text-red-500"
                     />
-                  </span>
+                    <span
+                      v-for="(p, pi) in b.province"
+                      :key="p+pi"
+                      class="mx-0.5"
+                    >
+                      {{ p }}
+                    </span>
+                  </div>
                 </div>
-              </div>
-            </ULink>
-          </UPageColumns>
-          <div class="flex justify-center relative p-4 z-1">
-            <UPagination
-              v-model:page="page"
-              :items-per-page="pageSize"
-              :total="totalPages"
-              :to="to"
-            />
-          </div>
-        </template>
+                <div class="p-5 flex-1 flex flex-col relative bg-[#fcfcfa]">
+                  <h3 class="text-2xl font-bold font-serif text-[#8b2b2b] mb-2 group-hover:text-amber-700 transition-colors">
+                    {{ b.name }}
+                  </h3>
+                  <p class="text-sm text-gray-600 leading-relaxed font-light mb-4 flex-1 line-clamp-3">
+                    {{ b.desc }}
+                  </p>
+
+                  <div class="pt-4 border-t border-gray-100 flex justify-between items-center group-hover:border-amber-100 transition-colors">
+                    <span class="text-[10px] text-gray-400 font-mono">ID: {{ b.title }}</span>
+                    <span class="text-sm text-[#8b2b2b] font-medium flex items-center gap-1 group-hover:gap-2 transition-all">
+                      查看详情 <UIcon
+                        name="i-lucide-arrow-right"
+                        class="w-3.5 h-3.5"
+                      />
+                    </span>
+                  </div>
+                </div>
+              </ULink>
+            </UPageColumns>
+            <div class="flex justify-center relative p-4 z-1">
+              <UPagination
+                v-model:page="page"
+                :items-per-page="pageSize"
+                :total="totalPages"
+                :to="to"
+              />
+            </div>
+          </template>
+        </UPageBody>
       </template>
     </UPage>
   </div>
