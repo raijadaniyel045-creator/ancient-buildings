@@ -101,9 +101,9 @@
       <template #default>
         <UPageBody>
           <div class="mb-4 text-gray-500 font-serif text-sm">
-            已找到 <span class="text-[#8b2b2b] font-bold text-lg">{{ filteredBuildings.length }}</span> 处相关古建筑
+            已找到 <span class="text-[#8b2b2b] font-bold text-lg">{{ total }}</span> 处相关古建筑
           </div>
-          <template v-if="filteredBuildings.length === 0">
+          <template v-if="total === 0">
             <div class="py-24 bg-white rounded-xl border border-[#e8dfcf] text-center text-gray-500 font-serif">
               <UIcon
                 name="i-lucide-box-select"
@@ -123,7 +123,7 @@
           <template v-else>
             <UPageColumns>
               <ULink
-                v-for="(b) in paginatedBuildings"
+                v-for="b in buildings"
                 :key="b.id"
                 class="bg-white rounded-xl overflow-hidden border border-[#e8dfcf] shadow-sm hover:shadow-2xl transition-all duration-300 group cursor-pointer flex flex-col h-full"
                 :to="localePath(b.path)"
@@ -193,7 +193,6 @@
                 v-model:page="page"
                 :items-per-page="pageSize"
                 :total="totalPages"
-                :to="to"
               />
             </div>
           </template>
@@ -206,57 +205,58 @@
 <script setup lang="ts">
 const localePath = useLocalePath()
 
-const buildings = await queryCollection('buildings').all()
-const provinceList = [...new Set(buildings.map(b => b.province).flat())]
-const dynastyList = [...new Set(buildings.map(b => b.dynasty).flat())]
-const categoryList = [...new Set(buildings.map(b => b.category).flat())]
-
 const route = useRoute()
 const router = useRouter()
+const { locale } = useI18n()
+
 const page = ref(Number(route.query.page) || 1)
 const defaultPageSize = 12
 const pageSize = ref(Number(route.query.pageSize) || defaultPageSize)
 const tags = ref(route.query.tags ? (route.query.tags as string).split(',') : [])
 
-function to(page: number) {
-  return {
-    query: {
-      page: page,
-      tags: [...tags.value].join(','),
-      pageSize: pageSize.value !== defaultPageSize ? pageSize.value : undefined
-    }
-  }
-}
-
-const filteredBuildings = computed(() => {
-  if (!tags.value.length) return buildings
-  return buildings.filter((building) => {
-    const buildingTags = [...building.category, ...building.dynasty, ...building.province]
-    return tags.value.every(tag => buildingTags.includes(tag))
-  })
-})
-
-const paginatedBuildings = computed(() => {
-  const start = (page.value - 1) * pageSize.value
-  const end = start + pageSize.value
-  return filteredBuildings.value.slice(start, end)
-})
-
-const totalPages = computed(() => Math.ceil(filteredBuildings.value.length / pageSize.value))
-
-watch([page, tags], () => {
-  const currentPage = Number(route.query.page) || 1
-  const currentTags = route.query.tags ? (route.query.tags as string).split(',') : []
-  const newTagsStr = tags.value.join(',')
-  if (currentPage !== page.value || currentTags.join(',') !== newTagsStr) {
-    router.replace({
+const { data: apiData, refresh } = await useAsyncData(`buildings-${locale.value}`,
+  () => {
+    return $fetch('/api/buildings', {
       query: {
-        ...route.query,
         page: page.value,
-        tags: newTagsStr || undefined
+        pageSize: pageSize.value,
+        tags: tags.value.join(',')
       }
     })
+  },
+  {
+    watch: [page, pageSize, tags]
+  })
+
+const buildings = computed(() => apiData.value?.items || [])
+const total = computed(() => apiData.value?.total || 0)
+const totalPages = computed(() => apiData.value?.totalPages || 0)
+const provinceList = computed(() => apiData.value?.tagOptions?.provinceList || [])
+const dynastyList = computed(() => apiData.value?.tagOptions?.dynastyList || [])
+const categoryList = computed(() => apiData.value?.tagOptions?.categoryList || [])
+
+function toggleTag(tag: string) {
+  if (tags.value.includes(tag)) {
+    tags.value = tags.value.filter(t => t !== tag)
+  } else {
+    tags.value.push(tag)
   }
+  page.value = 1
+  refresh()
+}
+
+function updateUrl() {
+  router.replace({
+    query: {
+      page: page.value,
+      pageSize: pageSize.value !== 12 ? pageSize.value : undefined,
+      tags: tags.value.length ? tags.value.join(',') : undefined
+    }
+  })
+}
+
+watch([page, tags], () => {
+  updateUrl()
 }, { deep: true })
 
 watch(() => route.query, (newQuery) => {
@@ -265,14 +265,6 @@ watch(() => route.query, (newQuery) => {
   if (newPage !== page.value) page.value = newPage
   if (JSON.stringify(newTags) !== JSON.stringify(tags.value)) tags.value = newTags
 })
-
-function toggleTag(tag: string) {
-  if (tags.value.includes(tag)) {
-    tags.value = tags.value.filter(t => t !== tag)
-  } else {
-    tags.value.push(tag)
-  }
-}
 </script>
 
 <style scoped>

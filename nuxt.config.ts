@@ -9,7 +9,8 @@ export default defineNuxtConfig({
     '@pinia/nuxt',
     '@tresjs/nuxt',
     'nuxt-auth-utils',
-    '@nuxt/content'
+    '@nuxt/content',
+    '@vueuse/nuxt'
   ],
 
   devtools: {
@@ -39,7 +40,7 @@ export default defineNuxtConfig({
 
   i18n: {
     locales: [
-      { code: 'cn', name: 'Chinese', file: 'cn.json' },
+      { code: 'cn', name: '中文-简体', file: 'cn.json' },
       { code: 'en', name: 'English', file: 'en.json' }
     ],
     defaultLocale: 'cn'

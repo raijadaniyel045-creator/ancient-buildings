@@ -155,9 +155,15 @@
 </template>
 
 <script setup lang="ts">
+const { locale } = useI18n()
 const localePath = useLocalePath()
 const slug = useRoute().params.slug
-const { data: post } = await useAsyncData(`building-${slug}`, () => {
-  return queryCollection('buildings').path(`/buildings/${slug}`).first()
+
+const { data: post, error } = await useAsyncData(`building-${slug}-${locale.value}`, () => {
+  return $fetch(`/api/buildings/${slug}`)
 })
+
+if (error.value) {
+  post.value = null
+}
 </script>
