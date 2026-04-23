@@ -215,15 +215,13 @@ const pageSize = ref(Number(route.query.pageSize) || defaultPageSize)
 const tags = ref(route.query.tags ? (route.query.tags as string).split(',') : [])
 
 const { data: apiData, refresh } = await useAsyncData(`buildings-${locale.value}`,
-  () => {
-    return $fetch('/api/buildings', {
-      query: {
-        page: page.value,
-        pageSize: pageSize.value,
-        tags: tags.value.join(',')
-      }
-    })
-  },
+  () => $fetch('/api/buildings', {
+    query: {
+      page: page.value,
+      pageSize: pageSize.value,
+      tags: tags.value.join(',')
+    }
+  }),
   {
     watch: [page, pageSize, tags]
   })

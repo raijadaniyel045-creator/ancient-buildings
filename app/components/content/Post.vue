@@ -4,6 +4,7 @@
   </div>
   <ClientOnly>
     <Teleport to="#content-grid">
+      <!--
       <slot
         v-if="$slots.architecture"
         name="architecture"
@@ -16,6 +17,14 @@
         v-if="$slots.culture"
         name="culture"
       />
+      -->
+      <slot
+        v-if="$slots.supplement"
+        name="supplement"
+      />
     </Teleport>
   </ClientOnly>
 </template>
+
+<script setup lang="ts">
+</script>

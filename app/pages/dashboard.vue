@@ -7,12 +7,8 @@
         全国古建数据大屏
       </h2>
     </UPageHeader>
-    <UContainer
-      class="bg-[#ffffffd9] rounded-lg shadow-2xl border border-white/3 my-8"
-    >
-      <div
-        class="py-24 px-6"
-      >
+    <UContainer class="bg-[#ffffffd9] rounded-lg shadow-2xl border border-white/3 my-8">
+      <div class="py-24 px-6">
         <Regional />
       </div>
     </UContainer>
