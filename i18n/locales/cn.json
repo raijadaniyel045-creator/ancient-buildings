@@ -10,5 +10,11 @@
   "dashboard": "数据大屏",
   "search": "搜索与推荐",
   "ai": "AI互动",
-  "login.register": "登录/注册"
+  "login.register": "登录/注册",
+  "modern-historic": "近现代重要史迹",
+  "ancient-buildings": "古代建筑",
+  "stone-carvings": "石刻",
+  "ancient-tombs": "古代墓葬",
+  "archaeological-sites": "考古遗址",
+  "others": "其他"
 }

@@ -10,5 +10,11 @@
   "dashboard": "Dashboard",
   "search": "Search & Recommend",
   "ai": "AI Interaction",
-  "login.register": "Login/Register"
+  "login.register": "Login/Register",
+  "modern-historic": "Modern and Contemporary Historic Sites",
+  "ancient-buildings": "Ancient Buildings",
+  "stone-carvings": "Stone Carvings",
+  "ancient-tombs": "Ancient Tombs",
+  "archaeological-sites": "Archaeological Sites",
+  "others": "Others"
 }

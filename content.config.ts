@@ -5,21 +5,21 @@ export default defineContentConfig({
   collections: {
     buildings: defineCollection({
       type: 'page',
-      source: 'buildings/*.md',
+      source: 'buildings/**/*.md',
       schema: z.object({
         name: z.string(),
-        province: z.array(z.string()),
-        dynasty: z.array(z.string()),
-        category: z.array(z.string()),
+        provinces: z.array(z.string()),
+        dynasties: z.array(z.string()),
+        categories: z.array(z.string()),
         img: z.string(),
         desc: z.string(),
         title: z.string(),
         subtitle: z.string()
       }),
       indexes: [
-        { columns: ['province'] },
-        { columns: ['category'] },
-        { columns: ['dynasty'] }
+        { columns: ['provinces'] },
+        { columns: ['categories'] },
+        { columns: ['dynasties'] }
       ]
     }),
     data: defineCollection({

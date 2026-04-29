@@ -7,12 +7,14 @@
             全国古建清单库
           </h1>
           <p class="text-white/80 font-light tracking-wide text-lg">
-            大国工匠的千年智慧，网罗全国 {{ buildings.length }} 座著名传世建筑。
+            大国工匠的千年智慧，网罗全国 {{ total }} 座著名传世建筑。
           </p>
         </div>
         <div class="relative w-full md:w-112.5">
           <UInputTags
             v-model="tags"
+            :display-value="t => t.name"
+            :convert-value="t => ({ name: t, type: 'sear' })"
             placeholder="全局检索：输入建筑名、地区、描述..."
             class="w-full px-8 py-4 pr-12 rounded-full text-black bg-white focus:outline-none shadow-xl outline-none border-2 border-transparent transition-all focus:border-amber-500 text-lg"
           />
@@ -49,13 +51,13 @@
               </h4>
               <div class="flex flex-wrap gap-2">
                 <ULink
-                  v-for="prov in provinceList"
+                  v-for="prov in provinceList.provinces"
                   :key="prov"
                   class="px-3.5 py-1.5 text-sm rounded-full transition-all border"
-                  :class="tags.includes(prov) ? 'bg-[#8b2b2b] border-[#8b2b2b] text-white shadow-md' : 'bg-transparent border-gray-200 text-gray-600 hover:border-gray-400'"
-                  @click="toggleTag(prov)"
+                  :class="existTag(prov, 'prov') ? 'bg-[#8b2b2b] border-[#8b2b2b] text-white shadow-md' : 'bg-transparent border-gray-200 text-gray-600 hover:border-gray-400'"
+                  @click="toggleTag(prov, 'prov')"
                 >
-                  {{ prov }}
+                  {{ t(prov) }}
                 </ULink>
               </div>
             </div>
@@ -67,13 +69,13 @@
               </h4>
               <div class="flex flex-wrap gap-2">
                 <ULink
-                  v-for="dyna in dynastyList"
+                  v-for="dyna in dynastyList.dynasties"
                   :key="dyna"
                   class="px-3.5 py-1.5 text-sm rounded-full transition-all border"
-                  :class="tags.includes(dyna) ? 'bg-[#8b2b2b] border-[#8b2b2b] text-white shadow-md' : 'bg-transparent border-gray-200 text-gray-600 hover:border-gray-400'"
-                  @click="toggleTag(dyna)"
+                  :class="existTag(dyna, 'dyna') ? 'bg-[#8b2b2b] border-[#8b2b2b] text-white shadow-md' : 'bg-transparent border-gray-200 text-gray-600 hover:border-gray-400'"
+                  @click="toggleTag(dyna, 'dyna')"
                 >
-                  {{ dyna }}
+                  {{ t(dyna) }}
                 </ULink>
               </div>
             </div>
@@ -85,13 +87,13 @@
               </h4>
               <div class="flex flex-wrap gap-2">
                 <ULink
-                  v-for="cate in categoryList"
+                  v-for="cate in categoryList.categories"
                   :key="cate"
                   class="px-3.5 py-1.5 text-sm rounded-full transition-all border"
-                  :class="tags.includes(cate) ? 'bg-[#8b2b2b] border-[#8b2b2b] text-white shadow-md' : 'bg-transparent border-gray-200 text-gray-600 hover:border-gray-400'"
-                  @click="toggleTag(cate)"
+                  :class="existTag(cate, 'cate') ? 'bg-[#8b2b2b] border-[#8b2b2b] text-white shadow-md' : 'bg-transparent border-gray-200 text-gray-600 hover:border-gray-400'"
+                  @click="toggleTag(cate, 'cate')"
                 >
-                  {{ cate }}
+                  {{ t(cate) }}
                 </ULink>
               </div>
             </div>
@@ -101,9 +103,9 @@
       <template #default>
         <UPageBody>
           <div class="mb-4 text-gray-500 font-serif text-sm">
-            已找到 <span class="text-[#8b2b2b] font-bold text-lg">{{ total }}</span> 处相关古建筑
+            已找到 <span class="text-[#8b2b2b] font-bold text-lg">{{ filter }}</span> 处相关古建筑
           </div>
-          <template v-if="total === 0">
+          <template v-if="filter === 0">
             <div class="py-24 bg-white rounded-xl border border-[#e8dfcf] text-center text-gray-500 font-serif">
               <UIcon
                 name="i-lucide-box-select"
@@ -126,7 +128,7 @@
                 v-for="b in buildings"
                 :key="b.id"
                 class="bg-white rounded-xl overflow-hidden border border-[#e8dfcf] shadow-sm hover:shadow-2xl transition-all duration-300 group cursor-pointer flex flex-col h-full"
-                :to="localePath(b.path)"
+                :to="localePath(`/buildings/${b.hash}`)"
               >
                 <div class="h-56 overflow-hidden relative border-b border-[#e8dfcf]">
                   <NuxtImg
@@ -140,18 +142,18 @@
                   <!-- Badges atop image -->
                   <div class="absolute top-3 right-3 flex gap-2">
                     <span
-                      v-for="(c, ci) in b.category"
+                      v-for="(c, ci) in b.categories"
                       :key="c+ci"
                       class="bg-black/60 text-white text-xs px-2.5 py-1 rounded-sm backdrop-blur-md border border-white/20"
                     >
-                      {{ c }}
+                      {{ t(c) }}
                     </span>
                     <span
-                      v-for="(d, di) in b.dynasty"
+                      v-for="(d, di) in b.dynasties"
                       :key="d+di"
                       class="bg-amber-600/80 text-white text-xs px-2.5 py-1 rounded-sm backdrop-blur-md border border-amber-400/20"
                     >
-                      {{ d }}
+                      {{ t(d) }}
                     </span>
                   </div>
                   <div class="absolute bottom-3 left-3 flex items-center text-white/90 text-sm font-light z-10 transition-transform group-hover:-translate-y-1">
@@ -160,11 +162,11 @@
                       class="w-4 h-4 mr-1 text-red-500"
                     />
                     <span
-                      v-for="(p, pi) in b.province"
+                      v-for="(p, pi) in b.provinces"
                       :key="p+pi"
                       class="mx-0.5"
                     >
-                      {{ p }}
+                      {{ t(p) }}
                     </span>
                   </div>
                 </div>
@@ -177,7 +179,7 @@
                   </p>
 
                   <div class="pt-4 border-t border-gray-100 flex justify-between items-center group-hover:border-amber-100 transition-colors">
-                    <span class="text-[10px] text-gray-400 font-mono">ID: {{ b.title }}</span>
+                    <span class="text-[10px] text-gray-400 font-mono">ID: {{ (b.hash as string).substring(0, 6) }}</span>
                     <span class="text-sm text-[#8b2b2b] font-medium flex items-center gap-1 group-hover:gap-2 transition-all">
                       查看详情 <UIcon
                         name="i-lucide-arrow-right"
@@ -192,7 +194,12 @@
               <UPagination
                 v-model:page="page"
                 :items-per-page="pageSize"
-                :total="totalPages"
+                :total="filter"
+              />
+              <UInputNumber
+                v-model="pageSize"
+                orientation="vertical"
+                class="w-20 mx-2"
               />
             </div>
           </template>
@@ -207,40 +214,63 @@ const localePath = useLocalePath()
 
 const route = useRoute()
 const router = useRouter()
-const { locale } = useI18n()
+const { locale, t } = useI18n()
 
 const page = ref(Number(route.query.page) || 1)
 const defaultPageSize = 12
 const pageSize = ref(Number(route.query.pageSize) || defaultPageSize)
-const tags = ref(route.query.tags ? (route.query.tags as string).split(',') : [])
+
+const tags = ref<{ name: string, type: 'prov' | 'cate' | 'dyna' | 'sear' }[]>([])
 
 const { data: apiData, refresh } = await useAsyncData(`buildings-${locale.value}`,
-  () => $fetch('/api/buildings', {
-    query: {
-      page: page.value,
-      pageSize: pageSize.value,
-      tags: tags.value.join(',')
-    }
-  }),
+  () => {
+    const p = tags.value.filter(v => v.type === 'prov').flatMap(v => v.name)
+    const d = tags.value.filter(v => v.type === 'dyna').flatMap(v => v.name)
+    const s = tags.value.filter(v => v.type === 'sear').flatMap(v => v.name)
+    const c = tags.value.filter(v => v.type === 'cate').flatMap(v => v.name)
+    return $fetch('/api/buildings', {
+      query: {
+        page: page.value,
+        pageSize: pageSize.value,
+        provinces: p.length ? p.join(',') : undefined,
+        dynasties: d.length ? d.join(',') : undefined,
+        categories: c.length ? c.join(',') : undefined,
+        searchs: s.length ? s.join(',') : undefined
+      }
+    })
+  },
   {
     watch: [page, pageSize, tags]
   })
+const { data: provinceResponse } = await useAsyncData(`buildings-province-${locale.value}`,
+  () => $fetch('/api/buildings/provinces'))
+const { data: dynastyResponse } = await useAsyncData(`buildings-dynasty-${locale.value}`,
+  () => $fetch('/api/buildings/dynasties'))
+const { data: categoryResponse } = await useAsyncData(`buildings-category-${locale.value}`,
+  () => $fetch('/api/buildings/categories'))
+const provinceList = provinceResponse.value || { provinces: [], length: 0 }
+const dynastyList = dynastyResponse.value || { dynasties: [], length: 0 }
+const categoryList = categoryResponse.value || { categories: [], length: 0 }
 
 const buildings = computed(() => apiData.value?.items || [])
 const total = computed(() => apiData.value?.total || 0)
-const totalPages = computed(() => apiData.value?.totalPages || 0)
-const provinceList = computed(() => apiData.value?.tagOptions?.provinceList || [])
-const dynastyList = computed(() => apiData.value?.tagOptions?.dynastyList || [])
-const categoryList = computed(() => apiData.value?.tagOptions?.categoryList || [])
+const filter = computed(() => apiData.value?.filter || 0)
 
-function toggleTag(tag: string) {
-  if (tags.value.includes(tag)) {
-    tags.value = tags.value.filter(t => t !== tag)
+function toggleTag(tag: string, type: 'prov' | 'cate' | 'dyna' | 'sear'): void {
+  const data = tags.value.find(v => v.type === type && v.name == tag)
+  if (data) {
+    tags.value = tags.value.filter(t => t !== data)
   } else {
-    tags.value.push(tag)
+    tags.value.push({
+      name: tag,
+      type
+    })
   }
   page.value = 1
   refresh()
+}
+function existTag(tag: string, type: 'prov' | 'cate' | 'dyna' | 'sear'): boolean {
+  return tags.value.find(v => v.type === type && v.name == tag)
 }
 
 function clear() {
@@ -249,24 +279,31 @@ function clear() {
 }
 
 function updateUrl() {
+  const p = tags.value.filter(v => v.type === 'prov').flatMap(v => v.name)
+  const d = tags.value.filter(v => v.type === 'dyna').flatMap(v => v.name)
+  const s = tags.value.filter(v => v.type === 'sear').flatMap(v => v.name)
+  const c = tags.value.filter(v => v.type === 'cate').flatMap(v => v.name)
   router.replace({
     query: {
       page: page.value,
       pageSize: pageSize.value !== 12 ? pageSize.value : undefined,
-      tags: tags.value.length ? tags.value.join(',') : undefined
+      provinces: p.length ? p.join(',') : undefined,
+      dynasties: d.length ? d.join(',') : undefined,
+      categories: c.length ? c.join(',') : undefined,
+      searchs: s.length ? s.join(',') : undefined
     }
   })
 }
-
-watch([page, tags], () => {
+watch([page, pageSize, tags], () => {
   updateUrl()
 }, { deep: true })
 
 watch(() => route.query, (newQuery) => {
   const newPage = Number(newQuery.page) || 1
-  const newTags = newQuery.tags ? (newQuery.tags as string).split(',') : []
+  const newPageSize = Number(newQuery.page) || defaultPageSize
+
   if (newPage !== page.value) page.value = newPage
-  if (JSON.stringify(newTags) !== JSON.stringify(tags.value)) tags.value = newTags
+  if (newPageSize !== pageSize.value) page.value = newPageSize
 })
 </script>
 
