@@ -1,6 +1,7 @@
 <script setup lang="ts">
 import { ref, computed, onMounted, onUnmounted } from 'vue'
 
+// ================= 轮播图状态与逻辑 (保持原有逻辑) =================
 const isPlaying = ref(false)
 const activeIndex = ref(0)
 const isMapVisible = ref(false)
@@ -18,124 +19,18 @@ const slides = [
   { id: 7, title: '布达拉宫', description: '世界上海拔最高、最宏伟的宫堡式建筑群，藏传佛教的圣地', image: '/images/布达拉宫.jpg', video: '/videos/budalagong.mp4', link: '/inventory?id=7' }
 ]
 
-const ancientBuildingsMap = [
-  { name: '泰顺廊桥', province: '浙江', type: '桥梁' },
-  { name: '湘峪古堡', province: '山西', type: '城堡' },
-  { name: '恭王府', province: '北京', type: '王府' },
-  { name: '开江牌坊', province: '四川', type: '牌坊' },
-  { name: '大召', province: '内蒙古', type: '寺庙' },
-  { name: '松江唐经幢', province: '上海', type: '经幢' },
-  { name: '南诏铁柱', province: '云南', type: '铁柱' },
-  { name: '北海公园', province: '北京', type: '园林' },
-  { name: '逢渠桥', province: '江西', type: '桥梁' },
-  { name: '张溥宅第', province: '江苏', type: '宅第' },
-  { name: '故宫', province: '北京', type: '宫殿' },
-  { name: '江村古建筑群', province: '安徽', type: '建筑群' },
-  { name: '鲁屯牌坊群', province: '贵州', type: '牌坊' },
-  { name: '长春洞', province: '云南', type: '道教建筑' },
-  { name: '靖江王府', province: '广西', type: '王府' },
-  { name: '光岳楼', province: '山东', type: '楼阁' },
-  { name: '拉鲁颇章', province: '西藏', type: '宫殿' },
-  { name: '双龙桥', province: '云南', type: '桥梁' },
-  { name: '武当山金殿', province: '湖北', type: '道教建筑' },
-  { name: '药王山石刻', province: '陕西', type: '石刻' },
-  { name: '郎德上寨古建筑群', province: '贵州', type: '建筑群' },
-  { name: '崆峒山古建筑群', province: '甘肃', type: '建筑群' },
-  { name: '槐山矶驳岸', province: '湖北', type: '驳岸' },
-  { name: '南涅水洪教院', province: '山西', type: '寺庙' },
-  { name: '平遥惠济桥', province: '山西', type: '桥梁' },
-  { name: '嘉业堂藏书楼', province: '浙江', type: '藏书楼' },
-  { name: '适园', province: '江苏', type: '园林' },
-  { name: '南屏村古建筑群', province: '安徽', type: '建筑群' },
-  { name: '陈阁老宅', province: '浙江', type: '宅第' },
-  { name: '龙江桥', province: '福建', type: '桥梁' },
-  { name: '高椅村古建筑群', province: '湖南', type: '建筑群' },
-  { name: '董府', province: '宁夏', type: '宅第' },
-  { name: '石堰坪古建筑群', province: '湖南', type: '建筑群' },
-  { name: '五泉山建筑群', province: '甘肃', type: '建筑群' },
-  { name: '淮军公所', province: '河北', type: '公所' },
-  { name: '山陕甘会馆', province: '河南', type: '会馆' },
-  { name: '泉州天后宫', province: '福建', type: '寺庙' }
-]
-
-// 警告：更换底图后，请手动微调以下 left 和 top 的百分比，以确保坐标落在真实地图的对应省份上
-const provincesData = [
-  { name: '北京', left: '64%', top: '41%', base: 'bg-amber-500', active: 'bg-amber-400', size: 'w-4 h-4' },
-  { name: '天津', left: '66%', top: '43%', base: 'bg-gray-500', active: 'bg-gray-400', size: 'w-3 h-3' },
-  { name: '河北', left: '63%', top: '48%', base: 'bg-blue-500', active: 'bg-blue-400', size: 'w-4 h-4' },
-  { name: '山西', left: '70%', top: '54%', base: 'bg-red-500', active: 'bg-red-400', size: 'w-4 h-4' },
-  { name: '内蒙古', left: '60%', top: '40%', base: 'bg-purple-500', active: 'bg-purple-400', size: 'w-4 h-4' },
-  { name: '辽宁', left: '72%', top: '38%', base: 'bg-cyan-500', active: 'bg-cyan-400', size: 'w-3 h-3' },
-  { name: '吉林', left: '77%', top: '32%', base: 'bg-teal-500', active: 'bg-teal-400', size: 'w-3 h-3' },
-  { name: '黑龙江', left: '75%', top: '22%', base: 'bg-emerald-500', active: 'bg-emerald-400', size: 'w-3 h-3' },
-  { name: '上海', left: '73%', top: '60%', base: 'bg-pink-500', active: 'bg-pink-400', size: 'w-3 h-3' },
-  { name: '江苏', left: '70%', top: '58%', base: 'bg-green-500', active: 'bg-green-400', size: 'w-4 h-4' },
-  { name: '浙江', left: '72%', top: '68%', base: 'bg-orange-500', active: 'bg-orange-400', size: 'w-4 h-4' },
-  { name: '安徽', left: '67%', top: '60%', base: 'bg-lime-500', active: 'bg-lime-400', size: 'w-3 h-3' },
-  { name: '福建', left: '69%', top: '74%', base: 'bg-indigo-500', active: 'bg-indigo-400', size: 'w-3 h-3' },
-  { name: '江西', left: '66%', top: '70%', base: 'bg-rose-500', active: 'bg-rose-400', size: 'w-3 h-3' },
-  { name: '山东', left: '67%', top: '52%', base: 'bg-yellow-500', active: 'bg-yellow-400', size: 'w-4 h-4' },
-  { name: '河南', left: '62%', top: '56%', base: 'bg-amber-600', active: 'bg-amber-500', size: 'w-4 h-4' },
-  { name: '湖北', left: '62%', top: '63%', base: 'bg-red-600', active: 'bg-red-500', size: 'w-4 h-4' },
-  { name: '湖南', left: '60%', top: '72%', base: 'bg-fuchsia-500', active: 'bg-fuchsia-400', size: 'w-3 h-3' },
-  { name: '广东', left: '62%', top: '80%', base: 'bg-violet-500', active: 'bg-violet-400', size: 'w-4 h-4' },
-  { name: '广西', left: '53%', top: '80%', base: 'bg-sky-500', active: 'bg-sky-400', size: 'w-3 h-3' },
-  { name: '海南', left: '56%', top: '90%', base: 'bg-emerald-400', active: 'bg-emerald-300', size: 'w-3 h-3' },
-  { name: '重庆', left: '53%', top: '65%', base: 'bg-orange-600', active: 'bg-orange-500', size: 'w-3 h-3' },
-  { name: '四川', left: '45%', top: '65%', base: 'bg-sky-600', active: 'bg-sky-500', size: 'w-4 h-4' },
-  { name: '贵州', left: '52%', top: '72%', base: 'bg-lime-600', active: 'bg-lime-500', size: 'w-3 h-3' },
-  { name: '云南', left: '42%', top: '80%', base: 'bg-teal-600', active: 'bg-teal-500', size: 'w-4 h-4' },
-  { name: '西藏', left: '32%', top: '60%', base: 'bg-cyan-700', active: 'bg-cyan-600', size: 'w-4 h-4' },
-  { name: '陕西', left: '55%', top: '55%', base: 'bg-red-700', active: 'bg-red-600', size: 'w-4 h-4' },
-  { name: '甘肃', left: '47%', top: '48%', base: 'bg-yellow-700', active: 'bg-yellow-600', size: 'w-4 h-4' },
-  { name: '青海', left: '38%', top: '52%', base: 'bg-pink-700', active: 'bg-pink-600', size: 'w-3 h-3' },
-  { name: '宁夏', left: '52%', top: '50%', base: 'bg-amber-700', active: 'bg-amber-600', size: 'w-3 h-3' },
-  { name: '新疆', left: '22%', top: '38%', base: 'bg-rose-700', active: 'bg-rose-600', size: 'w-4 h-4' },
-  { name: '香港', left: '64%', top: '82%', base: 'bg-indigo-700', active: 'bg-indigo-600', size: 'w-2 h-2' },
-  { name: '澳门', left: '62%', top: '83%', base: 'bg-purple-700', active: 'bg-purple-600', size: 'w-2 h-2' },
-  { name: '台湾', left: '74%', top: '78%', base: 'bg-emerald-700', active: 'bg-emerald-600', size: 'w-3 h-3' }
-]
-
-const mapLegend = [
-  { id: '宫殿', label: '宫殿建筑', color: 'bg-amber-400' },
-  { id: '寺庙', label: '宗教建筑', color: 'bg-red-400' },
-  { id: '桥梁', label: '桥梁建筑', color: 'bg-blue-400' },
-  { id: '建筑群', label: '民居群落', color: 'bg-green-400' }
-]
-
-const aggregatedData = computed(() => {
-  const dataToProcess = selectedProvince.value
-    ? ancientBuildingsMap.filter(b => b.province === selectedProvince.value)
-    : ancientBuildingsMap
-
-  const statsMap = new Map<string, number>()
-  dataToProcess.forEach((item) => {
-    statsMap.set(item.type, (statsMap.get(item.type) || 0) + 1)
-  })
-
-  const statsArray = Array.from(statsMap.entries()).map(([type, count]) => ({ type, count }))
-  statsArray.sort((a, b) => b.count - a.count)
-
-  return statsArray
-})
-
-const totalBuildings = computed(() => {
-  return selectedProvince.value
-    ? ancientBuildingsMap.filter(b => b.province === selectedProvince.value).length
-    : ancientBuildingsMap.length
-})
-
 const currentSlide = computed(() => slides[activeIndex.value])
+
 const nextSlide = () => {
   activeIndex.value = (activeIndex.value + 1) % slides.length
-  // 切换幻灯片时暂停视频并展开侧边栏
-  document.querySelectorAll('video').forEach(video => video.pause())
-  isPlaying.value = false
-  isSidebarCollapsed.value = false
+  pauseAllVideos()
 }
 const prevSlide = () => {
   activeIndex.value = (activeIndex.value - 1 + slides.length) % slides.length
-  // 切换幻灯片时暂停视频并展开侧边栏
+  pauseAllVideos()
+}
+
+const pauseAllVideos = () => {
   document.querySelectorAll('video').forEach(video => video.pause())
   isPlaying.value = false
   isSidebarCollapsed.value = false
@@ -147,30 +42,17 @@ const handleKeydown = (e: KeyboardEvent) => {
   if (e.key === 'ArrowLeft') prevSlide()
 }
 
-const selectProvince = (province: string) => {
-  selectedProvince.value = selectedProvince.value === province ? null : province
-}
-
-const toggleFilter = (typeId: string) => {
-  activeFilter.value = activeFilter.value === typeId ? null : typeId
-}
-
-const isProvinceHighlighted = (provinceName: string) => {
-  if (!activeFilter.value) return true
-  return ancientBuildingsMap.some((b) => {
-    if (b.province !== provinceName) return false
-    if (activeFilter.value === '寺庙' && (b.type === '寺庙' || b.type === '道教建筑' || b.type === '石刻')) return true
-    if (activeFilter.value === '建筑群' && (b.type === '建筑群' || b.type === '宅第' || b.type === '村落')) return true
-    return b.type === activeFilter.value
-  })
-}
-
 const setSlide = (index: number) => {
   activeIndex.value = index
-  setTimeout(() => {
-    document.querySelectorAll('video').forEach(video => video.pause())
-    isPlaying.value = false
-  }, 100)
+  setTimeout(pauseAllVideos, 100)
+}
+
+const togglePlay = () => {
+  isPlaying.value = !isPlaying.value
+  document.querySelectorAll('video').forEach((video) => {
+    isPlaying.value ? video.play().catch(() => {}) : video.pause()
+  })
+  isSidebarCollapsed.value = isPlaying.value
 }
 
 onMounted(() => {
@@ -183,20 +65,27 @@ onUnmounted(() => {
   window.removeEventListener('keydown', handleKeydown)
 })
 
-const togglePlay = () => {
-  isPlaying.value = !isPlaying.value
-  document.querySelectorAll('video').forEach((video) => {
-    isPlaying.value ? video.play().catch(() => {}) : video.pause()
-  })
+// ================= 新增：展厅叙事数据源 =================
 
-  // 自动控制侧边栏收缩
-  isSidebarCollapsed.value = isPlaying.value
-}
+// 1. 大国足迹数据
+const footprints = [
+  { id: 1, title: '山西 · 平遥古城', image: '/images/平遥古城.jpg', desc: '“敬畏历史、敬畏文化、敬畏生态，全面保护好历史文化遗产，统筹好旅游发展、特色经营、古城保护。”' },
+  { id: 2, title: '甘肃 · 敦煌莫高窟', image: '/images/莫高窟.jpg', desc: '“保护好我们的国粹，传承好优秀的传统文化。把莫高窟保护好，把敦煌文化传承好。”' },
+  { id: 3, title: '北京 · 中轴线', image: '/images/中轴线.jpg', desc: '“北京历史文化是中华文明源远流长的伟大见证，要更加精心保护好，凸显北京历史文化的整体价值。”' }
+]
+
+// 2. 数字营造功能引流数据
+const features = [
+  { id: 1, title: '九州图志', subtitle: '古建遗存数据大屏', desc: '依托百万级地理数据，全景式刻画华夏大地的木构、砖石与古塔分布，利用可视化图表洞悉千年营造脉络。', icon: 'i-lucide-map', link: '/dashboard' },
+  { id: 2, title: '太虚幻境', subtitle: 'AI 沉浸式历史推演', desc: '搭载 DeepSeek 大语言模型，与古建宗师跨越时空对话，在水墨晕染的案几上探寻营造法式的奥秘。', icon: 'i-lucide-sparkles', link: '/dashboard' }, // 这里的链接后续改为你的实际路由
+  { id: 3, title: '营造学社', subtitle: '青年文脉传承社区', desc: '汇聚全国古建爱好者与学者，共享测绘图纸、田野调查与文献资料，共筑数字化保护与交流的基石。', icon: 'i-lucide-library', link: '/forum' }
+]
 </script>
 
 <template>
-  <div class="min-h-screen bg-[#030303] text-white font-serif selection:bg-amber-600/30">
-    <div class="relative w-full h-[100vh] bg-[#030303] overflow-hidden flex flex-col items-center justify-center">
+  <div class="font-serif selection:bg-[#8B2B2B]/20 overflow-x-hidden">
+    <!-- ================= 首屏：暗黑沉浸式轮播 (保留你的原版) ================= -->
+    <div class="relative w-full h-[100vh] bg-[#030303] text-white overflow-hidden flex flex-col items-center justify-center">
       <div class="absolute inset-0 z-0 bg-black">
         <transition
           name="fade"
@@ -248,6 +137,7 @@ const togglePlay = () => {
         </div>
       </div>
 
+      <!-- 控制按钮 -->
       <div class="absolute top-6 right-6 lg:right-12 flex gap-3 z-30 px-4 py-2 bg-black/40 backdrop-blur-md rounded-full border border-white/10 shadow-lg pointer-events-auto">
         <button
           class="hover:text-amber-400 transition-colors"
@@ -289,6 +179,7 @@ const togglePlay = () => {
         />
       </button>
 
+      <!-- 标题与按钮 -->
       <div class="absolute bottom-20 z-20 w-full text-center px-4 flex flex-col items-center pointer-events-none">
         <transition
           name="fade-up"
@@ -320,6 +211,7 @@ const togglePlay = () => {
         </transition>
       </div>
 
+      <!-- 底部指示器 -->
       <div class="absolute bottom-16 flex gap-3 z-30 pointer-events-auto">
         <button
           v-for="(slide, index) in slides"
@@ -330,7 +222,8 @@ const togglePlay = () => {
         />
       </div>
 
-      <div class="absolute bottom-12 left-1/2 transform -translate-x-1/2 z-20 animate-bounce pointer-events-none">
+      <!-- 提示下拉动画 -->
+      <div class="absolute bottom-6 left-1/2 transform -translate-x-1/2 z-20 animate-bounce pointer-events-none">
         <UIcon
           name="i-lucide-chevron-down"
           class="w-8 h-8 text-white/60"
@@ -338,136 +231,137 @@ const togglePlay = () => {
       </div>
     </div>
 
-    <div class="relative w-full min-h-screen bg-[#d8c3a5] bg-opacity-10 bg-[url('https://www.transparenttextures.com/patterns/rice-paper-2.png')] py-20 px-6">
-      <div class="max-w-[1300px] mx-auto">
-        <div class="text-center mb-12">
-          <h2 class="text-4xl md:text-5xl font-bold text-[#f5ebd7] mb-6 font-serif tracking-widest text-shadow-sm">
-            《 古建筑分布地图 》
-          </h2>
-        </div>
+    <!-- ================= 第一幕：引言卷轴 (极简留白与故宫红) ================= -->
+    <section class="relative py-40 bg-[#FAFAFA] flex flex-col items-center justify-center overflow-hidden border-b border-[#EAEAEA]">
+      <!-- 巨大的印章/文字水印，营造高级感 -->
+      <div class="absolute inset-0 flex items-center justify-center opacity-[0.03] pointer-events-none select-none">
+        <span class="font-serif text-[24rem] font-bold text-[#8B2B2B]">文脉</span>
+      </div>
 
-        <div class="flex flex-col lg:flex-row items-center justify-center gap-8 lg:gap-12">
-          <div
-            class="relative w-full lg:flex-1 max-w-4xl flex items-center justify-center"
-            style="aspect-ratio: 4/3;"
-          >
-            <img
-              src="/images/china-map-real.png"
-              alt="中国地图底图"
-              class="absolute inset-0 w-full h-full object-contain opacity-90 drop-shadow-2xl"
-            >
-
-            <div class="absolute inset-0 w-full h-full">
-              <div
-                v-for="prov in provincesData"
-                :key="prov.name"
-                class="absolute transform -translate-x-1/2 -translate-y-1/2 z-10 transition-all duration-500"
-                :style="{ left: prov.left, top: prov.top }"
-                :class="isProvinceHighlighted(prov.name) ? 'opacity-100 hover:z-20' : 'opacity-20 grayscale scale-90'"
-              >
-                <button
-                  class="rounded-full border-2 transition-all cursor-pointer shadow-lg hover:scale-125 focus:outline-none"
-                  :class="[prov.size, selectedProvince === prov.name ? `${prov.active} scale-125 border-white ring-4 ring-${prov.base}/30` : `${prov.base} border-white/50 hover:${prov.active}`]"
-                  @click="selectProvince(prov.name)"
-                />
-                <span
-                  class="absolute top-6 left-1/2 transform -translate-x-1/2 text-xs text-white/90 whitespace-nowrap font-medium bg-black/70 px-2 py-0.5 rounded border border-white/10 backdrop-blur-sm transition-opacity"
-                  :class="selectedProvince === prov.name ? 'opacity-100' : 'opacity-0 md:group-hover:opacity-100'"
-                >
-                  {{ prov.name }}
-                </span>
-              </div>
-            </div>
-          </div>
-
-          <div
-            class="w-full lg:w-[280px] shrink-0 transform transition-all duration-500"
-            :class="selectedProvince ? 'scale-105' : 'scale-100'"
-          >
-            <div class="bg-[#9d1b1b] text-[#f5ebd7] rounded shadow-[0_10px_40px_rgba(0,0,0,0.5)] border border-[#c13030] overflow-hidden">
-              <div class="text-center pt-6 pb-4 px-4 relative">
-                <div class="absolute top-2 left-2 w-3 h-3 border-t border-l border-[#d8c3a5] opacity-50" />
-                <div class="absolute top-2 right-2 w-3 h-3 border-t border-r border-[#d8c3a5] opacity-50" />
-
-                <h3 class="text-xl font-bold tracking-[0.2em] mb-2 font-serif">
-                  【 {{ selectedProvince || '全国' }} 】
-                </h3>
-                <p class="text-xs opacity-80 tracking-widest border-b border-[#d8c3a5]/30 pb-3 inline-block px-6">
-                  代表性统计
-                </p>
-              </div>
-
-              <div class="bg-[#8b1818] p-1">
-                <div
-                  v-if="aggregatedData.length > 0"
-                  class="grid grid-cols-2 gap-[1px] bg-[#d8c3a5]/20"
-                >
-                  <div
-                    v-for="(stat, index) in aggregatedData"
-                    :key="index"
-                    class="bg-[#9d1b1b] py-5 px-2 text-center flex flex-col justify-center items-center group hover:bg-[#b02222] transition-colors"
-                  >
-                    <span class="text-2xl font-bold mb-1 transform group-hover:scale-110 transition-transform duration-300">{{ stat.count }}</span>
-                    <span class="text-[10px] tracking-wider opacity-80">{{ stat.type }}</span>
-                  </div>
-                </div>
-
-                <div
-                  v-else
-                  class="bg-[#9d1b1b] py-16 text-center opacity-60"
-                >
-                  <UIcon
-                    name="i-lucide-map"
-                    class="w-8 h-8 mx-auto mb-3 opacity-50"
-                  />
-                  <p class="text-sm">
-                    该地区暂无数据
-                  </p>
-                </div>
-              </div>
-
-              <div class="p-4 text-center relative">
-                <div class="absolute bottom-2 left-2 w-3 h-3 border-b border-l border-[#d8c3a5] opacity-50" />
-                <div class="absolute bottom-2 right-2 w-3 h-3 border-b border-r border-[#d8c3a5] opacity-50" />
-
-                <div class="inline-flex items-center justify-center gap-2 font-bold w-full">
-                  <span class="text-xs opacity-80">总计：</span>
-                  <span class="text-2xl text-amber-400 font-serif">{{ totalBuildings }}</span>
-                  <span class="text-xs opacity-80">项</span>
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
-
-        <div class="mt-8 max-w-2xl mx-auto">
-          <div class="grid grid-cols-2 md:grid-cols-4 gap-3 text-center">
-            <button
-              v-for="legend in mapLegend"
-              :key="legend.id"
-              class="group relative overflow-hidden bg-[#1a1a1a] p-3 rounded-xl border transition-all duration-300 focus:outline-none"
-              :class="activeFilter === legend.id ? 'border-amber-400/60 shadow-[0_0_10px_rgba(251,191,36,0.15)] bg-[#222]' : 'border-[#333] hover:border-[#555]'"
-              @click="toggleFilter(legend.id)"
-            >
-              <div
-                class="w-2.5 h-2.5 rounded-full mx-auto mb-2 transition-transform duration-300"
-                :class="[legend.color, activeFilter === legend.id ? 'scale-125' : 'group-hover:scale-110']"
-              />
-              <p
-                class="text-xs transition-colors"
-                :class="activeFilter === legend.id ? 'text-amber-400 font-medium' : 'text-white/70 group-hover:text-white'"
-              >
-                {{ legend.label }}
-              </p>
-            </button>
+      <div class="relative z-10 max-w-5xl mx-auto text-center px-6">
+        <h2 class="text-3xl md:text-5xl font-serif text-[#1A1A1A] leading-[1.8] tracking-[0.1em] font-bold">
+          “历史文化遗产是祖先留给我们的，<br class="hidden md:block">我们一定要完整交给后人。”
+        </h2>
+        <div class="mt-16 flex flex-col items-center gap-6">
+          <div class="w-px h-20 bg-[#8B2B2B]/30" />
+          <p class="text-[#666666] font-serif tracking-[0.4em] text-sm uppercase">
+            从木构的榫卯 到砖石的斑驳 每一寸皆为华夏大国气象
+          </p>
+          <!-- 古风落款印章 -->
+          <div class="mt-6 w-14 h-14 border-2 border-[#8B2B2B] text-[#8B2B2B] flex items-center justify-center font-serif text-sm font-bold rotate-[-6deg] opacity-80 shadow-[inset_0_0_8px_rgba(139,43,43,0.1)]">
+            赓续<br>文脉
           </div>
         </div>
       </div>
-    </div>
+    </section>
+
+    <!-- ================= 第二幕：大国足迹 (现代美术馆风格) ================= -->
+    <section class="py-32 bg-white relative">
+      <div class="max-w-7xl mx-auto px-6">
+        <!-- 章节标题 -->
+        <div class="text-center mb-20">
+          <h3 class="text-3xl md:text-4xl font-serif text-[#1A1A1A] tracking-[0.2em] font-bold mb-5 flex items-center justify-center gap-4">
+            <span class="w-12 h-px bg-[#8B2B2B]/40" />
+            大国足迹 · 守护历史文脉
+            <span class="w-12 h-px bg-[#8B2B2B]/40" />
+          </h3>
+          <p class="text-[#888888] font-serif tracking-widest text-sm">
+            循着历史的印记，见证大国对古建保护的坚定承诺
+          </p>
+        </div>
+
+        <!-- 足迹卡片阵列 -->
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-10">
+          <div
+            v-for="footprint in footprints"
+            :key="footprint.id"
+            class="group bg-[#FAFAFA] rounded-sm overflow-hidden shadow-[0_10px_30px_rgba(0,0,0,0.03)] hover:shadow-[0_20px_50px_rgba(139,43,43,0.08)] transition-all duration-500 relative cursor-pointer flex flex-col h-full border border-transparent hover:border-[#8B2B2B]/15"
+          >
+            <!-- 卡片顶部：高清高饱和摄影 -->
+            <div class="h-64 overflow-hidden relative">
+              <div class="absolute inset-0 bg-[#8B2B2B]/0 group-hover:bg-[#8B2B2B]/10 transition-colors z-10 mix-blend-overlay" />
+              <img
+                :src="footprint.image"
+                :alt="footprint.title"
+                class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-1000 ease-out"
+              >
+            </div>
+            <!-- 卡片底部：现代留白排版 -->
+            <div class="p-8 relative flex-1 flex flex-col justify-start">
+              <div class="absolute top-0 left-0 w-0 h-1 bg-[#8B2B2B] group-hover:w-full transition-all duration-700 ease-out" />
+              <h4 class="text-xl font-serif text-[#1A1A1A] font-bold tracking-widest mb-4">
+                {{ footprint.title }}
+              </h4>
+              <p class="text-[#666666] font-serif text-sm leading-[2.2] text-justify tracking-wide">
+                {{ footprint.desc }}
+              </p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ================= 第三幕：数字营造 (功能引流区) ================= -->
+    <section class="py-32 bg-[#F5F5F7] relative border-t border-[#EAEAEA]">
+      <div class="max-w-7xl mx-auto px-6">
+        <!-- 章节标题 -->
+        <div class="text-center mb-20 flex flex-col items-center">
+          <UIcon
+            name="i-lucide-layout-dashboard"
+            class="w-10 h-10 text-[#8B2B2B] mb-6 opacity-80"
+          />
+          <h3 class="text-3xl md:text-4xl font-serif text-[#1A1A1A] tracking-[0.2em] font-bold mb-5">
+            数字营造 · 焕新千年古建
+          </h3>
+          <p class="text-[#888888] font-serif tracking-widest text-sm max-w-2xl leading-relaxed">
+            以数字之光，照亮千年斗拱。国家倡导，青年践行。<br>
+            融合 3D 漫游、地理大数据与前沿 AI 交互，让沉睡的古建重焕新生。
+          </p>
+        </div>
+
+        <!-- 交互方块 -->
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+          <div
+            v-for="feature in features"
+            :key="feature.id"
+            class="bg-white p-10 rounded-sm shadow-[0_5px_20px_rgba(0,0,0,0.02)] hover:shadow-[0_15px_40px_rgba(0,0,0,0.06)] transition-all duration-300 flex flex-col items-start border border-[#EAEAEA] hover:-translate-y-1"
+          >
+            <!-- 图标与副标题 -->
+            <div class="w-14 h-14 bg-[#FAFAFA] border border-[#EAEAEA] rounded-full flex items-center justify-center mb-6 text-[#8B2B2B]">
+              <UIcon
+                :name="feature.icon"
+                class="w-6 h-6"
+              />
+            </div>
+            <h4 class="text-2xl font-serif text-[#1A1A1A] font-bold tracking-widest mb-2">
+              {{ feature.title }}
+            </h4>
+            <span class="text-xs text-[#8B2B2B] tracking-widest border border-[#8B2B2B]/30 px-2 py-1 mb-5 bg-[#8B2B2B]/5">{{ feature.subtitle }}</span>
+
+            <p class="text-[#666666] font-serif text-sm leading-loose mb-10 flex-1">
+              {{ feature.desc }}
+            </p>
+
+            <!-- 复用首屏的红色按钮基因 -->
+            <NuxtLink
+              :to="feature.link"
+              class="group w-full flex items-center justify-center gap-2 py-3 bg-[#ad2a2a] hover:bg-[#c93e3e] text-white rounded-sm transition-all duration-300 shadow-md"
+            >
+              <span class="tracking-[0.2em] text-sm">进入探索</span>
+              <UIcon
+                name="i-lucide-arrow-right"
+                class="w-4 h-4 group-hover:translate-x-1 transition-transform"
+              />
+            </NuxtLink>
+          </div>
+        </div>
+      </div>
+    </section>
   </div>
 </template>
 
 <style scoped>
+/* 轮播图保留样式 */
 .text-shadow-lg { text-shadow: 2px 2px 10px rgba(0, 0, 0, 0.9), 0 0 30px rgba(0,0,0,0.6); }
 .text-shadow-sm { text-shadow: 1px 1px 4px rgba(0, 0, 0, 0.9); }
 .fade-enter-active, .fade-leave-active { transition: opacity 1.2s ease; }
