@@ -4,7 +4,7 @@ export default defineNuxtConfig({
     '@nuxt/eslint',
     '@nuxt/ui',
     '@nuxt/image',
-    '@nuxt/icon',````````````````````````````````````````````````````````````````
+    '@nuxt/icon',
     '@nuxtjs/i18n',
     '@pinia/nuxt',
     '@tresjs/nuxt',
