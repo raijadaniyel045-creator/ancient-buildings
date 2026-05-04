@@ -1,3 +1,2 @@
-import * from './dashboard'
-
-export
+export * from './buildings'
+export * from './secure'

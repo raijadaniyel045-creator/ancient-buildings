@@ -60,7 +60,6 @@ const items = computed<NavigationMenuItem[]>(() => [
   ] },
   { label: t('forum'), to: localePath('/forum') },
   { label: t('dashboard'), to: localePath('/dashboard') },
-  { label: t('search'), to: localePath('/search') },
   { label: t('ai'), to: localePath('/ai') }
 ])
 </script>

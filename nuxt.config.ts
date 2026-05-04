@@ -10,7 +10,8 @@ export default defineNuxtConfig({
     '@tresjs/nuxt',
     'nuxt-auth-utils',
     '@nuxt/content',
-    'nuxt-echarts'
+    'nuxt-echarts',
+    '@pinia-plugin-persistedstate/nuxt'
   ],
 
   devtools: {
@@ -20,7 +21,15 @@ export default defineNuxtConfig({
   css: ['~/assets/css/main.css'],
 
   content: {
+    database: {
+      type: 'postgres',
+      url: 'postgresql://admin:123456@localhost:5432/buildings'
+    },
     experimental: { nativeSqlite: true }
+  },
+
+  ui: {
+    fonts: false
   },
 
   build: {
@@ -32,6 +41,15 @@ export default defineNuxtConfig({
   },
 
   compatibilityDate: '2025-01-15',
+
+  nitro: {
+    routeRules: {
+      // 将所有 /api-v1/ 开头的请求代理到后端服务
+      '/api-v1/**': {
+        proxy: 'http://localhost:5224/api-v1/**'
+      }
+    }
+  },
 
   echarts: {
     // 导入所有图表类型
@@ -72,8 +90,6 @@ export default defineNuxtConfig({
   },
 
   icon: {
-    serverBundle: {
-      collections: ['uil', 'mdi']
-    }
+    serverBundle: 'local'
   }
 })
