@@ -58,7 +58,7 @@
 
         <template #history>
           <div class="mt-6">
-            <DashboardHistory />
+            <DashboardStory />
           </div>
         </template>
       </UTabs>
