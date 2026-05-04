@@ -45,7 +45,7 @@
           >
             <span>{{ tab.icon }}</span>
             <span>{{ tab.label }}</span>
-            <span 
+            <span
               v-if="tab.count > 0"
               :class="[
                 'px-2.5 py-0.5 text-xs font-bold rounded-full',
@@ -433,22 +433,22 @@ const tabs = computed(() => [
 
 const filteredFriends = computed(() => {
   let result = friends.value
-  
+
   if (searchQuery.value) {
     const query = searchQuery.value.toLowerCase()
-    result = result.filter(friend => 
+    result = result.filter(friend =>
       friend.name.toLowerCase().includes(query) ||
       friend.bio.toLowerCase().includes(query) ||
       friend.interests.some(i => i.toLowerCase().includes(query))
     )
   }
-  
+
   if (filterOnline.value === 'online') {
     result = result.filter(friend => friend.online)
   } else if (filterOnline.value === 'offline') {
     result = result.filter(friend => !friend.online)
   }
-  
+
   return result
 })
 
@@ -720,7 +720,7 @@ const closeChat = () => {
 
 const sendMessage = async () => {
   if (!chatMessage.value.trim() || !chattingWith.value) return
-  
+
   const content = chatMessage.value
   chatMessages.value.push({
     from: 'me',
@@ -728,7 +728,7 @@ const sendMessage = async () => {
     time: '刚刚'
   })
   chatMessage.value = ''
-  
+
   // 滚动到底部
   setTimeout(() => {
     const el = document.getElementById('chatMessages')
@@ -736,7 +736,7 @@ const sendMessage = async () => {
       el.scrollTop = el.scrollHeight
     }
   }, 100)
-  
+
   try {
     await fetch('/api/friends/message', {
       method: 'POST',

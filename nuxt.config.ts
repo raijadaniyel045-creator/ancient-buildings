@@ -23,6 +23,10 @@ export default defineNuxtConfig({
     experimental: { nativeSqlite: true }
   },
 
+  build: {
+    transpile: ['echarts', 'vue-echarts', 'zrender'] // zrender 是 echarts 的底层依赖
+  },
+
   routeRules: {
     '/': { prerender: true }
   },
