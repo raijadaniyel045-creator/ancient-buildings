@@ -11,7 +11,7 @@ export default defineEventHandler((event) => {
   const files = fs.readdirSync(dataDir).filter(f => f.endsWith('.json'))
   const allData = []
 
-  // 严格同步读取，并去除可能存在的隐藏空格
+  // 极简提取，只拿省份和朝代
   for (const file of files) {
     try {
       const content = fs.readFileSync(path.join(dataDir, file), 'utf-8')
@@ -19,9 +19,6 @@ export default defineEventHandler((event) => {
 
       allData.push({
         province: (json.province || '未知').trim(),
-        city: (json.city || '未知').trim(),
-        category: (json.category || '未知').trim(),
-        // ！！！增加这一行：把朝代数据传给前端！！！
         era: (json.era || '未知').trim()
       })
     } catch (e) {
