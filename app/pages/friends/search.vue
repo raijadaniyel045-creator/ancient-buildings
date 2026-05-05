@@ -1,59 +1,98 @@
 <template>
   <div class="min-h-screen bg-[#FDFBF7] text-[#2C363F] font-sans selection:bg-[#D4AF37] selection:text-white">
     <!-- 顶部装饰线 -->
-    <div class="h-1 w-full bg-gradient-to-r from-transparent via-[#D4AF37] to-transparent opacity-50" />
+    <div class="h-1 w-full bg-linear-to-r from-transparent via-[#D4AF37] to-transparent opacity-50" />
 
     <!-- 页面标题 -->
     <div class="max-w-6xl mx-auto px-6 pt-10 pb-6">
       <div class="flex items-center gap-4">
         <div class="w-12 h-12 bg-[#F5F0E6] rounded-2xl flex items-center justify-center border border-[#E8DFCE] shadow-sm">
-          <svg class="w-6 h-6 text-[#8B7355]" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0zM10 7v3m0 0v3m0-3h3m-3 0H7" />
+          <svg
+            class="w-6 h-6 text-[#8B7355]"
+            fill="none"
+            viewBox="0 0 24 24"
+            stroke="currentColor"
+          >
+            <path
+              stroke-linecap="round"
+              stroke-linejoin="round"
+              stroke-width="1.5"
+              d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0zM10 7v3m0 0v3m0-3h3m-3 0H7"
+            />
           </svg>
         </div>
         <div>
-          <h1 class="text-2xl font-serif tracking-wide text-[#2C363F]">寻觅知音</h1>
-          <p class="text-sm text-[#8B7355] mt-1 font-light tracking-wider">高山流水，基于志趣匹配同道中人</p>
+          <h1 class="text-2xl font-serif tracking-wide text-[#2C363F]">
+            寻觅知音
+          </h1>
+          <p class="text-sm text-[#8B7355] mt-1 font-light tracking-wider">
+            高山流水，基于志趣匹配同道中人
+          </p>
         </div>
       </div>
     </div>
 
     <!-- 页面主体 -->
     <div class="max-w-6xl mx-auto px-6 py-4">
-
       <!-- 匹配统计 -->
       <div class="grid grid-cols-2 md:grid-cols-4 gap-5 mb-8">
         <div class="relative overflow-hidden bg-white/60 backdrop-blur-md rounded-2xl p-5 border border-[#E8DFCE]/60 shadow-sm group">
-          <div class="absolute -right-4 -top-4 w-20 h-20 bg-gradient-to-br from-[#D4AF37] opacity-10 rounded-full blur-xl group-hover:scale-150 transition-all duration-500" />
-          <div class="text-3xl font-serif text-[#2C363F] relative z-10">{{ recommendedUsers.length }}</div>
-          <div class="text-xs text-[#8B7355] mt-2 font-medium tracking-widest relative z-10">推演归客</div>
+          <div class="absolute -right-4 -top-4 w-20 h-20 bg-linear-to-br from-[#D4AF37] opacity-10 rounded-full blur-xl group-hover:scale-150 transition-all duration-500" />
+          <div class="text-3xl font-serif text-[#2C363F] relative z-10">
+            {{ recommendedUsers.length }}
+          </div>
+          <div class="text-xs text-[#8B7355] mt-2 font-medium tracking-widest relative z-10">
+            推演归客
+          </div>
         </div>
         <div class="relative overflow-hidden bg-white/60 backdrop-blur-md rounded-2xl p-5 border border-[#E8DFCE]/60 shadow-sm group">
-          <div class="absolute -right-4 -top-4 w-20 h-20 bg-gradient-to-br from-[#5B8C7A] opacity-10 rounded-full blur-xl group-hover:scale-150 transition-all duration-500" />
-          <div class="text-3xl font-serif text-[#5B8C7A] relative z-10">{{ avgMatchScore }}<span class="text-lg">%</span></div>
-          <div class="text-xs text-[#8B7355] mt-2 font-medium tracking-widest relative z-10">平均契合</div>
+          <div class="absolute -right-4 -top-4 w-20 h-20 bg-linear-to-br from-[#5B8C7A] opacity-10 rounded-full blur-xl group-hover:scale-150 transition-all duration-500" />
+          <div class="text-3xl font-serif text-[#5B8C7A] relative z-10">
+            {{ avgMatchScore }}<span class="text-lg">%</span>
+          </div>
+          <div class="text-xs text-[#8B7355] mt-2 font-medium tracking-widest relative z-10">
+            平均契合
+          </div>
         </div>
         <div class="relative overflow-hidden bg-white/60 backdrop-blur-md rounded-2xl p-5 border border-[#E8DFCE]/60 shadow-sm group">
-          <div class="absolute -right-4 -top-4 w-20 h-20 bg-gradient-to-br from-[#8B7355] opacity-10 rounded-full blur-xl group-hover:scale-150 transition-all duration-500" />
-          <div class="text-3xl font-serif text-[#2C363F] relative z-10">{{ onlineCount }}</div>
-          <div class="text-xs text-[#8B7355] mt-2 font-medium tracking-widest relative z-10">当前在线</div>
+          <div class="absolute -right-4 -top-4 w-20 h-20 bg-linear-to-br from-[#8B7355] opacity-10 rounded-full blur-xl group-hover:scale-150 transition-all duration-500" />
+          <div class="text-3xl font-serif text-[#2C363F] relative z-10">
+            {{ onlineCount }}
+          </div>
+          <div class="text-xs text-[#8B7355] mt-2 font-medium tracking-widest relative z-10">
+            当前在线
+          </div>
         </div>
         <div class="relative overflow-hidden bg-white/60 backdrop-blur-md rounded-2xl p-5 border border-[#E8DFCE]/60 shadow-sm group">
-          <div class="absolute -right-4 -top-4 w-20 h-20 bg-gradient-to-br from-[#C94F4F] opacity-10 rounded-full blur-xl group-hover:scale-150 transition-all duration-500" />
-          <div class="text-3xl font-serif text-[#C94F4F] relative z-10">{{ requestCount }}</div>
-          <div class="text-xs text-[#8B7355] mt-2 font-medium tracking-widest relative z-10">待定之缘</div>
+          <div class="absolute -right-4 -top-4 w-20 h-20 bg-linear-to-br from-[#C94F4F] opacity-10 rounded-full blur-xl group-hover:scale-150 transition-all duration-500" />
+          <div class="text-3xl font-serif text-[#C94F4F] relative z-10">
+            {{ requestCount }}
+          </div>
+          <div class="text-xs text-[#8B7355] mt-2 font-medium tracking-widest relative z-10">
+            待定之缘
+          </div>
         </div>
       </div>
 
       <!-- 筛选区域 -->
       <div class="bg-white/80 backdrop-blur-sm rounded-2xl p-6 border border-[#E8DFCE]/60 shadow-sm mb-10 relative overflow-hidden">
         <!-- 装饰性角标 -->
-        <div class="absolute top-0 right-0 w-32 h-32 bg-[radial-gradient(circle_at_top_right,_var(--tw-gradient-stops))] from-[#D4AF37]/5 via-transparent to-transparent pointer-events-none" />
+        <div class="absolute top-0 right-0 w-32 h-32 bg-[radial-gradient(circle_at_top_right,var(--tw-gradient-stops))] from-[#D4AF37]/5 via-transparent to-transparent pointer-events-none" />
 
         <div class="flex items-center justify-between mb-6 relative z-10">
           <h3 class="text-base font-serif font-medium text-[#2C363F] flex items-center gap-2">
-            <svg class="w-5 h-5 text-[#8B7355]" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M7 7h.01M7 3h5c.512 0 1.024.195 1.414.586l7 7a2 2 0 010 2.828l-7 7a2 2 0 01-2.828 0l-7-7A1.994 1.994 0 013 12V7a4 4 0 014-4z" />
+            <svg
+              class="w-5 h-5 text-[#8B7355]"
+              fill="none"
+              stroke="currentColor"
+              viewBox="0 0 24 24"
+            >
+              <path
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                stroke-width="1.5"
+                d="M7 7h.01M7 3h5c.512 0 1.024.195 1.414.586l7 7a2 2 0 010 2.828l-7 7a2 2 0 01-2.828 0l-7-7A1.994 1.994 0 013 12V7a4 4 0 014-4z"
+              />
             </svg>
             择其所好
           </h3>
@@ -66,28 +105,51 @@
           <button
             v-for="tag in allTags"
             :key="tag.id"
-            @click="toggleTag(tag.id)"
             :class="[
               'px-5 py-2 rounded-xl text-sm font-medium transition-all duration-300 border',
               selectedTags.includes(tag.id)
                 ? 'bg-[#2C363F] text-[#FDFBF7] border-[#2C363F] shadow-md transform scale-105'
                 : 'bg-[#FDFBF7] text-[#8B7355] border-[#E8DFCE] hover:border-[#D4AF37]/50 hover:bg-[#F5F0E6]'
             ]"
+            @click="toggleTag(tag.id)"
           >
             {{ tag.name }}
           </button>
         </div>
 
         <div class="flex items-center justify-between mt-8 pt-6 border-t border-[#E8DFCE]/60 relative z-10">
-          <button @click="clearTags" class="text-[#A69B8D] hover:text-[#8B7355] text-sm font-medium transition-colors flex items-center gap-1.5 group">
-            <svg class="w-4 h-4 group-hover:-rotate-90 transition-transform duration-300" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M6 18L18 6M6 6l12 12" />
+          <button
+            class="text-[#A69B8D] hover:text-[#8B7355] text-sm font-medium transition-colors flex items-center gap-1.5 group"
+            @click="clearTags"
+          >
+            <svg
+              class="w-4 h-4 group-hover:-rotate-90 transition-transform duration-300"
+              fill="none"
+              stroke="currentColor"
+              viewBox="0 0 24 24"
+            >
+              <path
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                stroke-width="1.5"
+                d="M6 18L18 6M6 6l12 12"
+              />
             </svg>
             <span>清空重选</span>
           </button>
           <button class="px-8 py-2.5 bg-[#2C363F] text-[#FDFBF7] rounded-xl text-sm font-medium hover:bg-[#1A2026] transition-all shadow-md hover:shadow-lg flex items-center gap-2">
-            <svg class="w-4 h-4 text-[#D4AF37]" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14 5l7 7m0 0l-7 7m7-7H3" />
+            <svg
+              class="w-4 h-4 text-[#D4AF37]"
+              fill="none"
+              stroke="currentColor"
+              viewBox="0 0 24 24"
+            >
+              <path
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                stroke-width="2"
+                d="M14 5l7 7m0 0l-7 7m7-7H3"
+              />
             </svg>
             <span>开始寻访</span>
           </button>
@@ -95,19 +157,37 @@
       </div>
 
       <!-- 加载状态 -->
-      <div v-if="loading" class="flex flex-col items-center justify-center py-20 animate-pulse">
+      <div
+        v-if="loading"
+        class="flex flex-col items-center justify-center py-20 animate-pulse"
+      >
         <div class="relative w-16 h-16 flex items-center justify-center mb-6">
           <div class="absolute inset-0 border-2 border-[#E8DFCE] rounded-full" />
           <div class="absolute inset-0 border-2 border-[#D4AF37] rounded-full border-t-transparent animate-spin" />
-          <svg class="w-6 h-6 text-[#8B7355]" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
+          <svg
+            class="w-6 h-6 text-[#8B7355]"
+            fill="none"
+            stroke="currentColor"
+            viewBox="0 0 24 24"
+          >
+            <path
+              stroke-linecap="round"
+              stroke-linejoin="round"
+              stroke-width="1"
+              d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"
+            />
           </svg>
         </div>
-        <p class="text-sm text-[#8B7355] tracking-widest font-serif">正在为您推演契合之士...</p>
+        <p class="text-sm text-[#8B7355] tracking-widest font-serif">
+          正在为您推演契合之士...
+        </p>
       </div>
 
       <!-- 推荐用户列表 -->
-      <div v-else-if="recommendedUsers.length > 0" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+      <div
+        v-else-if="recommendedUsers.length > 0"
+        class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6"
+      >
         <div
           v-for="(user, index) in recommendedUsers"
           :key="user.id"
@@ -117,8 +197,15 @@
           <!-- 雅致的头部背景 -->
           <div class="relative h-28 bg-[#FDFBF7] overflow-hidden border-b border-[#E8DFCE]/40">
             <!-- 抽象山水/几何底纹 -->
-            <svg class="absolute inset-0 w-full h-full text-[#E8DFCE] opacity-50" viewBox="0 0 100 100" preserveAspectRatio="none">
-              <path d="M0 100 C 20 0 50 0 100 100 Z" fill="currentColor" />
+            <svg
+              class="absolute inset-0 w-full h-full text-[#E8DFCE] opacity-50"
+              viewBox="0 0 100 100"
+              preserveAspectRatio="none"
+            >
+              <path
+                d="M0 100 C 20 0 50 0 100 100 Z"
+                fill="currentColor"
+              />
             </svg>
             <div class="absolute top-4 right-4">
               <div class="px-3 py-1 bg-white/80 backdrop-blur border border-[#D4AF37]/20 text-[#D4AF37] text-[11px] font-bold tracking-wider rounded-full shadow-sm">
@@ -140,8 +227,12 @@
 
             <!-- 基本信息 -->
             <div class="text-center mb-5">
-              <h3 class="text-lg font-serif font-medium text-[#2C363F] mb-1.5">{{ user.name }}</h3>
-              <p class="text-xs text-[#8B7355] font-light leading-relaxed h-8 line-clamp-2">{{ user.bio }}</p>
+              <h3 class="text-lg font-serif font-medium text-[#2C363F] mb-1.5">
+                {{ user.name }}
+              </h3>
+              <p class="text-xs text-[#8B7355] font-light leading-relaxed h-8 line-clamp-2">
+                {{ user.bio }}
+              </p>
             </div>
 
             <!-- 兴趣标签 -->
@@ -158,7 +249,6 @@
             <!-- 操作按钮 -->
             <div class="flex gap-3">
               <button
-                @click="sendRequest(user.id)"
                 :class="[
                   'flex-1 py-2.5 rounded-xl text-sm font-medium transition-all shadow-sm flex items-center justify-center gap-2',
                   user.requestSent
@@ -166,18 +256,51 @@
                     : 'bg-[#5B8C7A] text-white hover:bg-[#4A7364] hover:shadow-md'
                 ]"
                 :disabled="user.requestSent"
+                @click="sendRequest(user.id)"
               >
-                <svg v-if="!user.requestSent" class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M18 9v3m0 0v3m0-3h3m-3 0h-3m-2-5a4 4 0 11-8 0 4 4 0 018 0zM3 20a6 6 0 0112 0v1H3v-1z" />
+                <svg
+                  v-if="!user.requestSent"
+                  class="w-4 h-4"
+                  fill="none"
+                  stroke="currentColor"
+                  viewBox="0 0 24 24"
+                >
+                  <path
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                    stroke-width="1.5"
+                    d="M18 9v3m0 0v3m0-3h3m-3 0h-3m-2-5a4 4 0 11-8 0 4 4 0 018 0zM3 20a6 6 0 0112 0v1H3v-1z"
+                  />
                 </svg>
-                <svg v-else class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M5 13l4 4L19 7" />
+                <svg
+                  v-else
+                  class="w-4 h-4"
+                  fill="none"
+                  stroke="currentColor"
+                  viewBox="0 0 24 24"
+                >
+                  <path
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                    stroke-width="1.5"
+                    d="M5 13l4 4L19 7"
+                  />
                 </svg>
                 <span>{{ user.requestSent ? '拜帖已递' : '递交拜帖' }}</span>
               </button>
               <button class="w-11 h-11 bg-[#FDFBF7] border border-[#E8DFCE] text-[#8B7355] rounded-xl hover:text-[#D4AF37] hover:border-[#D4AF37]/30 transition-colors flex items-center justify-center">
-                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z" />
+                <svg
+                  class="w-5 h-5"
+                  fill="none"
+                  stroke="currentColor"
+                  viewBox="0 0 24 24"
+                >
+                  <path
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                    stroke-width="1.5"
+                    d="M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z"
+                  />
                 </svg>
               </button>
             </div>
@@ -186,20 +309,37 @@
       </div>
 
       <!-- 空状态 -->
-      <div v-else class="text-center py-20 bg-white/50 rounded-2xl border border-dashed border-[#E8DFCE] mt-4">
-        <svg class="w-16 h-16 mx-auto text-[#D1C9BE] mb-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0zM10 7v3m0 0v3m0-3h3m-3 0H7" />
+      <div
+        v-else
+        class="text-center py-20 bg-white/50 rounded-2xl border border-dashed border-[#E8DFCE] mt-4"
+      >
+        <svg
+          class="w-16 h-16 mx-auto text-[#D1C9BE] mb-4"
+          fill="none"
+          stroke="currentColor"
+          viewBox="0 0 24 24"
+        >
+          <path
+            stroke-linecap="round"
+            stroke-linejoin="round"
+            stroke-width="1"
+            d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0zM10 7v3m0 0v3m0-3h3m-3 0H7"
+          />
         </svg>
-        <h3 class="text-lg font-serif text-[#2C363F] mb-2">未寻得同道</h3>
-        <p class="text-sm text-[#8B7355] mb-6">上方择选几项志趣，方可在此得遇良缘</p>
+        <h3 class="text-lg font-serif text-[#2C363F] mb-2">
+          未寻得同道
+        </h3>
+        <p class="text-sm text-[#8B7355] mb-6">
+          上方择选几项志趣，方可在此得遇良缘
+        </p>
       </div>
-
     </div>
   </div>
 </template>
 
 <script setup lang="ts">
-import { ref, computed, onMounted } from 'vue'
+
+
 
 interface Tag {
   id: string
@@ -260,7 +400,7 @@ const clearTags = () => {
   selectedTags.value = []
 }
 
-const sendRequest = (userid: number) => {
+const sendRequest = (userId: number) => {
   const user = recommendedUsers.value.find(u => u.id === userId)
   if (user) {
     user.requestSent = true

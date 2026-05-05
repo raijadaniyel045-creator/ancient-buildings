@@ -72,7 +72,6 @@ const items = computed<NavigationMenuItem[]>(() => [
   { label: t('home'), to: localePath('/') },
   { label: t('buildings'), to: localePath('/buildings') },
   { label: t('friends'), to: localePath('/friends'), children: [
-    { label: t('friends.manager'), to: localePath('/friends/manager') },
     { label: t('friends.search'), to: localePath('/friends/search') }
   ] },
   { label: t('forum'), to: localePath('/forum') },

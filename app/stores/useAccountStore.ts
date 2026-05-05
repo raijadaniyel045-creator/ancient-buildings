@@ -13,7 +13,7 @@ interface AuthState {
   machineHash: string | null
   accessToken: string | null
   refreshToken: string | null
-  userid: number | null
+  userId: number | null
   email: string | null
   isLoggedIn: boolean
   rememberMe: boolean
