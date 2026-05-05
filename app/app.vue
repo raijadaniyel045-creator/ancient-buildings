@@ -33,4 +33,7 @@ useSeoMeta({
   ogTitle: title,
   ogDescription: description
 })
+
+const accountStore = useAccountStore()
+accountStore.tryRestoreSession()
 </script>

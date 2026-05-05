@@ -257,7 +257,7 @@ const { data: apiData, refresh } = await useAsyncData<SplitPage>(`buildings-${lo
         provinces: p.length ? p.join(',') : undefined,
         dynasties: d.length ? d.join(',') : undefined,
         categories: c.length ? c.join(',') : undefined,
-        searchs: s.length ? s.join(',') : undefined
+        searches: s.length ? s.join(',') : undefined
       }
     })
   },
@@ -302,7 +302,7 @@ function updateUrl() {
       provinces: p.length ? p.join(',') : undefined,
       dynasties: d.length ? d.join(',') : undefined,
       categories: c.length ? c.join(',') : undefined,
-      searchs: s.length ? s.join(',') : undefined
+      searches: s.length ? s.join(',') : undefined
     }
   })
 }

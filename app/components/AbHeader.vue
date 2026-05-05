@@ -23,23 +23,36 @@
       />
     </template>
     <template #right>
-      <UButton
-        :to="localePath('/auth/login')"
-        color="neutral"
-        variant="subtle"
-        class="flex items-center gap-1.5"
+      <template
+        v-if="!isLogin"
       >
-        <UIcon
-          name="i-lucide-user"
-          class="w-4.5 h-4.5"
-        />
-        <span>{{ t('login.register') }}</span>
-      </UButton>
+        <UButton
+          :to="localePath('/auth/login')"
+          color="neutral"
+          variant="subtle"
+          class="flex items-center gap-1.5"
+        >
+          <UIcon
+            name="i-lucide-user"
+            class="w-4.5 h-4.5"
+          />
+          <span>{{ t('login.register') }}</span>
+        </UButton>
+      </template>
+      <template v-else>
+        <UPopover>
+          <UUser :name="store.userId" />
+          <template #content>
+            <div class="size-48 m-4 inline-flex" />
+          </template>
+        </UPopover>
+      </template>
       <ULocaleSelect
         :model-value="locale"
         :locales="locales as any"
         @update:model-value="setLocale($event as any)"
       />
+      <UColorModeButton />
     </template>
   </UHeader>
 </template>
@@ -50,13 +63,16 @@ import AppLogo from '~/components/AppLogo.vue'
 
 const { t, locale, locales, setLocale } = useI18n()
 const localePath = useLocalePath()
+const store = useAccountStore()
+
+const isLogin = computed(() => store.isLoggedIn)
 
 const items = computed<NavigationMenuItem[]>(() => [
   { label: t('home'), to: localePath('/') },
   { label: t('buildings'), to: localePath('/buildings') },
-  { label: t('friends'), children: [
-    { label: t('friends.mine'), to: localePath('/friends/mine') },
-    { label: t('friends.add'), to: localePath('/friends/add') }
+  { label: t('friends'), to: localePath('/friends'), children: [
+    { label: t('friends.manager'), to: localePath('/friends/manager') },
+    { label: t('friends.search'), to: localePath('/friends/search') }
   ] },
   { label: t('forum'), to: localePath('/forum') },
   { label: t('dashboard'), to: localePath('/dashboard') },
