@@ -27,12 +27,14 @@
 
 <script lang="ts" setup>
 import type { FormSubmitEvent, AuthFormField } from '@nuxt/ui'
-import type { LoginRequest, LoginResponse } from '~/types'
 import * as z from 'zod'
 import { useAccountStore } from '~/stores/useAccountStore'
 
 const { t, locale } = useI18n()
 const localePath = useLocalePath()
+const route = useRoute()
+
+const redirect = (route.query.redirect || '/') as string
 
 const toast = useToast()
 const fields: AuthFormField[] = [{
@@ -74,6 +76,6 @@ async function onSubmit(event: FormSubmitEvent<Schema>) {
     return
   }
   toast.add({ title: 'Success', description: 'success', color: 'success' })
-  await useRouter().push('/')
+  await useRouter().push(redirect)
 }
 </script>

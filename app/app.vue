@@ -6,7 +6,7 @@
   </UApp>
 </template>
 
-<script setup>
+<script setup lang="ts">
 const { t } = useI18n()
 
 useHead({
@@ -34,6 +34,8 @@ useSeoMeta({
   ogDescription: description
 })
 
-const accountStore = useAccountStore()
-accountStore.tryRestoreSession()
+onMounted(async () => {
+  const accountStore = useAccountStore()
+  await accountStore.tryRestoreSession()
+})
 </script>

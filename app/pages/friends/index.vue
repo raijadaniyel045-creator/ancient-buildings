@@ -455,10 +455,11 @@ import RequestFriendsSvg from '~/components/svgs/RequestFriendsSvg.vue'
 
 const accountStore = useAccountStore()
 const { t, locale } = useI18n()
+const { $authFetch } = useNuxtApp()
 const localePath = useLocalePath()
 
 const { data: globalInfo } = await useAsyncData<GlobalInfo>(`friends-global-${locale.value}-${accountStore.userId}`, () => {
-  return $fetch('/api-v1/account/friends/global', {
+  return $authFetch('/api-v1/account/friends/global', {
     headers: {
       UserId: String(accountStore.userId)
     }
@@ -480,7 +481,7 @@ const filters = ['all', 'online', 'recent'] as const
 const page = ref(0)
 
 const { data: arrayList } = await useAsyncData<SplitFriendsArray>(`friends-${locale.value}`, () => {
-  return $fetch(`/api-v1/account/friends`, {
+  return $authFetch(`/api-v1/account/friends`, {
     method: 'POST',
     headers: {
       userId: String(accountStore.userId)
@@ -497,19 +498,19 @@ const { data: arrayList } = await useAsyncData<SplitFriendsArray>(`friends-${loc
 const displayFriends = computed(() => arrayList.value?.users ?? [])
 
 const { data: pendingList } = await useAsyncData<PendingRequest[]>(`friends-${locale.value}-${accountStore.userId}`, () => {
-  return $fetch(`/api-v1/account/friends/pending`, {})
+  return $authFetch(`/api-v1/account/friends/pending`, {})
 })
 const pendingRequests = computed<PendingRequest[]>(() => pendingList.value ?? [])
 
 const { data: recentLogs } = await useAsyncData<RecentActivity[]>(`friends-${locale.value}-${accountStore.userId}`, () => {
-  return $fetch(`/api-v1/account/friends/pending`, {
+  return $authFetch(`/api-v1/account/friends/pending`, {
 
   })
 })
 const recentActivities = computed(() => recentLogs.value ?? [])
 
 async function dealRequest(request: PendingRequest, accept: boolean) {
-  await useFetch('api-v1/account/friends/request', {
+  await $authFetch('api-v1/account/friends/request', {
     method: 'POST',
     body: {
       userId: String(request.userId),
