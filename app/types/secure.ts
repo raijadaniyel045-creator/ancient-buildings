@@ -4,7 +4,7 @@ export interface LoginRequest {
   password: string
 }
 export interface LoginResponse {
-  userId: number
+  userid: number
   email: string
   accessToken: string
   accessTokenExpire: string
@@ -17,19 +17,25 @@ export interface RegisterRequest {
   password: string
 }
 export interface RegisterResponse {
-  userId: number
+  userid: number
   email: string
   username: string
   createdAt: string
 }
 export interface RefreshTokenRequest {
-  userId: number
+  userid: number
   email: string
   hash: string
   refreshToken: string
 }
 export interface RefreshTokenResponse {
-  userId: number
+  userid: number
   accessToken: string
   accessTokenExpire: string
+}
+export interface AccountPublicInfo {
+  userid: number
+  email: string
+  userName: string
+  createdAt: string
 }

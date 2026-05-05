@@ -5,7 +5,7 @@ export interface GlobalInfo {
 }
 
 export interface FriendInfo {
-  userId: number
+  userid: number
   userName: string
   description: string
   online: boolean
@@ -22,7 +22,7 @@ export interface SplitFriendsArray {
 }
 
 export interface PendingRequest {
-  userId: number
+  userid: number
   userName: string
   avatar: string
   reason: string
@@ -30,7 +30,7 @@ export interface PendingRequest {
 }
 
 export interface RecentActivity {
-  userId: number
+  userid: number
   desc: string
   avatar: string
   time: string

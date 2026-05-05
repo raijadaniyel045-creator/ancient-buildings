@@ -537,7 +537,9 @@
 </template>
 
 <script setup lang="ts">
-import { ref, computed, onMounted } from 'vue'
+
+
+
 
 const activeTab = ref('friends')
 const searchQuery = ref('')

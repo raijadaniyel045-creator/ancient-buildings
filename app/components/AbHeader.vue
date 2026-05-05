@@ -41,7 +41,7 @@
       </template>
       <template v-else>
         <UPopover>
-          <UUser :name="store.userId" />
+          <UUser :name="userName" />
           <template #content>
             <div class="size-48 m-4 inline-flex" />
           </template>
@@ -66,6 +66,7 @@ const localePath = useLocalePath()
 const store = useAccountStore()
 
 const isLogin = computed(() => store.isLoggedIn)
+const userName = computed(() => store.publicInfo?.userName)
 
 const items = computed<NavigationMenuItem[]>(() => [
   { label: t('home'), to: localePath('/') },

@@ -1010,7 +1010,7 @@ const tabs = [
 ]
 interface Post {
   id: string
-  userId: string
+  userid: number
   userName: string
   userAvatar: string
   title: string
@@ -1049,7 +1049,7 @@ interface OnlineUser {
 interface Comment {
   id: string
   postId: string
-  userId: string
+  userid: number
   userName: string
   userAvatar: string
   content: string
@@ -1059,7 +1059,7 @@ interface Comment {
 interface Reply {
   id: string
   commentId: string
-  userId: string
+  userid: number
   userName: string
   userAvatar: string
   content: string

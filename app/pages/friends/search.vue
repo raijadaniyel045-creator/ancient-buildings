@@ -260,7 +260,7 @@ const clearTags = () => {
   selectedTags.value = []
 }
 
-const sendRequest = (userId: string) => {
+const sendRequest = (userid: number) => {
   const user = recommendedUsers.value.find(u => u.id === userId)
   if (user) {
     user.requestSent = true

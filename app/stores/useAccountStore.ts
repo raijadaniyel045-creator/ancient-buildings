@@ -1,5 +1,6 @@
 import generateRandomString from '~/utils/generateRandomString'
 import type {
+  AccountPublicInfo,
   LoginRequest,
   LoginResponse,
   RefreshTokenRequest,
@@ -12,10 +13,11 @@ interface AuthState {
   machineHash: string | null
   accessToken: string | null
   refreshToken: string | null
-  userId: number | null
+  userid: number | null
   email: string | null
   isLoggedIn: boolean
   rememberMe: boolean
+  publicInfo: AccountPublicInfo | null
 }
 export const useAccountStore = defineStore('useAccountStore', {
   state: (): AuthState => ({
@@ -25,7 +27,8 @@ export const useAccountStore = defineStore('useAccountStore', {
     userId: null,
     email: null,
     isLoggedIn: false,
-    rememberMe: false
+    rememberMe: false,
+    publicInfo: null
   }),
   actions: {
     getMachineHash(): string {
@@ -62,6 +65,7 @@ export const useAccountStore = defineStore('useAccountStore', {
         storage.setItem('refresh_token', data.value.refreshToken)
         storage.setItem('remember_me', String(rememberMe))
       }
+      await this.getAccount()
     },
     logout() {
       this.accessToken = null
@@ -106,6 +110,7 @@ export const useAccountStore = defineStore('useAccountStore', {
         return false
       }
       this.accessToken = data.value.accessToken
+      await this.getAccount()
       return true
     },
     /**
@@ -122,7 +127,9 @@ export const useAccountStore = defineStore('useAccountStore', {
       // 不直接存 refreshToken 到 state，防止 XSS 窃取，但为了方便刷新动作，也可以暂存
       this.refreshToken = savedRefreshToken
       // 尝试用 refreshToken 换取新的 accessToken
-      return await this.refreshAccessToken()
+      const content = await this.refreshAccessToken()
+      await this.getAccount()
+      return content
     },
     async register(credentials: { username: string, email: string, password: string }, rememberMe: boolean) {
       this.logout()
@@ -138,6 +145,17 @@ export const useAccountStore = defineStore('useAccountStore', {
       if (error.value || data.value === undefined) {
         throw error
       }
+    },
+    async getAccount(): Promise<AccountPublicInfo | undefined> {
+      if (!this.isLoggedIn) return undefined
+      const { data, error } = await useFetch<AccountPublicInfo>('/api-v1/secure/public', {
+        query: {
+          userId: this.userId
+        }
+      })
+      if (error.value || data.value === undefined) return undefined
+      this.publicInfo = data.value
+      return data.value
     }
   },
   persist: true
