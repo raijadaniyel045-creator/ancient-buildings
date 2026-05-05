@@ -11,7 +11,6 @@ export default defineEventHandler((event) => {
   const files = fs.readdirSync(dataDir).filter(f => f.endsWith('.json'))
   const allData = []
 
-  // 极简提取，只拿省份和朝代
   for (const file of files) {
     try {
       const content = fs.readFileSync(path.join(dataDir, file), 'utf-8')

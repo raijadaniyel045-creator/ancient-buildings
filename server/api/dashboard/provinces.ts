@@ -4,7 +4,6 @@ import path from 'path'
 
 export default defineEventHandler(async (event) => {
   try {
-    // 1. 定位到你存放 JSON 数据的目录
     // process.cwd() 获取的是项目的根目录
     const dataDir = path.join(process.cwd(), 'content', 'data')
 
@@ -38,7 +37,6 @@ export default defineEventHandler(async (event) => {
       .sort((a, b) => b.value - a.value) // 降序排列
       .slice(0, 10) // 取 Top 10
 
-    // 返回给前端的数据格式
     return {
       code: 200,
       data: sortedProvinces

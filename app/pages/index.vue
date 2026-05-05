@@ -1,7 +1,6 @@
 <script setup lang="ts">
 import { ref, computed, onMounted, onUnmounted } from 'vue'
 
-// ================= 轮播图状态与逻辑 (保持原有逻辑) =================
 const isPlaying = ref(false)
 const activeIndex = ref(0)
 const isMapVisible = ref(false)
@@ -10,13 +9,13 @@ const activeFilter = ref<string | null>(null)
 const isSidebarCollapsed = ref(false)
 
 const slides = [
-  { id: 1, title: '故宫建筑群', description: '中国古代木构建筑的巅峰，展现了极为严谨的对称布局与皇家威仪', image: '/images/故宫.jpg', video: '/videos/gugong.mp4', link: '/inventory?id=1' },
-  { id: 2, title: '万里长城', description: '世界上最宏伟的军事防御工程，依山就势，气势磅礴', image: 'https://images.unsplash.com/photo-1508804185872-d7badad00f7d?q=80&w=1920&auto=format&fit=crop', video: '/videos/changcheng.mp4', link: '/inventory?id=2' },
-  { id: 3, title: '莫高窟', description: '集建筑、彩塑、壁画为一体的佛教艺术宝库，沙漠中的璀璨明珠', image: '/images/莫高窟.jpg', video: '/videos/mogaoku.mp4', link: '/inventory?id=6' },
-  { id: 4, title: '祈年殿与天坛', description: '中国古代祭祀建筑的杰作，三重檐圆攒尖顶体现"天圆地方"的宇宙观', image: '/images/天坛.jpg', video: '/videos/tiantan.mp4', link: '/inventory?id=3' },
-  { id: 5, title: '赵州桥', description: '距今一千四百多年，首创敞肩石拱桥结构，世界桥梁史上的奇迹', image: '/images/赵州桥.jpg', video: '/videos/zhaozhouqiao.mp4', link: '/inventory?id=4' },
-  { id: 6, title: '应县木塔', description: '世界现存最古老最高大的纯木结构楼阁式建筑，全塔无一铁钉', image: '/images/应县木塔.jpg', video: '/videos/yingxian.mp4', link: '/inventory?id=5' },
-  { id: 7, title: '布达拉宫', description: '世界上海拔最高、最宏伟的宫堡式建筑群，藏传佛教的圣地', image: '/images/布达拉宫.jpg', video: '/videos/budalagong.mp4', link: '/inventory?id=7' }
+  { id: 1, title: '故宫建筑群', description: '中国古代木构建筑的巅峰，展现了极为严谨的对称布局与皇家威仪', image: '/images/故宫.jpg', video: '/videos/gugong.mp4', link: '/buildings/id=1' },
+  { id: 2, title: '万里长城', description: '世界上最宏伟的军事防御工程，依山就势，气势磅礴', image: 'https://images.unsplash.com/photo-1508804185872-d7badad00f7d?q=80&w=1920&auto=format&fit=crop', video: '/videos/changcheng.mp4', link: '/buildings/id=2' },
+  { id: 3, title: '莫高窟', description: '集建筑、彩塑、壁画为一体的佛教艺术宝库，沙漠中的璀璨明珠', image: '/images/莫高窟.jpg', video: '/videos/mogaoku.mp4', link: '/buildings/id=6' },
+  { id: 4, title: '祈年殿与天坛', description: '中国古代祭祀建筑的杰作，三重檐圆攒尖顶体现"天圆地方"的宇宙观', image: '/images/天坛.jpg', video: '/videos/tiantan.mp4', link: '/buildings/id=3' },
+  { id: 5, title: '赵州桥', description: '距今一千四百多年，首创敞肩石拱桥结构，世界桥梁史上的奇迹', image: '/images/赵州桥.jpg', video: '/videos/zhaozhouqiao.mp4', link: '/buildings/id=4' },
+  { id: 6, title: '应县木塔', description: '世界现存最古老最高大的纯木结构楼阁式建筑，全塔无一铁钉', image: '/images/应县木塔.jpg', video: '/videos/yingxian.mp4', link: '/buildings/id=5' },
+  { id: 7, title: '布达拉宫', description: '世界上海拔最高、最宏伟的宫堡式建筑群，藏传佛教的圣地', image: '/images/布达拉宫.jpg', video: '/videos/budalagong.mp4', link: '/buildings/id=7' }
 ]
 
 const currentSlide = computed(() => slides[activeIndex.value])
@@ -84,7 +83,6 @@ const features = [
 
 <template>
   <div class="font-serif selection:bg-[#8B2B2B]/20 overflow-x-hidden">
-    <!-- ================= 首屏：暗黑沉浸式轮播 (保留你的原版) ================= -->
     <div class="relative w-full h-[100vh] bg-[#030303] text-white overflow-hidden flex flex-col items-center justify-center">
       <div class="absolute inset-0 z-0 bg-black">
         <transition
@@ -231,9 +229,8 @@ const features = [
       </div>
     </div>
 
-    <!-- ================= 第一幕：引言卷轴 (极简留白与故宫红) ================= -->
+    <!-- ================= 第一幕：引言卷轴  ================= -->
     <section class="relative py-40 bg-[#FAFAFA] flex flex-col items-center justify-center overflow-hidden border-b border-[#EAEAEA]">
-      <!-- 巨大的印章/文字水印，营造高级感 -->
       <div class="absolute inset-0 flex items-center justify-center opacity-[0.03] pointer-events-none select-none">
         <span class="font-serif text-[24rem] font-bold text-[#8B2B2B]">文脉</span>
       </div>
@@ -247,7 +244,6 @@ const features = [
           <p class="text-[#666666] font-serif tracking-[0.4em] text-sm uppercase">
             从木构的榫卯 到砖石的斑驳 每一寸皆为华夏大国气象
           </p>
-          <!-- 古风落款印章 -->
           <div class="mt-6 w-14 h-14 border-2 border-[#8B2B2B] text-[#8B2B2B] flex items-center justify-center font-serif text-sm font-bold rotate-[-6deg] opacity-80 shadow-[inset_0_0_8px_rgba(139,43,43,0.1)]">
             赓续<br>文脉
           </div>

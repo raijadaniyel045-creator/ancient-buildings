@@ -1,5 +1,4 @@
 export const useDailyStory = () => {
-  // 离线预生成的 10 篇高质量故事库 (为节省篇幅，此处填入 3 篇极其典型的范例，你后续可补齐至 10 篇)
   const stories = [
     {
       id: 1,
@@ -51,7 +50,6 @@ export const useDailyStory = () => {
     const month = d.getMonth() + 1
     const date = d.getDate()
 
-    // 在真实生产环境，这里应引入 lunar-javascript 计算，此处为演示比赛直接提供静态古典字符串
     const fakeLunarMonths = ['孟春', '仲春', '季春', '孟夏', '仲夏', '季夏', '孟秋', '仲秋', '季秋', '孟冬', '仲冬', '季冬']
 
     return {

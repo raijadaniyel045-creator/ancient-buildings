@@ -10,7 +10,6 @@
       </p>
     </UPageHeader>
 
-    <!-- 去掉原来的白色背景，换成无边框的深色容器 -->
     <UContainer class="max-w-7xl my-8">
       <!-- 使用 UTabs 切换四个大屏组件 -->
       <UTabs
@@ -44,7 +43,6 @@
         }"
       >
         <template #regional>
-          <!-- 这里就是你原来的 Regional 组件 -->
           <div class="mt-6">
             <DashboardRegional />
           </div>
