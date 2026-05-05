@@ -1,7 +1,7 @@
 /** 由 stc v2.16.1 生成
  *
  * https://github.com/long-woo/stc
- * 2026-05-06 04:19:40
+ * 2026-05-06 07:05:00
  */
 
 // #region AccountFullInfo
@@ -101,27 +101,28 @@ export interface AuthResetPasswordCommand {
 
 // #region BuildingArticle
 export interface BuildingArticle {
-  img?: string
-  title?: string
-  provinces?: string[]
-  dynasties?: string[]
-  categories?: string[]
-  name?: string
-  desc?: string
-  subtitle?: string
-  id?: string
-  body?: string
+  img: string
+  title: string
+  provinces: string[]
+  dynasties: string[]
+  categories: string[]
+  name: string
+  desc: string
+  subtitle: string
+  id: string
+  body: string
 }
 // #endregion
 
 // #region BuildingSlug
 export interface BuildingSlug {
-  hash?: string
-  name?: string
-  desc?: string
-  provinces?: string[]
-  categories?: string[]
-  dynasties?: string[]
+  hash: string
+  name: string
+  desc: string
+  img: string
+  provinces: string[]
+  categories: string[]
+  dynasties: string[]
 }
 // #endregion
 
@@ -229,8 +230,6 @@ export interface SplitPageFriendsCommand {
 export interface SplitPageResponse {
   items?: BuildingSlug[]
   total?: number | string
-  page?: number | string
-  pageSize?: number | string
 }
 // #endregion
 

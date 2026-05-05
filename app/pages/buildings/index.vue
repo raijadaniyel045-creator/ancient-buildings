@@ -125,8 +125,8 @@
           <template v-else>
             <UPageColumns>
               <ULink
-                v-for="{ b, index } in buildings"
-                :key="index"
+                v-for="b in buildings"
+                :key="b.hash"
                 class="bg-white rounded-xl overflow-hidden border border-[#e8dfcf] shadow-sm hover:shadow-2xl transition-all duration-300 group cursor-pointer flex flex-col h-full"
                 :to="localePath(`/buildings/${b.hash}`)"
               >
@@ -210,7 +210,7 @@
 </template>
 
 <script setup lang="ts">
-import type { BuildingSlug, BuildingSummaryResponse, SplitPageCommand, SplitPageResponse } from '~/types'
+import type { BuildingSlug, BuildingSummaryResponse, SplitPageResponse } from '~/types'
 
 const localePath = useLocalePath()
 
@@ -228,7 +228,7 @@ type TagValue = {
 }
 const tags = ref<TagValue[]>([])
 function displayTagValue(tag: TagValue): string {
-  return tag.name
+  return t(tag.name)
 }
 function wrapTagValue(name: string): TagValue {
   return ({
@@ -259,7 +259,7 @@ const { data: apiData, refresh } = await useAsyncData<SplitPageResponse>(`buildi
         dynasties: d.length ? d.join(',') : undefined,
         categories: c.length ? c.join(',') : undefined,
         searches: s.length ? s.join(',') : undefined
-      } as SplitPageCommand
+      }
     })
   },
   {
