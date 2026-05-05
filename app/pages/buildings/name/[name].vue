@@ -159,9 +159,9 @@ import type { BuildingArticle } from '~/types'
 
 const { locale, t } = useI18n()
 const localePath = useLocalePath()
-const hash = useRoute().params.hash
+const name = useRoute().params.name
 
-const { data: post } = await useAsyncData<BuildingArticle>(`building-${hash}-${locale.value}`, () => {
-  return $fetch(`/api/v1/Buildings/${hash}`)
+const { data: post } = await useAsyncData<BuildingArticle>(`building-${name}-${locale.value}`, () => {
+  return $fetch(`/api/v1/Buildings/name/${name}`)
 })
 </script>

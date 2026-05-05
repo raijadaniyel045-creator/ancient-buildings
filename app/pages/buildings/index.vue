@@ -125,8 +125,8 @@
           <template v-else>
             <UPageColumns>
               <ULink
-                v-for="b in buildings"
-                :key="b.id"
+                v-for="{ b, index } in buildings"
+                :key="index"
                 class="bg-white rounded-xl overflow-hidden border border-[#e8dfcf] shadow-sm hover:shadow-2xl transition-all duration-300 group cursor-pointer flex flex-col h-full"
                 :to="localePath(`/buildings/${b.hash}`)"
               >
@@ -210,7 +210,7 @@
 </template>
 
 <script setup lang="ts">
-import type { SplitPage, Summary } from '~/types'
+import type { BuildingSlug, BuildingSummaryResponse, SplitPageCommand, SplitPageResponse } from '~/types'
 
 const localePath = useLocalePath()
 
@@ -237,20 +237,21 @@ function wrapTagValue(name: string): TagValue {
   })
 }
 
-const { data: summaryResponse } = await useAsyncData<Summary>(`buildings-summary-${locale.value}`,
-  () => $fetch('/api-v1/buildings/summary'))
+const { data: summaryResponse } = await useAsyncData<BuildingSummaryResponse>(`buildings-summary-${locale.value}`,
+  () => $fetch('/api/v1/Buildings'))
 const provinceList = summaryResponse.value?.provinces || { values: [], length: 0 }
 const dynastyList = summaryResponse.value?.dynasties || { values: [], length: 0 }
 const categoryList = summaryResponse.value?.categories || { values: [], length: 0 }
 const total = computed(() => summaryResponse.value?.total || 0)
 
-const { data: apiData, refresh } = await useAsyncData<SplitPage>(`buildings-${locale.value}`,
+const { data: apiData, refresh } = await useAsyncData<SplitPageResponse>(`buildings-${locale.value}`,
   () => {
     const p = tags.value.filter(v => v.type === 'prov').flatMap(v => v.name)
     const d = tags.value.filter(v => v.type === 'dyna').flatMap(v => v.name)
     const s = tags.value.filter(v => v.type === 'sear').flatMap(v => v.name)
     const c = tags.value.filter(v => v.type === 'cate').flatMap(v => v.name)
-    return $fetch('/api-v1/buildings', {
+    return $fetch('/api/v1/Buildings', {
+      method: 'POST',
       query: {
         page: page.value,
         pageSize: pageSize.value,
@@ -258,14 +259,14 @@ const { data: apiData, refresh } = await useAsyncData<SplitPage>(`buildings-${lo
         dynasties: d.length ? d.join(',') : undefined,
         categories: c.length ? c.join(',') : undefined,
         searches: s.length ? s.join(',') : undefined
-      }
+      } as SplitPageCommand
     })
   },
   {
     watch: [page, pageSize, tags]
   })
 
-const buildings = computed(() => apiData.value?.items || [])
+const buildings = computed<BuildingSlug[]>(() => apiData.value?.items || [])
 const filter = computed(() => apiData.value?.total || 0)
 
 function toggleTag(tag: string, type: 'prov' | 'cate' | 'dyna' | 'sear'): void {

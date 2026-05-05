@@ -275,13 +275,18 @@
 </template>
 
 <script setup lang="ts">
-import type { FriendInfo } from '~/types'
+import type { AccountPublicInfo } from '~/types'
 import { ref } from 'vue'
 
 const accountStore = useAccountStore()
 const { t, locale } = useI18n()
 const { $authFetch } = useNuxtApp()
 const localePath = useLocalePath()
+
+const { data: tagsResponse } = await useAsyncData<string[]>(`search-collection-${locale.value}`, () => {
+  return $fetch('/api/v1/Account/social/collentTags')
+})
+const allTags = computed<string[]>(() => tagsResponse.value ?? [])
 
 type TagFrom = 'get' | 'input'
 type TagPair = {
@@ -314,18 +319,13 @@ function wrapTag(tag: string): TagPair {
   })
 }
 
-const { data: tagsResponse } = await useFetch<string[]>('/api-v1/account/friends/searchTags', {
-  $fetch: $authFetch,
-  headers: {
-    userId: String(accountStore.userId)
-  }
-})
-const allTags = computed<string[]>(() => tagsResponse.value ?? [])
-const { data: recommendRequest, refresh } = await useAsyncData<FriendInfo[]>(`search-${locale.value}-${accountStore.userId}`, () => {
-  return $authFetch('/api-v1/account/friends/search', {
+const { data: recommendRequest, refresh } = await useAsyncData<AccountPublicInfo[]>(`search-${locale.value}-${accountStore.userId}`, () => {
+  return $authFetch('/api/v1/Account/social/search', {
     method: 'POST',
+    headers: {
+      userId: String(accountStore.userId)
+    },
     body: {
-      userId: accountStore.userId,
       searchTags: tags.value.filter(tp => tp.type === 'get').flatMap(tp => tp.value),
       searches: tags.value.filter(tp => tp.type === 'input').flatMap(tp => tp.value)
     }
@@ -333,7 +333,7 @@ const { data: recommendRequest, refresh } = await useAsyncData<FriendInfo[]>(`se
 }, {
   watch: [tags]
 })
-const friendsGetArray = computed<FriendInfo[]>(() => recommendRequest.value ?? [])
+const friendsGetArray = computed<AccountPublicInfo[]>(() => recommendRequest.value ?? [])
 
 const requests = ref<number[]>([])
 const toast = useToast()
@@ -344,7 +344,7 @@ async function sendRequest(userId: number) {
   if (existRequest(userId)) {
     toast.add({ title: '成功提交' })
     requests.value.push(userId)
-    await $authFetch('/api-v1/account/friends/request', {
+    await $authFetch('/api/v1/account/friends/request', {
       method: 'POST',
       body: {
         userId: accountStore.userId,

@@ -447,21 +447,27 @@
 </template>
 
 <script setup lang="ts">
-import type { GlobalInfo, PendingRequest, RecentActivity, SplitFriendsArray } from '~/types'
 import StatCard from '~/components/friends/StatCard.vue'
 import TotalFriendsSvg from '~/components/svgs/TotalFriendsSvg.vue'
 import OnlineFriendsSvg from '~/components/svgs/OnlineFriendsSvg.vue'
 import RequestFriendsSvg from '~/components/svgs/RequestFriendsSvg.vue'
+import type {
+  FriendsSummary,
+  NewFriendRequest,
+  RecentActivityLog,
+  SplitFriendsArrayResponse,
+  SplitPageFriendsCommand
+} from '~/types'
 
 const accountStore = useAccountStore()
 const { t, locale } = useI18n()
 const { $authFetch } = useNuxtApp()
 const localePath = useLocalePath()
 
-const { data: globalInfo } = await useAsyncData<GlobalInfo>(`friends-global-${locale.value}-${accountStore.userId}`, () => {
-  return $authFetch('/api-v1/account/friends/global', {
+const { data: globalInfo } = await useAsyncData<FriendsSummary>(`friends-summary-${locale.value}-${accountStore.userId}`, () => {
+  return $authFetch('/api/v1/Account/friends', {
     headers: {
-      UserId: String(accountStore.userId)
+      userId: String(accountStore.userId)
     }
   })
 })
@@ -480,41 +486,49 @@ const activeFilter = ref('all')
 const filters = ['all', 'online', 'recent'] as const
 const page = ref(0)
 
-const { data: arrayList } = await useAsyncData<SplitFriendsArray>(`friends-${locale.value}`, () => {
-  return $authFetch(`/api-v1/account/friends`, {
+const { data: arrayList } = await useAsyncData<SplitFriendsArrayResponse>(`friends-${locale.value}-${activeFilter.value}`, () => {
+  return $authFetch(`/api/v1/account/friends/${activeFilter.value}`, {
     method: 'POST',
     headers: {
       userId: String(accountStore.userId)
     },
     body: {
       page: String(page.value),
-      filter: activeFilter.value,
       search: searchFilter.value
-    }
+    } as SplitPageFriendsCommand
   })
 }, {
   watch: [searchFilter, activeFilter, page]
 })
 const displayFriends = computed(() => arrayList.value?.users ?? [])
 
-const { data: pendingList } = await useAsyncData<PendingRequest[]>(`friends-${locale.value}-${accountStore.userId}`, () => {
-  return $authFetch(`/api-v1/account/friends/pending`, {})
-})
-const pendingRequests = computed<PendingRequest[]>(() => pendingList.value ?? [])
-
-const { data: recentLogs } = await useAsyncData<RecentActivity[]>(`friends-${locale.value}-${accountStore.userId}`, () => {
-  return $authFetch(`/api-v1/account/friends/pending`, {
-
+const { data: pendingList } = await useAsyncData<NewFriendRequest[]>(`friends-pending-${locale.value}-${accountStore.userId}`, () => {
+  return $authFetch(`/api/v1/Account/social/pending`, {
+    headers: {
+      userId: String(accountStore.userId)
+    }
   })
 })
-const recentActivities = computed(() => recentLogs.value ?? [])
+const pendingRequests = computed<NewFriendRequest[]>(() => pendingList.value ?? [])
 
-async function dealRequest(request: PendingRequest, accept: boolean) {
-  await $authFetch('api-v1/account/friends/request', {
+const { data: recentLogs } = await useAsyncData<RecentActivityLog[]>(`friends-recent-${locale.value}-${accountStore.userId}`, () => {
+  return $authFetch(`/api/v1/Account/social/logs`, {
+    headers: {
+      userId: String(accountStore.userId)
+    }
+  })
+})
+const recentActivities = computed<RecentActivityLog[]>(() => recentLogs.value ?? [])
+
+async function dealRequest(request: NewFriendRequest, accept: boolean) {
+  await $authFetch('/api/v1/Account/social/dealRequest', {
     method: 'POST',
-    body: {
-      userId: String(request.userId),
-      accept: String(accept)
+    headers: {
+      userId: String(accountStore.userId)
+    },
+    query: {
+      targetUserId: request.userId,
+      confirm: accept
     }
   })
 }

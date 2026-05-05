@@ -1,19 +1,17 @@
 import generateRandomString from '~/utils/generateRandomString'
 import type {
   AccountPublicInfo,
-  LoginRequest,
-  LoginResponse,
-  RefreshTokenRequest,
-  RefreshTokenResponse,
-  RegisterRequest,
-  RegisterResponse
+  AuthLoginCommand,
+  AuthLoginResponse, AuthRegisterCommand, AuthRegisterResponse,
+  RefreshTokenCommand,
+  RefreshTokenResponse
 } from '~/types'
 
 interface AuthState {
   machineHash: string | null
   accessToken: string | null
   refreshToken: string | null
-  userId: number | null
+  userId: number | string | null
   email: string | null
   isLoggedIn: boolean
   rememberMe: boolean
@@ -44,13 +42,13 @@ export const useAccountStore = defineStore('useAccountStore', {
      */
     async login(credentials: { email: string, password: string }, rememberMe: boolean) {
       this.rememberMe = rememberMe
-      const { data, error } = await useFetch<LoginResponse>('/api-v1/secure/login', {
+      const { data, error } = await useFetch<AuthLoginResponse>('/api/v1/Secure/login', {
         method: 'POST',
         body: {
           email: credentials.email,
           password: await sha256(credentials.password),
           hash: this.getMachineHash()
-        } as LoginRequest
+        } as AuthLoginCommand
       })
       if (error.value || data.value === undefined) {
         throw new Error('Login failed')
@@ -97,14 +95,14 @@ export const useAccountStore = defineStore('useAccountStore', {
         this.logout()
         return false
       }
-      const { data, error } = await useFetch<RefreshTokenResponse>('/api-v1/secure/refresh', {
+      const { data, error } = await useFetch<RefreshTokenResponse>('/api/v1/Secure/refresh', {
         method: 'POST',
         body: {
           userId: this.userId,
           email: this.email,
           hash: this.getMachineHash(),
           refreshToken: this.refreshToken
-        } as RefreshTokenRequest
+        } as RefreshTokenCommand
       })
       if (error.value || data.value === undefined) {
         return false
@@ -134,13 +132,13 @@ export const useAccountStore = defineStore('useAccountStore', {
     async register(credentials: { username: string, email: string, password: string }, rememberMe: boolean) {
       this.logout()
       this.rememberMe = rememberMe
-      const { data, error } = await useFetch<RegisterResponse>('/api-v1/secure/register', {
+      const { data, error } = await useFetch<AuthRegisterResponse>('/api/v1/Secure/register', {
         method: 'POST',
         body: {
           username: credentials.username,
           email: credentials.email,
           password: await sha256(credentials.password)
-        } as RegisterRequest
+        } as AuthRegisterCommand
       })
       if (error.value || data.value === undefined) {
         throw error
@@ -148,7 +146,7 @@ export const useAccountStore = defineStore('useAccountStore', {
     },
     async getAccount(): Promise<AccountPublicInfo | undefined> {
       if (!this.isLoggedIn) return undefined
-      const { data, error } = await useFetch<AccountPublicInfo>('/api-v1/secure/public', {
+      const { data, error } = await useFetch<AccountPublicInfo>('/api/v1/Account', {
         query: {
           userId: this.userId
         }
