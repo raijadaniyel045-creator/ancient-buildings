@@ -12,6 +12,7 @@ export interface FriendInfo {
   location: string
   tags: string[]
   avatar: string
+  matchScore: number
 }
 
 export interface SplitFriendsArray {
@@ -22,7 +23,7 @@ export interface SplitFriendsArray {
 }
 
 export interface PendingRequest {
-  userid: number
+  userId: number
   userName: string
   avatar: string
   reason: string

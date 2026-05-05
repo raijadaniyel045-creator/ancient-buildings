@@ -1,6 +1,7 @@
 // plugins/auth-interceptor.client.ts (仅客户端执行)
 export default defineNuxtPlugin(() => {
   const authStore = useAccountStore()
+  const localePath = useLocalePath()
 
   // 全局 fetch 拦截器（适用于 $fetch 和 useFetch）
   const interceptor = $fetch.create({
@@ -22,7 +23,7 @@ export default defineNuxtPlugin(() => {
           return $fetch(response.url, options)
         } else {
           // 刷新失败，跳转到登录页
-          await navigateTo('/auth')
+          await navigateTo(localePath('/auth'))
           return Promise.reject(response)
         }
       }
