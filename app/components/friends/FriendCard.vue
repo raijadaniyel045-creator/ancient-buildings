@@ -3,14 +3,22 @@
     <div class="p-5">
       <div class="flex items-start gap-4">
         <div class="w-14 h-14 rounded-full overflow-hidden border-2 border-[#d03d3d] shadow-md flex-shrink-0">
-          <img :src="friend.avatar" :alt="friend.name" class="w-full h-full object-cover" />
+          <img
+            :src="friend.avatar"
+            :alt="friend.name"
+            class="w-full h-full object-cover"
+          >
         </div>
         <div class="flex-1 min-w-0">
           <div class="flex items-center justify-between mb-1">
-            <h3 class="font-bold text-lg text-[#2c2420] truncate">{{ friend.name }}</h3>
+            <h3 class="font-bold text-lg text-[#2c2420] truncate">
+              {{ friend.name }}
+            </h3>
             <span class="text-xs text-gray-400 font-medium">{{ friend.province }}</span>
           </div>
-          <p class="text-sm text-gray-500 line-clamp-2 mb-3">{{ friend.bio }}</p>
+          <p class="text-sm text-gray-500 line-clamp-2 mb-3">
+            {{ friend.bio }}
+          </p>
           <div class="flex flex-wrap gap-2 mb-3">
             <span
               v-for="interest in friend.interests.slice(0, 3)"
@@ -22,11 +30,17 @@
           </div>
           <div class="flex items-center gap-4 text-xs text-gray-400">
             <span class="flex items-center gap-1">
-              <UIcon name="i-lucide-file-text" class="w-3.5 h-3.5" />
+              <UIcon
+                name="i-lucide-file-text"
+                class="w-3.5 h-3.5"
+              />
               {{ friend.postsCount }} 帖子
             </span>
             <span class="flex items-center gap-1">
-              <UIcon name="i-lucide-users" class="w-3.5 h-3.5" />
+              <UIcon
+                name="i-lucide-users"
+                class="w-3.5 h-3.5"
+              />
               {{ friend.friendsCount }} 好友
             </span>
           </div>

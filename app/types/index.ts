@@ -1,3 +1,1 @@
-import * from './dashboard'
-
-export
+export * from './_types'

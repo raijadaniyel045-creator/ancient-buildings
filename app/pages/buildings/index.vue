@@ -13,8 +13,8 @@
         <div class="relative w-full md:w-112.5">
           <UInputTags
             v-model="tags"
-            :display-value="t => t.name"
-            :convert-value="t => ({ name: t, type: 'sear' })"
+            :display-value="displayTagValue"
+            :convert-value="wrapTagValue"
             placeholder="全局检索：输入建筑名、地区、描述..."
             class="w-full px-8 py-4 pr-12 rounded-full text-black bg-white focus:outline-none shadow-xl outline-none border-2 border-transparent transition-all focus:border-amber-500 text-lg"
           />
@@ -51,7 +51,7 @@
               </h4>
               <div class="flex flex-wrap gap-2">
                 <ULink
-                  v-for="prov in provinceList.provinces"
+                  v-for="prov in provinceList.values"
                   :key="prov"
                   class="px-3.5 py-1.5 text-sm rounded-full transition-all border"
                   :class="existTag(prov, 'prov') ? 'bg-[#8b2b2b] border-[#8b2b2b] text-white shadow-md' : 'bg-transparent border-gray-200 text-gray-600 hover:border-gray-400'"
@@ -69,7 +69,7 @@
               </h4>
               <div class="flex flex-wrap gap-2">
                 <ULink
-                  v-for="dyna in dynastyList.dynasties"
+                  v-for="dyna in dynastyList.values"
                   :key="dyna"
                   class="px-3.5 py-1.5 text-sm rounded-full transition-all border"
                   :class="existTag(dyna, 'dyna') ? 'bg-[#8b2b2b] border-[#8b2b2b] text-white shadow-md' : 'bg-transparent border-gray-200 text-gray-600 hover:border-gray-400'"
@@ -87,7 +87,7 @@
               </h4>
               <div class="flex flex-wrap gap-2">
                 <ULink
-                  v-for="cate in categoryList.categories"
+                  v-for="cate in categoryList.values"
                   :key="cate"
                   class="px-3.5 py-1.5 text-sm rounded-full transition-all border"
                   :class="existTag(cate, 'cate') ? 'bg-[#8b2b2b] border-[#8b2b2b] text-white shadow-md' : 'bg-transparent border-gray-200 text-gray-600 hover:border-gray-400'"
@@ -126,7 +126,7 @@
             <UPageColumns>
               <ULink
                 v-for="b in buildings"
-                :key="b.id"
+                :key="b.hash"
                 class="bg-white rounded-xl overflow-hidden border border-[#e8dfcf] shadow-sm hover:shadow-2xl transition-all duration-300 group cursor-pointer flex flex-col h-full"
                 :to="localePath(`/buildings/${b.hash}`)"
               >
@@ -210,6 +210,8 @@
 </template>
 
 <script setup lang="ts">
+import type { BuildingSlug, BuildingSummaryResponse, SplitPageResponse } from '~/types'
+
 const localePath = useLocalePath()
 
 const route = useRoute()
@@ -220,41 +222,52 @@ const page = ref(Number(route.query.page) || 1)
 const defaultPageSize = 12
 const pageSize = ref(Number(route.query.pageSize) || defaultPageSize)
 
-const tags = ref<{ name: string, type: 'prov' | 'cate' | 'dyna' | 'sear' }[]>([])
+type TagValue = {
+  name: string
+  type: 'prov' | 'cate' | 'dyna' | 'sear'
+}
+const tags = ref<TagValue[]>([])
+function displayTagValue(tag: TagValue): string {
+  return t(tag.name)
+}
+function wrapTagValue(name: string): TagValue {
+  return ({
+    name,
+    type: 'sear'
+  })
+}
 
-const { data: apiData, refresh } = await useAsyncData(`buildings-${locale.value}`,
+const { data: summaryResponse } = await useAsyncData<BuildingSummaryResponse>(`buildings-summary-${locale.value}`,
+  () => $fetch('/api/v1/Buildings'))
+const provinceList = summaryResponse.value?.provinces || { values: [], length: 0 }
+const dynastyList = summaryResponse.value?.dynasties || { values: [], length: 0 }
+const categoryList = summaryResponse.value?.categories || { values: [], length: 0 }
+const total = computed(() => summaryResponse.value?.total || 0)
+
+const { data: apiData, refresh } = await useAsyncData<SplitPageResponse>(`buildings-${locale.value}`,
   () => {
     const p = tags.value.filter(v => v.type === 'prov').flatMap(v => v.name)
     const d = tags.value.filter(v => v.type === 'dyna').flatMap(v => v.name)
     const s = tags.value.filter(v => v.type === 'sear').flatMap(v => v.name)
     const c = tags.value.filter(v => v.type === 'cate').flatMap(v => v.name)
-    return $fetch('/api/buildings', {
+    return $fetch('/api/v1/Buildings', {
+      method: 'POST',
       query: {
         page: page.value,
         pageSize: pageSize.value,
         provinces: p.length ? p.join(',') : undefined,
         dynasties: d.length ? d.join(',') : undefined,
         categories: c.length ? c.join(',') : undefined,
-        searchs: s.length ? s.join(',') : undefined
+        searches: s.length ? s.join(',') : undefined
       }
     })
   },
   {
     watch: [page, pageSize, tags]
   })
-const { data: provinceResponse } = await useAsyncData(`buildings-province-${locale.value}`,
-  () => $fetch('/api/buildings/provinces'))
-const { data: dynastyResponse } = await useAsyncData(`buildings-dynasty-${locale.value}`,
-  () => $fetch('/api/buildings/dynasties'))
-const { data: categoryResponse } = await useAsyncData(`buildings-category-${locale.value}`,
-  () => $fetch('/api/buildings/categories'))
-const provinceList = provinceResponse.value || { provinces: [], length: 0 }
-const dynastyList = dynastyResponse.value || { dynasties: [], length: 0 }
-const categoryList = categoryResponse.value || { categories: [], length: 0 }
 
-const buildings = computed(() => apiData.value?.items || [])
-const total = computed(() => apiData.value?.total || 0)
-const filter = computed(() => apiData.value?.filter || 0)
+const buildings = computed<BuildingSlug[]>(() => apiData.value?.items || [])
+const filter = computed(() => apiData.value?.total || 0)
 
 function toggleTag(tag: string, type: 'prov' | 'cate' | 'dyna' | 'sear'): void {
   const data = tags.value.find(v => v.type === type && v.name == tag)
@@ -265,12 +278,12 @@ function toggleTag(tag: string, type: 'prov' | 'cate' | 'dyna' | 'sear'): void {
       name: tag,
       type
     })
+    refresh()
   }
   page.value = 1
-  refresh()
 }
-function existTag(tag: string, type: 'prov' | 'cate' | 'dyna' | 'sear'): boolean {
-  return tags.value.find(v => v.type === type && v.name == tag)
+function existTag(tag: string, type: TagValue['type']): boolean {
+  return tags.value.find(v => v.type === type && v.name == tag) !== undefined
 }
 
 function clear() {
@@ -290,7 +303,7 @@ function updateUrl() {
       provinces: p.length ? p.join(',') : undefined,
       dynasties: d.length ? d.join(',') : undefined,
       categories: c.length ? c.join(',') : undefined,
-      searchs: s.length ? s.join(',') : undefined
+      searches: s.length ? s.join(',') : undefined
     }
   })
 }
