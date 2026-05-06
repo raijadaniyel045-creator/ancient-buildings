@@ -119,11 +119,9 @@
               </div>
             </div>
           </div>
-          <ClientOnly>
-            <ContentRenderer
-              :value="post"
-            />
-          </ClientOnly>
+          <ContentRenderer
+            :value="post"
+          />
         </div>
         <div
           id="content-grid"

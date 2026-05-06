@@ -278,9 +278,9 @@ function toggleTag(tag: string, type: 'prov' | 'cate' | 'dyna' | 'sear'): void {
       name: tag,
       type
     })
+    refresh()
   }
   page.value = 1
-  refresh()
 }
 function existTag(tag: string, type: TagValue['type']): boolean {
   return tags.value.find(v => v.type === type && v.name == tag) !== undefined

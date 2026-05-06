@@ -484,7 +484,7 @@ const handleSubmit = () => {
 const searchFilter = ref('')
 const activeFilter = ref('all')
 const filters = ['all', 'online', 'recent'] as const
-const page = ref(0)
+const page = ref(1)
 
 const { data: arrayList } = await useAsyncData<SplitFriendsArrayResponse>(`friends-${locale.value}-${activeFilter.value}`, () => {
   return $authFetch(`/api/v1/account/friends/${activeFilter.value}`, {
