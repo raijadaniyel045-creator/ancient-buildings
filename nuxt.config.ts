@@ -8,7 +8,6 @@ export default defineNuxtConfig({
     '@nuxtjs/i18n',
     '@pinia/nuxt',
     '@tresjs/nuxt',
-    'nuxt-auth-utils',
     '@nuxt/content',
     'nuxt-echarts',
     '@pinia-plugin-persistedstate/nuxt'

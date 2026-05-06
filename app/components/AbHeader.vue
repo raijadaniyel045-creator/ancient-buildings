@@ -52,7 +52,6 @@
         :locales="locales as any"
         @update:model-value="setLocale($event as any)"
       />
-      <UColorModeButton />
     </template>
   </UHeader>
 </template>

@@ -23,7 +23,6 @@
     "better-sqlite3": "^12.9.0",
     "echarts": "^6.0.0",
     "nuxt": "^4.4.2",
-    "nuxt-auth-utils": "0.5.29",
     "nuxt-echarts": "^1.0.1",
     "pg": "^8.20.0",
     "tailwindcss": "^4.2.4",
