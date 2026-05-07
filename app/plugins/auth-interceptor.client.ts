@@ -24,6 +24,7 @@ export default defineNuxtPlugin(() => {
         } else {
           // 刷新失败，跳转到登录页
           await navigateTo(localePath('/auth'))
+          authStore.logout()
           return Promise.reject(response)
         }
       }

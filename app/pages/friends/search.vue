@@ -275,8 +275,8 @@
 </template>
 
 <script setup lang="ts">
-import type { AccountPublicInfo } from '~/types'
 import { ref } from 'vue'
+import type { components } from '~/types'
 
 const accountStore = useAccountStore()
 const { t, locale } = useI18n()
@@ -284,7 +284,7 @@ const { $authFetch } = useNuxtApp()
 const localePath = useLocalePath()
 
 const { data: tagsResponse } = await useAsyncData<string[]>(`search-collection-${locale.value}`, () => {
-  return $fetch('/api/v1/Account/social/collentTags')
+  return $fetch('/api/v1/Account/social/collectTags')
 })
 const allTags = computed<string[]>(() => tagsResponse.value ?? [])
 
@@ -319,7 +319,7 @@ function wrapTag(tag: string): TagPair {
   })
 }
 
-const { data: recommendRequest, refresh } = await useAsyncData<AccountPublicInfo[]>(`search-${locale.value}-${accountStore.userId}`, () => {
+const { data: recommendRequest, refresh } = await useAsyncData<components['schemas']['AccountPublicInfoResponse'][]>(`search-${locale.value}-${accountStore.userId}`, () => {
   return $authFetch('/api/v1/Account/social/search', {
     method: 'POST',
     headers: {
@@ -328,12 +328,12 @@ const { data: recommendRequest, refresh } = await useAsyncData<AccountPublicInfo
     body: {
       searchTags: tags.value.filter(tp => tp.type === 'get').flatMap(tp => tp.value),
       searches: tags.value.filter(tp => tp.type === 'input').flatMap(tp => tp.value)
-    }
+    } as components['schemas']['SearchFriendsCommand']
   })
 }, {
   watch: [tags]
 })
-const friendsGetArray = computed<AccountPublicInfo[]>(() => recommendRequest.value ?? [])
+const friendsGetArray = computed<components['schemas']['AccountPublicInfoResponse'][]>(() => recommendRequest.value ?? [])
 
 const requests = ref<number[]>([])
 const toast = useToast()
@@ -344,11 +344,13 @@ async function sendRequest(userId: number) {
   if (existRequest(userId)) {
     toast.add({ title: '成功提交' })
     requests.value.push(userId)
-    await $authFetch('/api/v1/account/friends/request', {
-      method: 'POST',
+    await $authFetch('/api/v1/Account/social/sendRequest', {
+      method: 'PUT',
+      headers: {
+        userId: String(accountStore.userId)
+      },
       body: {
-        userId: accountStore.userId,
-        targetId: userId
+        targetUserId: userId
       }
     })
   } else {

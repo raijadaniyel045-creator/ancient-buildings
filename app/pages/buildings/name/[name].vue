@@ -155,13 +155,13 @@
 </template>
 
 <script setup lang="ts">
-import type { BuildingArticle } from '~/types'
+import type { components } from '~/types'
 
 const { locale, t } = useI18n()
 const localePath = useLocalePath()
 const name = useRoute().params.name
 
-const { data: post } = await useAsyncData<BuildingArticle>(`building-${name}-${locale.value}`, () => {
+const { data: post } = await useAsyncData<components['schemas']['BuildingArticle']>(`building-${name}-${locale.value}`, () => {
   return $fetch(`/api/v1/Buildings/name/${name}`)
 })
 </script>

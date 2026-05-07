@@ -210,7 +210,7 @@
 </template>
 
 <script setup lang="ts">
-import type { BuildingSlug, BuildingSummaryResponse, SplitPageResponse } from '~/types'
+import type { components, paths } from '~/types'
 
 const localePath = useLocalePath()
 
@@ -237,14 +237,14 @@ function wrapTagValue(name: string): TagValue {
   })
 }
 
-const { data: summaryResponse } = await useAsyncData<BuildingSummaryResponse>(`buildings-summary-${locale.value}`,
+const { data: summaryResponse } = await useAsyncData<components['schemas']['BuildingSummaryResponse']>(`buildings-summary-${locale.value}`,
   () => $fetch('/api/v1/Buildings'))
 const provinceList = summaryResponse.value?.provinces || { values: [], length: 0 }
 const dynastyList = summaryResponse.value?.dynasties || { values: [], length: 0 }
 const categoryList = summaryResponse.value?.categories || { values: [], length: 0 }
 const total = computed(() => summaryResponse.value?.total || 0)
 
-const { data: apiData, refresh } = await useAsyncData<SplitPageResponse>(`buildings-${locale.value}`,
+const { data: apiData, refresh } = await useAsyncData<components['schemas']['SplitPageResponse']>(`buildings-${locale.value}`,
   () => {
     const p = tags.value.filter(v => v.type === 'prov').flatMap(v => v.name)
     const d = tags.value.filter(v => v.type === 'dyna').flatMap(v => v.name)
@@ -253,20 +253,20 @@ const { data: apiData, refresh } = await useAsyncData<SplitPageResponse>(`buildi
     return $fetch('/api/v1/Buildings', {
       method: 'POST',
       query: {
-        page: page.value,
-        pageSize: pageSize.value,
-        provinces: p.length ? p.join(',') : undefined,
-        dynasties: d.length ? d.join(',') : undefined,
-        categories: c.length ? c.join(',') : undefined,
-        searches: s.length ? s.join(',') : undefined
-      }
+        Page: page.value,
+        PageSize: pageSize.value,
+        Provinces: p.length ? p.join(',') : undefined,
+        Dynasties: d.length ? d.join(',') : undefined,
+        Categories: c.length ? c.join(',') : undefined,
+        Searches: s.length ? s.join(',') : undefined
+      } as paths['/api/v1/Buildings']['post']['parameters']['query']
     })
   },
   {
     watch: [page, pageSize, tags]
   })
 
-const buildings = computed<BuildingSlug[]>(() => apiData.value?.items || [])
+const buildings = computed<components['schemas']['BuildingSlug'][]>(() => apiData.value?.items || [])
 const filter = computed(() => apiData.value?.total || 0)
 
 function toggleTag(tag: string, type: 'prov' | 'cate' | 'dyna' | 'sear'): void {
@@ -298,13 +298,13 @@ function updateUrl() {
   const c = tags.value.filter(v => v.type === 'cate').flatMap(v => v.name)
   router.replace({
     query: {
-      page: page.value,
-      pageSize: pageSize.value !== 12 ? pageSize.value : undefined,
-      provinces: p.length ? p.join(',') : undefined,
-      dynasties: d.length ? d.join(',') : undefined,
-      categories: c.length ? c.join(',') : undefined,
-      searches: s.length ? s.join(',') : undefined
-    }
+      Page: page.value,
+      PageSize: pageSize.value !== 12 ? pageSize.value : undefined,
+      Provinces: p.length ? p.join(',') : undefined,
+      Dynasties: d.length ? d.join(',') : undefined,
+      Categories: c.length ? c.join(',') : undefined,
+      Searches: s.length ? s.join(',') : undefined
+    } as paths['/api/v1/Buildings']['post']['parameters']['query']
   })
 }
 watch([page, pageSize, tags], () => {
