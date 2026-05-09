@@ -65,6 +65,7 @@ export const useAccountStore = defineStore('useAccountStore', {
       this.userId = null
       this.email = null
       this.isLoggedIn = false
+      this.publicInfo = null
       if (import.meta.client) {
         localStorage.removeItem('refresh_token')
         localStorage.removeItem('remember_me')
@@ -121,7 +122,6 @@ export const useAccountStore = defineStore('useAccountStore', {
       this.refreshToken = savedRefreshToken
       // 尝试用 refreshToken 换取新的 accessToken
       const content = await this.refreshAccessToken()
-      await this.getAccount()
       return content
     },
     async register(credentials: { username: string, email: string, password: string }, rememberMe: boolean) {
@@ -138,6 +138,10 @@ export const useAccountStore = defineStore('useAccountStore', {
       if (error.value || data.value === undefined) {
         throw error
       }
+      await this.login({
+        email: credentials.email,
+        password: credentials.password
+      }, rememberMe)
     },
     async getAccount(): Promise<components['schemas']['AccountPublicInfoResponse'] | undefined> {
       if (!this.isLoggedIn) return undefined

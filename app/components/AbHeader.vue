@@ -40,12 +40,9 @@
         </UButton>
       </template>
       <template v-else>
-        <UPopover>
+        <UDropdownMenu :items="menuItems">
           <UUser :name="userName" />
-          <template #content>
-            <div class="size-48 m-4 inline-flex" />
-          </template>
-        </UPopover>
+        </UDropdownMenu>
       </template>
       <ULocaleSelect
         :model-value="locale"
@@ -57,7 +54,7 @@
 </template>
 
 <script lang="ts" setup>
-import type { NavigationMenuItem } from '@nuxt/ui'
+import type { DropdownMenuItem, NavigationMenuItem } from '@nuxt/ui'
 import AppLogo from '~/components/AppLogo.vue'
 
 const { t, locale, locales, setLocale } = useI18n()
@@ -76,5 +73,23 @@ const items = computed<NavigationMenuItem[]>(() => [
   { label: t('forum'), to: localePath('/forum') },
   { label: t('dashboard'), to: localePath('/dashboard') },
   { label: t('ai'), to: localePath('/ai') }
+])
+
+const menuItems = computed<DropdownMenuItem[][]>(() => [
+  [
+    {
+      label: 'Something'
+    }
+  ], [
+    {
+      label: 'Logout',
+      icon: 'i-lucide-log-out',
+      color: 'error',
+      onSelect: () => {
+        store.logout()
+        useRouter().push('/')
+      }
+    }
+  ]
 ])
 </script>

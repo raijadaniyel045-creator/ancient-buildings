@@ -32,6 +32,9 @@ import { useAccountStore } from '~/stores/useAccountStore'
 
 const { t } = useI18n()
 const localePath = useLocalePath()
+const route = useRoute()
+
+const redirect = (route.query.redirect || '/') as string
 
 const toast = useToast()
 const fields: AuthFormField[] = [{
@@ -95,6 +98,6 @@ async function onSubmit(event: FormSubmitEvent<Schema>) {
     return
   }
   toast.add({ title: 'Success', description: 'success', color: 'success' })
-  await useRouter().push(localePath('/auth/login'))
+  await useRouter().push(redirect)
 }
 </script>
