@@ -453,7 +453,7 @@ const { t, locale } = useI18n()
 const { $authFetch } = useNuxtApp()
 const localePath = useLocalePath()
 
-const { data: globalInfo } = await useAsyncData<components['schemas']['FriendsSummary']>(`friends-summary-${locale.value}-${accountStore.userId}`, () => {
+const { data: globalInfo, refresh: friendsRefresh } = await useAsyncData<components['schemas']['FriendsSummary']>(`friends-summary-${locale.value}-${accountStore.userId}`, () => {
   return $authFetch('/api/v1/Account/friends', {
     headers: {
       userId: String(accountStore.userId)
@@ -475,7 +475,7 @@ const activeFilter = ref('all')
 const filters = ['all', 'online', 'recent'] as const
 const page = ref(1)
 
-const { data: arrayList } = await useAsyncData<components['schemas']['SplitFriendsArrayResponse']>(`friends-${locale.value}-${activeFilter.value}`, () => {
+const { data: arrayList, refresh } = await useAsyncData<components['schemas']['SplitFriendsArrayResponse']>(`friends-${locale.value}-${activeFilter.value}`, () => {
   console.log(activeFilter.value)
   return $authFetch(`/api/v1/Account/friends/${activeFilter.value}`, {
     method: 'POST',
@@ -522,6 +522,8 @@ async function dealRequest(request: components['schemas']['RecentActivityLog'], 
       confirm: accept
     }
   })
+  await refresh()
+  await friendsRefresh()
 }
 </script>
 

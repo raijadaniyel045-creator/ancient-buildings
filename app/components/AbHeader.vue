@@ -40,6 +40,7 @@
         </UButton>
       </template>
       <template v-else>
+        <UColorModeButton />
         <UDropdownMenu :items="menuItems">
           <UUser :name="userName" />
         </UDropdownMenu>

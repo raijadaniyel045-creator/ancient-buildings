@@ -106,8 +106,8 @@ export const useAccountStore = defineStore('useAccountStore', {
      * 适合在 Nuxt 插件或 app.vue 中调用
      */
     async tryRestoreSession() {
-      console.log('Trying to restore session')
       if (!import.meta.client) return false
+      console.log('Trying to restore session')
       this.rememberMe = localStorage.getItem('remember_me') === 'true'
       if (this.rememberMe) {
         // 不直接存 refreshToken 到 state，防止 XSS 窃取，但为了方便刷新动作，也可以暂存
