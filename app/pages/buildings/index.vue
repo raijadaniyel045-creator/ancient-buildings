@@ -218,9 +218,9 @@ const route = useRoute()
 const router = useRouter()
 const { locale, t } = useI18n()
 
-const page = ref(Number(route.query.page) || 1)
+const page = ref(Number(route.query.Page) || 1)
 const defaultPageSize = 12
-const pageSize = ref(Number(route.query.pageSize) || defaultPageSize)
+const pageSize = ref(Number(route.query.PageSize) || defaultPageSize)
 
 type TagValue = {
   name: string
@@ -278,9 +278,9 @@ function toggleTag(tag: string, type: 'prov' | 'cate' | 'dyna' | 'sear'): void {
       name: tag,
       type
     })
-    refresh()
   }
   page.value = 1
+  refresh()
 }
 function existTag(tag: string, type: TagValue['type']): boolean {
   return tags.value.find(v => v.type === type && v.name == tag) !== undefined
@@ -310,14 +310,6 @@ function updateUrl() {
 watch([page, pageSize, tags], () => {
   updateUrl()
 }, { deep: true })
-
-watch(() => route.query, (newQuery) => {
-  const newPage = Number(newQuery.page) || 1
-  const newPageSize = Number(newQuery.page) || defaultPageSize
-
-  if (newPage !== page.value) page.value = newPage
-  if (newPageSize !== pageSize.value) page.value = newPageSize
-})
 </script>
 
 <style scoped>
