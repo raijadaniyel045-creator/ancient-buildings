@@ -29,7 +29,7 @@
       <div class="grid grid-cols-1 md:grid-cols-2 gap-16 items-center reveal-element">
         <div class="order-2 md:order-1">
           <img
-            src="/images/zhongzhouxian.jpg"
+            src="/images/zhongzhouxian.png"
             alt="北京中轴线风貌"
             class="w-full shadow-2xl rounded-sm object-cover h-[500px] grayscale hover:grayscale-0 transition-all duration-1000"
           >
