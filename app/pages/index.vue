@@ -68,9 +68,9 @@ onUnmounted(() => {
 
 // 1. 大国足迹数据
 const footprints = [
-  { id: 1, title: '山西 · 平遥古城', image: '/images/平遥古城.jpg', desc: '“敬畏历史、敬畏文化、敬畏生态，全面保护好历史文化遗产，统筹好旅游发展、特色经营、古城保护。”' },
-  { id: 2, title: '甘肃 · 敦煌莫高窟', image: '/images/莫高窟.jpg', desc: '“保护好我们的国粹，传承好优秀的传统文化。把莫高窟保护好，把敦煌文化传承好。”' },
-  { id: 3, title: '北京 · 中轴线', image: '/images/中轴线.jpg', desc: '“北京历史文化是中华文明源远流长的伟大见证，要更加精心保护好，凸显北京历史文化的整体价值。”' }
+  { id: 1, title: '山西 · 平遥古城', image: '/images/平遥古城.jpg', desc: '“敬畏历史、敬畏文化、敬畏生态，全面保护好历史文化遗产，统筹好旅游发展、特色经营、古城保护。”', link: '/action/pingyao' },
+  { id: 2, title: '甘肃 · 敦煌莫高窟', image: '/images/莫高窟.jpg', desc: '“保护好我们的国粹，传承好优秀的传统文化。把莫高窟保护好，把敦煌文化传承好。”', link: '/action/mogaoku' },
+  { id: 3, title: '北京 · 中轴线', image: '/images/中轴线.jpg', desc: '“北京历史文化是中华文明源远流长的伟大见证，要更加精心保护好，凸显北京历史文化的整体价值。”', link: '/action/zhongzhouxian' }
 ]
 
 // 2. 数字营造功能引流数据
@@ -268,9 +268,10 @@ const features = [
 
         <!-- 足迹卡片阵列 -->
         <div class="grid grid-cols-1 md:grid-cols-3 gap-10">
-          <div
+          <NuxtLink
             v-for="footprint in footprints"
             :key="footprint.id"
+            :to="footprint.link"
             class="group bg-[#FAFAFA] rounded-sm overflow-hidden shadow-[0_10px_30px_rgba(0,0,0,0.03)] hover:shadow-[0_20px_50px_rgba(139,43,43,0.08)] transition-all duration-500 relative cursor-pointer flex flex-col h-full border border-transparent hover:border-[#8B2B2B]/15"
           >
             <!-- 卡片顶部：高清高饱和摄影 -->
@@ -292,7 +293,7 @@ const features = [
                 {{ footprint.desc }}
               </p>
             </div>
-          </div>
+          </NuxtLink>
         </div>
       </div>
     </section>

@@ -50,6 +50,16 @@ export default defineNuxtConfig({
     }
   },
 
+  vite: {
+    server: {
+      allowedHosts: [
+        '6f9c5118.r26.cpolar.top',
+        '.cpolar.top',
+        '.cpolar.cn'
+      ]
+    }
+  },
+
   echarts: {
     // 导入所有图表类型
     charts: [
