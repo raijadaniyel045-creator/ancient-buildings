@@ -20,6 +20,7 @@ export default defineNuxtConfig({
   css: ['~/assets/css/main.css'],
 
   content: {
+    watch: false,
     database: {
       type: 'postgres',
       url: 'postgresql://admin:123456@localhost:5432/buildings'
