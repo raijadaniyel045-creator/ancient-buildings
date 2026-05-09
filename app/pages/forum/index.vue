@@ -1,27 +1,29 @@
 <template>
   <div class="bg-[#FAF8F5] min-h-screen font-serif text-[#333333] pb-20 selection:bg-[#8B2B2B]/10 overflow-x-hidden">
-
     <section class="bg-white border-b border-[#EAE3D9] pt-32 pb-16 relative overflow-hidden">
-      <img src="https://api.dicebear.com/7.x/shapes/svg?seed=architecture-blueprint&backgroundColor=transparent&flip=false&radius=0" class="absolute -right-20 -bottom-20 w-[500px] h-[500px] opacity-[0.04] pointer-events-none select-none rotate-[-15deg]">
+      <img
+        src="https://api.dicebear.com/7.x/shapes/svg?seed=architecture-blueprint&backgroundColor=transparent&flip=false&radius=0"
+        class="absolute -right-20 -bottom-20 w-[500px] h-[500px] opacity-[0.04] pointer-events-none select-none rotate-[-15deg]"
+      >
 
       <div class="max-w-7xl mx-auto px-6 relative z-10 text-center flex flex-col items-center">
         <div class="absolute left-6 top-24 writing-vertical-rl text-xs tracking-[0.5em] text-[#C9A063]/60 select-none">
           雅集论坛
         </div>
 
-        <h1 class="text-5xl md:text-6xl font-bold tracking-[0.3em] mb-5 text-[#1A1A1A]">营造学社</h1>
+        <h1 class="text-5xl md:text-6xl font-bold tracking-[0.3em] mb-5 text-[#1A1A1A]">
+          营造学社
+        </h1>
         <p class="text-[#666666] tracking-widest text-base max-w-2xl leading-relaxed">
           —— 汇聚天下同好，以数字之光，重筑华夏典籍中的木构文脉 ——
         </p>
-        <div class="w-16 h-0.5 bg-[#8B2B2B] mt-8 opacity-60"></div>
+        <div class="w-16 h-0.5 bg-[#8B2B2B] mt-8 opacity-60" />
       </div>
     </section>
 
     <div class="max-w-7xl mx-auto px-6 mt-12">
       <div class="grid grid-cols-1 lg:grid-cols-12 gap-12">
-
         <div class="lg:col-span-8 flex flex-col gap-8">
-
           <div class="flex gap-10 border-b border-[#EAE3D9] pb-4 mb-3">
             <button
               v-for="tab in tabs"
@@ -31,19 +33,29 @@
               @click="activeTab = tab.id"
             >
               {{ tab.name }}
-              <span v-if="activeTab === tab.id" class="absolute bottom-[-18px] left-1/2 -translate-x-1/2 w-10 h-1 bg-[#8B2B2B] rounded-full shadow-[0_1px_3px_rgba(139,43,43,0.3)]"></span>
+              <span
+                v-if="activeTab === tab.id"
+                class="absolute bottom-[-18px] left-1/2 -translate-x-1/2 w-10 h-1 bg-[#8B2B2B] rounded-full shadow-[0_1px_3px_rgba(139,43,43,0.3)]"
+              />
             </button>
           </div>
 
-          <transition-group name="list" tag="div" class="flex flex-col gap-8">
+          <transition-group
+            name="list"
+            tag="div"
+            class="flex flex-col gap-8"
+          >
             <NuxtLink
               v-for="post in filteredPosts"
               :key="post.id"
               :to="`/forum/${post.id}`"
               class="block bg-white rounded-sm border border-[#EAE3D9] hover:border-[#C9A063]/30 hover:shadow-[0_15px_45px_rgba(201,160,99,0.08)] transition-all duration-500 relative overflow-hidden group hover:-translate-y-1.5"
             >
-              <div v-if="post.isAi" class="absolute top-0 left-0 w-1.5 h-full bg-gradient-to-b from-[#8B2B2B] to-[#C9A063]"></div>
-              <div class="absolute inset-0 bg-[url('https://www.transparenttextures.com/patterns/rice-paper-3.png')] opacity-[0.1] pointer-events-none mix-blend-multiply"></div>
+              <div
+                v-if="post.isAi"
+                class="absolute top-0 left-0 w-1.5 h-full bg-gradient-to-b from-[#8B2B2B] to-[#C9A063]"
+              />
+              <div class="absolute inset-0 bg-[url('https://www.transparenttextures.com/patterns/rice-paper-3.png')] opacity-[0.1] pointer-events-none mix-blend-multiply" />
 
               <div class="p-8 md:p-10 relative z-10">
                 <div class="flex items-center justify-between mb-6 pb-5 border-b border-[#F5F1EA]">
@@ -52,7 +64,10 @@
                       <div class="w-12 h-12 flex items-center justify-center border-2 border-[#8B2B2B] text-[#8B2B2B] relative rotate-[-5deg] scale-95 opacity-90 shadow-[inset_0_0_8px_rgba(139,43,43,0.1)]">
                         <span class="font-serif text-lg font-bold leading-none writing-vertical-rl tracking-tight">太虚<br>书童</span>
                         <div class="absolute -right-1.5 -bottom-1.5 bg-[#8B2B2B] text-white rounded-full w-5 h-5 flex items-center justify-center scale-90">
-                          <UIcon name="i-lucide-badge-check" class="w-3.5 h-3.5" />
+                          <UIcon
+                            name="i-lucide-badge-check"
+                            class="w-3.5 h-3.5"
+                          />
                         </div>
                       </div>
                       <div>
@@ -63,7 +78,11 @@
                       </div>
                     </template>
                     <template v-else>
-                      <img :src="post.avatar" alt="avatar" class="w-12 h-12 rounded-full object-cover border-2 border-[#EAE3D9] p-0.5">
+                      <img
+                        :src="post.avatar"
+                        alt="avatar"
+                        class="w-12 h-12 rounded-full object-cover border-2 border-[#EAE3D9] p-0.5"
+                      >
                       <div>
                         <span class="text-sm font-bold text-[#1A1A1A] tracking-widest group-hover:text-[#8B2B2B] transition-colors">{{ post.author }}</span>
                         <span class="text-xs text-[#999999] tracking-wider">{{ post.date }} · 游观心得</span>
@@ -87,9 +106,18 @@
                 </p>
 
                 <div class="flex items-center gap-8 text-[#888888] text-sm pt-5 border-t border-[#F5F1EA]">
-                  <span class="flex items-center gap-2 hover:text-[#8B2B2B] transition-colors"><UIcon name="i-lucide-thumbs-up" class="w-4 h-4" /> {{ post.likes }}</span>
-                  <span class="flex items-center gap-2 hover:text-[#8B2B2B] transition-colors"><UIcon name="i-lucide-message-square" class="w-4 h-4" /> {{ post.comments }}</span>
-                  <span class="flex items-center gap-2"><UIcon name="i-lucide-eye" class="w-4 h-4" /> {{ post.views }}</span>
+                  <span class="flex items-center gap-2 hover:text-[#8B2B2B] transition-colors"><UIcon
+                    name="i-lucide-thumbs-up"
+                    class="w-4 h-4"
+                  /> {{ post.likes }}</span>
+                  <span class="flex items-center gap-2 hover:text-[#8B2B2B] transition-colors"><UIcon
+                    name="i-lucide-message-square"
+                    class="w-4 h-4"
+                  /> {{ post.comments }}</span>
+                  <span class="flex items-center gap-2"><UIcon
+                    name="i-lucide-eye"
+                    class="w-4 h-4"
+                  /> {{ post.views }}</span>
                 </div>
               </div>
             </NuxtLink>
@@ -101,24 +129,42 @@
         </div>
 
         <div class="lg:col-span-4 flex flex-col gap-10">
-
-          <NuxtLink to="/forum/editor" class="w-full flex items-center justify-center gap-3 py-5 bg-[#8B2B2B] hover:bg-[#6D2121] text-white font-bold tracking-[0.3em] transition-all rounded-sm shadow-[0_10px_25px_rgba(139,43,43,0.2)] hover:-translate-y-1.5 group">
-            <UIcon name="i-lucide-pen-tool" class="w-5 h-5 group-hover:rotate-[-15deg] transition-transform" />
+          <NuxtLink
+            to="/forum/editor"
+            class="w-full flex items-center justify-center gap-3 py-5 bg-[#8B2B2B] hover:bg-[#6D2121] text-white font-bold tracking-[0.3em] transition-all rounded-sm shadow-[0_10px_25px_rgba(139,43,43,0.2)] hover:-translate-y-1.5 group"
+          >
+            <UIcon
+              name="i-lucide-pen-tool"
+              class="w-5 h-5 group-hover:rotate-[-15deg] transition-transform"
+            />
             撰写新卷宗
           </NuxtLink>
 
           <div class="bg-white p-8 rounded-sm border border-[#EAE3D9] relative overflow-hidden">
-            <UIcon name="i-lucide-bento-box" class="absolute -left-5 -bottom-5 w-24 h-24 text-[#C9A063]/5 pointer-events-none" />
+            <UIcon
+              name="i-lucide-bento-box"
+              class="absolute -left-5 -bottom-5 w-24 h-24 text-[#C9A063]/5 pointer-events-none"
+            />
 
-            <h4 class="text-xl font-bold tracking-widest border-b border-[#EAE3D9] pb-4 mb-6 text-[#1A1A1A]">学社纪事</h4>
+            <h4 class="text-xl font-bold tracking-widest border-b border-[#EAE3D9] pb-4 mb-6 text-[#1A1A1A]">
+              学社纪事
+            </h4>
             <div class="grid grid-cols-2 gap-6 text-center">
               <div>
-                <div class="text-3xl font-bold text-[#8B2B2B] font-mono shadow-sm">1,240</div>
-                <div class="text-xs text-[#666666] tracking-[0.3em] mt-2.5">典籍探讨</div>
+                <div class="text-3xl font-bold text-[#8B2B2B] font-mono shadow-sm">
+                  1,240
+                </div>
+                <div class="text-xs text-[#666666] tracking-[0.3em] mt-2.5">
+                  典籍探讨
+                </div>
               </div>
               <div>
-                <div class="text-3xl font-bold text-[#1A1A1A] font-mono">358</div>
-                <div class="text-xs text-[#666666] tracking-[0.3em] mt-2.5">同好齐聚</div>
+                <div class="text-3xl font-bold text-[#1A1A1A] font-mono">
+                  358
+                </div>
+                <div class="text-xs text-[#666666] tracking-[0.3em] mt-2.5">
+                  同好齐聚
+                </div>
               </div>
             </div>
           </div>
@@ -127,7 +173,10 @@
             <h4 class="text-xl font-bold tracking-widest border-b border-[#EAE3D9] pb-4 mb-7 flex items-center justify-between text-[#1A1A1A]">
               热门经纬 · 十甲
               <div class="flex items-center justify-center w-8 h-8 rounded-full bg-[#8B2B2B]/5 text-[#8B2B2B]">
-                <UIcon name="i-lucide-bar-chart-3" class="w-4 h-4" />
+                <UIcon
+                  name="i-lucide-bar-chart-3"
+                  class="w-4 h-4"
+                />
               </div>
             </h4>
 
@@ -144,26 +193,35 @@
                     'bg-[#8B2B2B] text-white shadow-md': index === 0, // 排名1：故宫红印章
                     'bg-[#C9A063] text-white': index === 1, // 排名2：古铜金印章
                     'bg-[#1A1A1A] text-white': index === 2, // 排名3：深墨黑印章
-                    'bg-[#F5F5F7] text-[#AAAAAA]': index > 2    // 其他：浅灰
+                    'bg-[#F5F5F7] text-[#AAAAAA]': index > 2 // 其他：浅灰
                   }"
                 >
                   <span class="relative z-10">{{ index + 1 }}</span>
-                  <UIcon v-if="index < 3" name="i-lucide-shapes" class="absolute inset-0 w-full h-full text-white/10 p-1" />
+                  <UIcon
+                    v-if="index < 3"
+                    name="i-lucide-shapes"
+                    class="absolute inset-0 w-full h-full text-white/10 p-1"
+                  />
                 </div>
 
                 <div class="flex-1 flex flex-col">
                   <h5 class="text-base font-bold text-[#333333] group-hover:text-[#8B2B2B] transition-colors leading-relaxed line-clamp-2 tracking-wide">
-                    <span v-if="hotPost.isAi" class="inline-block text-[10px] text-[#8B2B2B] border border-[#8B2B2B]/30 px-1 py-0.5 rounded-sm mr-1.5 align-middle tracking-widest scale-90">太虚</span>
+                    <span
+                      v-if="hotPost.isAi"
+                      class="inline-block text-[10px] text-[#8B2B2B] border border-[#8B2B2B]/30 px-1 py-0.5 rounded-sm mr-1.5 align-middle tracking-widest scale-90"
+                    >太虚</span>
                     {{ hotPost.title }}
                   </h5>
                   <span class="text-xs text-[#AAAAAA] tracking-widest mt-2 flex items-center gap-1.5">
-                    <UIcon name="i-lucide-trending-up" class="w-3.5 h-3.5 text-[#C9A063]" /> 营造热度 {{ hotPost.heatScore }}
+                    <UIcon
+                      name="i-lucide-trending-up"
+                      class="w-3.5 h-3.5 text-[#C9A063]"
+                    /> 营造热度 {{ hotPost.heatScore }}
                   </span>
                 </div>
               </NuxtLink>
             </div>
           </div>
-
         </div>
       </div>
     </div>

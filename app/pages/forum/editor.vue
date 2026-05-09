@@ -1,25 +1,38 @@
 <template>
   <div class="bg-white min-h-screen font-serif flex flex-col selection:bg-[#8B2B2B]/20">
-
     <header class="sticky top-0 z-50 bg-white/90 backdrop-blur-md border-b border-[#EAEAEA] px-6 h-16 flex items-center justify-between">
       <div class="flex items-center gap-4">
         <button
           class="flex items-center gap-2 text-[#666666] hover:text-[#1A1A1A] transition-colors tracking-widest text-sm"
           @click="goBack"
         >
-          <UIcon name="i-lucide-chevron-left" class="w-5 h-5" />
+          <UIcon
+            name="i-lucide-chevron-left"
+            class="w-5 h-5"
+          />
           返回学社
         </button>
-        <div class="w-px h-4 bg-[#EAEAEA]"></div>
+        <div class="w-px h-4 bg-[#EAEAEA]" />
         <span class="text-xs text-[#888888] tracking-widest flex items-center gap-1">
-          <UIcon v-if="isSaving" name="i-lucide-refresh-cw" class="w-3 h-3 animate-spin" />
-          <UIcon v-else name="i-lucide-check-circle" class="w-3 h-3 text-green-600/70" />
+          <UIcon
+            v-if="isSaving"
+            name="i-lucide-refresh-cw"
+            class="w-3 h-3 animate-spin"
+          />
+          <UIcon
+            v-else
+            name="i-lucide-check-circle"
+            class="w-3 h-3 text-green-600/70"
+          />
           {{ isSaving ? '草稿保存中...' : '已保存于本地' }}
         </span>
       </div>
 
       <div class="flex items-center gap-4">
-        <span v-if="isEditMode" class="text-xs text-[#D4AF37] border border-[#D4AF37]/30 px-2 py-1 tracking-widest bg-[#D4AF37]/5">
+        <span
+          v-if="isEditMode"
+          class="text-xs text-[#D4AF37] border border-[#D4AF37]/30 px-2 py-1 tracking-widest bg-[#D4AF37]/5"
+        >
           修订卷宗模式
         </span>
         <button
@@ -27,14 +40,16 @@
           :disabled="!isValid"
           @click="publishPost"
         >
-          <UIcon name="i-lucide-send" class="w-4 h-4" />
+          <UIcon
+            name="i-lucide-send"
+            class="w-4 h-4"
+          />
           {{ isEditMode ? '确认修订' : '落笔成卷' }}
         </button>
       </div>
     </header>
 
     <main class="flex-1 max-w-4xl w-full mx-auto px-6 py-12 flex flex-col gap-6">
-
       <div class="flex items-center gap-3">
         <span class="text-sm text-[#888888] tracking-widest">选择分类：</span>
         <div class="flex gap-2">
@@ -58,7 +73,7 @@
         @input="autoSave"
       >
 
-      <div class="w-16 h-px bg-[#8B2B2B]/30 my-2"></div>
+      <div class="w-16 h-px bg-[#8B2B2B]/30 my-2" />
 
       <UTextarea
         v-model="postForm.content"
@@ -74,7 +89,6 @@
         @input="autoSave"
       />
     </main>
-
   </div>
 </template>
 
@@ -103,9 +117,9 @@ const postForm = ref({
 
 // 表单校验：标题、内容、标签缺一不可
 const isValid = computed(() => {
-  return postForm.value.title.trim().length > 0 &&
-    postForm.value.content.trim().length > 0 &&
-    selectedTag.value !== ''
+  return postForm.value.title.trim().length > 0
+    && postForm.value.content.trim().length > 0
+    && selectedTag.value !== ''
 })
 
 // 生命周期：初始化数据

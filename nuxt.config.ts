@@ -45,7 +45,7 @@ export default defineNuxtConfig({
     routeRules: {
       // 将所有 /api/v1/ 开头的请求代理到后端服务
       '/api/v1/**': {
-        proxy: 'http://localhost:5224/api/v1/**'
+        proxy: 'http://nilarea.natapp1.cc/api/v1/**'
       }
     }
   },
