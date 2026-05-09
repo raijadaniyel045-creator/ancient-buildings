@@ -1,6 +1,7 @@
 // plugins/auth-interceptor.client.ts (仅客户端执行)
-export default defineNuxtPlugin(() => {
+export default defineNuxtPlugin(async () => {
   const authStore = useAccountStore()
+  await authStore.tryRestoreSession()
   const localePath = useLocalePath()
 
   // 全局 fetch 拦截器（适用于 $fetch 和 useFetch）

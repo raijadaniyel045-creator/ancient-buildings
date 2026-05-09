@@ -128,8 +128,8 @@
       <template v-if="friendsGetArray.length > 0">
         <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
           <div
-            v-for="(user, index) in friendsGetArray"
-            :key="index"
+            v-for="user in friendsGetArray"
+            :key="user.userId"
             class="bg-white rounded-2xl border border-[#E8DFCE]/60 hover:border-[#D4AF37]/40 shadow-sm hover:shadow-md transition-all duration-500 group animate-fade-in-up relative overflow-hidden"
             :style="{ animationDelay: `${index * 0.08}s` }"
           >
@@ -146,11 +146,13 @@
                   fill="currentColor"
                 />
               </svg>
+              <!--
               <div class="absolute top-4 right-4">
                 <div class="px-3 py-1 bg-white/80 backdrop-blur border border-[#D4AF37]/20 text-[#D4AF37] text-[11px] font-bold tracking-wider rounded-full shadow-sm">
                   契合度 {{ user.matchScore }}%
                 </div>
               </div>
+              -->
             </div>
 
             <!-- 用户信息 -->
@@ -177,7 +179,7 @@
               <!-- 兴趣标签 -->
               <div class="flex flex-wrap justify-center gap-2 mb-6 h-14 overflow-hidden">
                 <span
-                  v-for="ta in user.tags.slice(0, 4)"
+                  v-for="ta in user.interest.slice(0, 4)"
                   :key="ta"
                   class="px-2.5 py-1 bg-[#F5F0E6] text-[#8B7355] text-[10px] tracking-wider rounded-md border border-[#E8DFCE]"
                 >
@@ -189,15 +191,15 @@
                 <button
                   :class="[
                     'flex-1 py-2.5 rounded-xl text-sm font-medium transition-all shadow-sm flex items-center justify-center gap-2',
-                    existRequest(user.userid)
+                    existRequest(user.userId)
                       ? 'bg-[#F5F0E6] text-[#A69B8D] cursor-not-allowed'
                       : 'bg-[#5B8C7A] text-white hover:bg-[#4A7364] hover:shadow-md'
                   ]"
-                  :disabled="existRequest(user.userid)"
-                  @click="sendRequest(user.userid)"
+                  :disabled="existRequest(user.userId)"
+                  @click="sendRequest(user.userId)"
                 >
                   <svg
-                    v-if="!existRequest(user.userid)"
+                    v-if="!existRequest(user.userId)"
                     class="w-4 h-4"
                     fill="none"
                     stroke="currentColor"
@@ -224,8 +226,9 @@
                       d="M5 13l4 4L19 7"
                     />
                   </svg>
-                  <span>{{ existRequest(user.userid) ? '拜帖已递' : '递交拜帖' }}</span>
+                  <span>{{ existRequest(user.userId) ? '拜帖已递' : '递交拜帖' }}</span>
                 </button>
+                <!--
                 <button class="w-11 h-11 bg-[#FDFBF7] border border-[#E8DFCE] text-[#8B7355] rounded-xl hover:text-[#D4AF37] hover:border-[#D4AF37]/30 transition-colors flex items-center justify-center">
                   <svg
                     class="w-5 h-5"
@@ -241,6 +244,7 @@
                     />
                   </svg>
                 </button>
+                -->
               </div>
             </div>
           </div>
@@ -281,7 +285,6 @@ import type { components } from '~/types'
 const accountStore = useAccountStore()
 const { t, locale } = useI18n()
 const { $authFetch } = useNuxtApp()
-const localePath = useLocalePath()
 
 const { data: tagsResponse } = await useAsyncData<string[]>(`search-collection-${locale.value}`, () => {
   return $fetch('/api/v1/Account/social/collectTags')
@@ -335,21 +338,24 @@ const { data: recommendRequest, refresh } = await useAsyncData<components['schem
 })
 const friendsGetArray = computed<components['schemas']['AccountPublicInfoResponse'][]>(() => recommendRequest.value ?? [])
 
-const requests = ref<number[]>([])
+const requests = ref<number[]>([...JSON.parse(sessionStorage.getItem('requests_ids') ?? '[]')])
 const toast = useToast()
 function existRequest(userId: number): boolean {
   return requests.value.find(t => t === userId) !== undefined
 }
 async function sendRequest(userId: number) {
-  if (existRequest(userId)) {
+  console.log(requests.value)
+  if (!existRequest(userId)) {
     toast.add({ title: '成功提交' })
     requests.value.push(userId)
-    await $authFetch('/api/v1/Account/social/sendRequest', {
+    sessionStorage.setItem('requests_ids', JSON.stringify(requests.value))
+    await useFetch('/api/v1/Account/social/sendRequest', {
+      $fetch: $authFetch,
       method: 'PUT',
       headers: {
         userId: String(accountStore.userId)
       },
-      body: {
+      query: {
         targetUserId: userId
       }
     })

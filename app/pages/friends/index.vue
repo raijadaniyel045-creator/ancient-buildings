@@ -148,22 +148,20 @@
           <template v-else>
             <div class="space-y-4">
               <div
-                v-for="(friend, index) in displayFriends"
+                v-for="friend in displayFriends"
                 :key="friend.userId"
                 class="group bg-white rounded-2xl p-5 border border-[#E8DFCE]/60 shadow-sm hover:shadow-md hover:border-[#D4AF37]/40 transition-all duration-300 animate-fade-in-up"
-                :style="{ animationDelay: `${index * 0.08}s` }"
+                :style="{ animationDelay: `0.08s` }"
               >
                 <div class="flex items-center gap-5">
                   <!-- 头像 -->
                   <div class="relative shrink-0">
                     <div class="w-16 h-16 rounded-full p-0.5 bg-linear-to-br from-[#E8DFCE] to-transparent group-hover:from-[#D4AF37] transition-colors duration-500">
                       <img
-                        :src="friend.avatar"
                         :alt="friend.userName"
                         class="w-full h-full rounded-full object-cover border-2 border-white"
                       >
                     </div>
-                    <span :class="['absolute bottom-0 right-0 w-3.5 h-3.5 rounded-full border-2 border-white', friend.online ? 'bg-[#5B8C7A]' : 'bg-[#D1C9BE]']" />
                   </div>
 
                   <!-- 核心信息 -->
@@ -172,13 +170,9 @@
                       <h3 class="text-lg font-serif font-medium text-[#2C363F] truncate">
                         {{ friend.userName }}
                       </h3>
-                      <span
-                        v-if="friend.online"
-                        class="px-2 py-0.5 bg-[#5B8C7A]/10 text-[#5B8C7A] text-[10px] tracking-wider font-bold rounded-md border border-[#5B8C7A]/20"
-                      >在线</span>
                     </div>
                     <p class="text-sm text-[#8B7355] mb-3 truncate font-light">
-                      {{ friend.description }}
+                      {{ friend.profile }}
                     </p>
                     <div class="flex items-center gap-4">
                       <span class="text-xs text-[#A69B8D] flex items-center gap-1.5">
@@ -206,7 +200,7 @@
                       <div class="w-1 h-1 rounded-full bg-[#E8DFCE]" />
                       <div class="flex flex-wrap gap-2">
                         <span
-                          v-for="(tag) in friend.tags.slice(0, 3)"
+                          v-for="(tag) in friend.interest.slice(0, 3)"
                           :key="tag"
                           class="text-xs text-[#D4AF37] bg-[#D4AF37]/5 px-2 py-1 rounded-md border border-[#D4AF37]/10"
                         >
@@ -302,7 +296,6 @@
                 >
                   <div class="flex gap-3">
                     <img
-                      :src="request.avatar"
                       :alt="request.userName"
                       class="w-10 h-10 rounded-full object-cover border border-[#E8DFCE]"
                     >
@@ -314,7 +307,7 @@
                         class="text-xs text-[#8B7355] mt-0.5 line-clamp-1"
                         :title="request.reason"
                       >
-                        {{ request.reason }}
+                        Hi，同好来报到～方便的话加个好友，以后多多指教！
                       </p>
                     </div>
                   </div>
@@ -392,6 +385,7 @@
             </div>
           </div>
           <!-- 最近互动 -->
+          <!--
           <div class="bg-white rounded-2xl p-6 border border-[#E8DFCE]/60 shadow-sm">
             <h3 class="text-base font-serif font-medium text-[#2C363F] flex items-center gap-2 mb-5">
               <svg
@@ -440,6 +434,7 @@
               </div>
             </template>
           </div>
+          -->
         </div>
       </div>
     </div>
@@ -495,7 +490,7 @@ const { data: arrayList } = await useAsyncData<components['schemas']['SplitFrien
 }, {
   watch: [searchFilter, activeFilter, page]
 })
-const displayFriends = computed(() => arrayList.value?.users ?? [])
+const displayFriends = computed<components['schemas']['FriendInfo'][]>(() => arrayList.value?.users ?? [])
 
 const { data: pendingList } = await useAsyncData<components['schemas']['NewFriendRequest'][]>(`friends-pending-${locale.value}-${accountStore.userId}`, () => {
   return $authFetch(`/api/v1/Account/social/pending`, {
@@ -504,7 +499,7 @@ const { data: pendingList } = await useAsyncData<components['schemas']['NewFrien
     }
   })
 })
-const pendingRequests = computed<components['schemas']['NewFriendRequest'][]>(() => pendingList.value ?? [])
+const pendingRequests = ref<components['schemas']['NewFriendRequest'][]>([...pendingList.value ?? []])
 
 const { data: recentLogs } = await useAsyncData<components['schemas']['RecentActivityLog'][]>(`friends-recent-${locale.value}-${accountStore.userId}`, () => {
   return $authFetch(`/api/v1/Account/social/logs`, {
@@ -516,8 +511,9 @@ const { data: recentLogs } = await useAsyncData<components['schemas']['RecentAct
 const recentActivities = computed<components['schemas']['RecentActivityLog'][]>(() => recentLogs.value ?? [])
 
 async function dealRequest(request: components['schemas']['RecentActivityLog'], accept: boolean) {
-  await $authFetch('/api/v1/Account/social/dealRequest', {
-    method: 'POST',
+  pendingRequests.value = pendingRequests.value.filter(e => e !== request)
+  await $authFetch('/api/v1/Account/social/dealRequest/accept', {
+    method: 'PUT',
     headers: {
       userId: String(accountStore.userId)
     },

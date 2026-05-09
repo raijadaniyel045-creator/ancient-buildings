@@ -406,7 +406,7 @@ export interface paths {
     patch?: never
     trace?: never
   }
-  '/api/v1/Account/social/dealRequest': {
+  '/api/v1/Account/social/dealRequest/accept': {
     parameters: {
       query?: never
       header?: never
@@ -552,7 +552,9 @@ export interface paths {
     post: {
       parameters: {
         query?: never
-        header?: never
+        header?: {
+          userId?: number | string
+        }
         path?: never
         cookie?: never
       }
@@ -755,7 +757,7 @@ export interface paths {
     patch?: never
     trace?: never
   }
-  '/api/v1/Forum': {
+  '/api/v1/Forum/post': {
     parameters: {
       query?: never
       header?: never
@@ -785,6 +787,74 @@ export interface paths {
       }
     }
     put?: never
+    post?: never
+    delete?: never
+    options?: never
+    head?: never
+    patch?: never
+    trace?: never
+  }
+  '/api/v1/Forum/post/{postId}': {
+    parameters: {
+      query?: never
+      header?: never
+      path?: never
+      cookie?: never
+    }
+    get: {
+      parameters: {
+        query?: never
+        header?: never
+        path: {
+          postId: number | string
+        }
+        cookie?: never
+      }
+      requestBody?: never
+      responses: {
+        /** @description OK */
+        200: {
+          headers: {
+            [name: string]: unknown
+          }
+          content?: never
+        }
+      }
+    }
+    put?: never
+    post?: never
+    delete?: never
+    options?: never
+    head?: never
+    patch?: never
+    trace?: never
+  }
+  '/api/v1/Forum/publish': {
+    parameters: {
+      query?: never
+      header?: never
+      path?: never
+      cookie?: never
+    }
+    get?: never
+    put: {
+      parameters: {
+        query?: never
+        header?: never
+        path?: never
+        cookie?: never
+      }
+      requestBody?: never
+      responses: {
+        /** @description OK */
+        200: {
+          headers: {
+            [name: string]: unknown
+          }
+          content?: never
+        }
+      }
+    }
     post?: never
     delete?: never
     options?: never
@@ -1260,7 +1330,6 @@ export interface components {
       location: string
       gender?: string
       interest?: string[]
-      online: boolean
     }
     ArrayPair: {
       /** Format: int32 */
@@ -1363,8 +1432,6 @@ export interface components {
       /** Format: int64 */
       userId?: number | string
       userName?: string
-      avatar?: string
-      reason?: string
       createdAt?: string
     }
     ProblemDetails: {
@@ -1398,6 +1465,8 @@ export interface components {
       accessTokenExpire: string
     }
     SearchFriendsCommand: {
+      /** Format: int32 */
+      page?: number | string
       searchTags?: string[]
       searches?: string[]
     }

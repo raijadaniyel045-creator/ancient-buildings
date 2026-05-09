@@ -34,8 +34,6 @@ useSeoMeta({
   ogDescription: description
 })
 
-onMounted(async () => {
-  const accountStore = useAccountStore()
-  await accountStore.tryRestoreSession()
-})
+const accountStore = useAccountStore()
+await accountStore.tryRestoreSession()
 </script>

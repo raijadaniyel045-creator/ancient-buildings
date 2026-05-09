@@ -52,14 +52,15 @@ export const useAccountStore = defineStore('useAccountStore', {
       this.accessToken = data.value.accessToken
       this.refreshToken = data.value.refreshToken
       this.isLoggedIn = true
-      if (import.meta.client) {
-        const storage = rememberMe ? localStorage : sessionStorage
-        storage.setItem('refresh_token', data.value.refreshToken)
-        storage.setItem('remember_me', String(rememberMe))
-      }
       await this.getAccount()
+      if (import.meta.client) {
+        const storage = this.rememberMe ? localStorage : sessionStorage
+        storage.setItem('refresh_token', data.value.refreshToken)
+        storage.setItem('remember_me', String(this.rememberMe))
+      }
     },
     logout() {
+      console.log('Logout')
       this.accessToken = null
       this.refreshToken = null
       this.userId = null
@@ -78,15 +79,8 @@ export const useAccountStore = defineStore('useAccountStore', {
      * 由请求拦截器或定时器调用
      */
     async refreshAccessToken(): Promise<boolean> {
-      // 从存储中获取 refreshToken
-      let storedRefreshToken = this.refreshToken
-      if (!storedRefreshToken && import.meta.client) {
-        // 优先从对应的存储里读取，兼容页面刷新后的状态恢复
-        const isRemember = localStorage.getItem('remember_me') === 'true'
-        const storage = isRemember ? localStorage : sessionStorage
-        storedRefreshToken = storage.getItem('refresh_token')
-      }
-      if (!storedRefreshToken) {
+      console.log('Refresh access token')
+      if (this.refreshToken === null) {
         this.logout()
         return false
       }
@@ -99,11 +93,11 @@ export const useAccountStore = defineStore('useAccountStore', {
           refreshToken: this.refreshToken
         } as components['schemas']['RefreshTokenCommand']
       })
-      if (error.value || data.value === undefined) {
+      if (error.value) {
         this.logout()
         return false
       }
-      this.accessToken = data.value.accessToken
+      this.accessToken = data.value?.accessToken || null
       await this.getAccount()
       return true
     },
@@ -112,17 +106,18 @@ export const useAccountStore = defineStore('useAccountStore', {
      * 适合在 Nuxt 插件或 app.vue 中调用
      */
     async tryRestoreSession() {
+      console.log('Trying to restore session')
       if (!import.meta.client) return false
-      const rememberMe = localStorage.getItem('remember_me') === 'true'
-      const storage = rememberMe ? localStorage : sessionStorage
-      const savedRefreshToken = storage.getItem('refresh_token')
-      if (!savedRefreshToken) return false
-      this.rememberMe = rememberMe
-      // 不直接存 refreshToken 到 state，防止 XSS 窃取，但为了方便刷新动作，也可以暂存
-      this.refreshToken = savedRefreshToken
-      // 尝试用 refreshToken 换取新的 accessToken
-      const content = await this.refreshAccessToken()
-      return content
+      this.rememberMe = localStorage.getItem('remember_me') === 'true'
+      if (this.rememberMe) {
+        // 不直接存 refreshToken 到 state，防止 XSS 窃取，但为了方便刷新动作，也可以暂存
+        const savedRefreshToken = localStorage.getItem('refresh_token')
+        if (savedRefreshToken === null) return false
+        this.refreshToken = savedRefreshToken
+        // 尝试用 refreshToken 换取新的 accessToken
+        return await this.refreshAccessToken()
+      }
+      return false
     },
     async register(credentials: { username: string, email: string, password: string }, rememberMe: boolean) {
       this.logout()
