@@ -4,7 +4,7 @@
  */
 
 export interface paths {
-  '/api/v1/Account': {
+  '/api/v1/Account/{userId}': {
     parameters: {
       query?: never
       header?: never
@@ -13,11 +13,11 @@ export interface paths {
     }
     get: {
       parameters: {
-        query?: {
-          userId?: number | string
-        }
+        query?: never
         header?: never
-        path?: never
+        path: {
+          userId: number
+        }
         cookie?: never
       }
       requestBody?: never
@@ -47,7 +47,21 @@ export interface paths {
       }
     }
     put?: never
-    post: {
+    post?: never
+    delete?: never
+    options?: never
+    head?: never
+    patch?: never
+    trace?: never
+  }
+  '/api/v1/Account/me': {
+    parameters: {
+      query?: never
+      header?: never
+      path?: never
+      cookie?: never
+    }
+    get: {
       parameters: {
         query?: never
         header?: {
@@ -82,6 +96,8 @@ export interface paths {
         }
       }
     }
+    put?: never
+    post?: never
     delete?: never
     options?: never
     head?: never
@@ -476,8 +492,8 @@ export interface paths {
       }
       requestBody?: never
       responses: {
-        /** @description No Content */
-        204: {
+        /** @description Created */
+        201: {
           headers: {
             [name: string]: unknown
           }
@@ -757,7 +773,7 @@ export interface paths {
     patch?: never
     trace?: never
   }
-  '/api/v1/Forum/post': {
+  '/api/v1/Forum/post/summary': {
     parameters: {
       query?: never
       header?: never
@@ -794,6 +810,46 @@ export interface paths {
     patch?: never
     trace?: never
   }
+  '/api/v1/Forum/post': {
+    parameters: {
+      query?: never
+      header?: never
+      path?: never
+      cookie?: never
+    }
+    get: {
+      parameters: {
+        query?: {
+          Page?: number | string
+          PageSize?: number | string
+        }
+        header?: never
+        path?: never
+        cookie?: never
+      }
+      requestBody?: never
+      responses: {
+        /** @description OK */
+        200: {
+          headers: {
+            [name: string]: unknown
+          }
+          content: {
+            'text/plain': components['schemas']['ForumSplitPageResponse']
+            'application/json': components['schemas']['ForumSplitPageResponse']
+            'text/json': components['schemas']['ForumSplitPageResponse']
+          }
+        }
+      }
+    }
+    put?: never
+    post?: never
+    delete?: never
+    options?: never
+    head?: never
+    patch?: never
+    trace?: never
+  }
   '/api/v1/Forum/post/{postId}': {
     parameters: {
       query?: never
@@ -806,7 +862,7 @@ export interface paths {
         query?: never
         header?: never
         path: {
-          postId: number | string
+          postId: number
         }
         cookie?: never
       }
@@ -817,7 +873,50 @@ export interface paths {
           headers: {
             [name: string]: unknown
           }
-          content?: never
+          content: {
+            'text/plain': components['schemas']['PostDataResponse']
+            'application/json': components['schemas']['PostDataResponse']
+            'text/json': components['schemas']['PostDataResponse']
+          }
+        }
+      }
+    }
+    put?: never
+    post?: never
+    delete?: never
+    options?: never
+    head?: never
+    patch?: never
+    trace?: never
+  }
+  '/api/v1/Forum/post/{postId}/profile': {
+    parameters: {
+      query?: never
+      header?: never
+      path?: never
+      cookie?: never
+    }
+    get: {
+      parameters: {
+        query?: never
+        header?: never
+        path: {
+          postId: number
+        }
+        cookie?: never
+      }
+      requestBody?: never
+      responses: {
+        /** @description OK */
+        200: {
+          headers: {
+            [name: string]: unknown
+          }
+          content: {
+            'text/plain': components['schemas']['PostSlugInfo']
+            'application/json': components['schemas']['PostSlugInfo']
+            'text/json': components['schemas']['PostSlugInfo']
+          }
         }
       }
     }
@@ -837,7 +936,8 @@ export interface paths {
       cookie?: never
     }
     get?: never
-    put: {
+    put?: never
+    post: {
       parameters: {
         query?: never
         header?: never
@@ -846,8 +946,8 @@ export interface paths {
       }
       requestBody?: never
       responses: {
-        /** @description OK */
-        200: {
+        /** @description Created */
+        201: {
           headers: {
             [name: string]: unknown
           }
@@ -855,7 +955,6 @@ export interface paths {
         }
       }
     }
-    post?: never
     delete?: never
     options?: never
     head?: never
@@ -1331,6 +1430,15 @@ export interface components {
       gender?: string
       interest?: string[]
     }
+    AccountUserPublicInfos: {
+      /** Format: int64 */
+      userId: number | string
+      userName: string
+      profile: string
+      location: string
+      gender: components['schemas']['Gender']
+      interest?: string[]
+    }
     ArrayPair: {
       /** Format: int32 */
       length?: number | string
@@ -1410,7 +1518,18 @@ export interface components {
       /** Format: int32 */
       total?: number | string
     }
-    ForumSummaryResponse: Record<string, never>
+    ForumSplitPageResponse: {
+      /** Format: int32 */
+      totalCount: number | string
+      displayedPosts?: components['schemas']['PostSlugInfo'][]
+    }
+    ForumSummaryResponse: {
+      hotPostSlugs?: components['schemas']['HotPostSlug'][]
+      /** Format: int32 */
+      totalPosts: number | string
+      /** Format: int32 */
+      totalUsers: number | string
+    }
     FriendInfo: {
       /** Format: int64 */
       userId: number | string
@@ -1427,12 +1546,58 @@ export interface components {
       /** Format: int32 */
       request?: number | string
     }
+    Gender: {
+      /** Format: int32 */
+      value?: number | string
+      code?: null | string
+    }
+    HotPostSlug: {
+      /** Format: int64 */
+      postId: number | string
+      title: string
+      isAi?: boolean
+      /** Format: int32 */
+      heatScore: number | string
+    }
     JsonDocument: unknown
     NewFriendRequest: {
       /** Format: int64 */
       userId?: number | string
       userName?: string
       createdAt?: string
+    }
+    PostDataResponse: {
+      /** Format: int64 */
+      id: number | string
+      title: string
+      excerpt: string
+      isAi?: boolean
+      tag: string
+      data: string
+      /** Format: date-time */
+      createdAt?: string
+      author: components['schemas']['AccountUserPublicInfos']
+      stats: components['schemas']['PostStats']
+    }
+    PostSlugInfo: {
+      /** Format: int64 */
+      id: number | string
+      title: string
+      excerpt: string
+      isAi?: boolean
+      tag: string
+      /** Format: date-time */
+      createdAt?: string
+      author: components['schemas']['AccountUserPublicInfos']
+      stats: components['schemas']['PostStats']
+    }
+    PostStats: {
+      /** Format: int32 */
+      views?: number | string
+      /** Format: int32 */
+      likes?: number | string
+      /** Format: int32 */
+      commentsCount?: number | string
     }
     ProblemDetails: {
       type?: null | string

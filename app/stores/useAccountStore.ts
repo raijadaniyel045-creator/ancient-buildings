@@ -140,11 +140,7 @@ export const useAccountStore = defineStore('useAccountStore', {
     },
     async getAccount(): Promise<components['schemas']['AccountPublicInfoResponse'] | undefined> {
       if (!this.isLoggedIn) return undefined
-      const { data, error } = await useFetch<components['schemas']['AccountPublicInfoResponse']>('/api/v1/Account', {
-        query: {
-          userId: this.userId
-        }
-      })
+      const { data, error } = await useFetch<components['schemas']['AccountPublicInfoResponse']>(`/api/v1/Account/${this.userId}`)
       if (error.value || data.value === undefined) return undefined
       this.publicInfo = data.value
       return data.value

@@ -81,9 +81,8 @@
         </div>
       </header>
 
-      <article
-        class="prose prose-lg max-w-none text-[#333333] leading-[2.2] tracking-wide text-justify font-serif mb-20"
-        v-html="postData.content"
+      <MDCRenderer
+        :value="parsed"
       />
 
       <section class="border-t border-[#EAEAEA] pt-16">
@@ -156,10 +155,17 @@
 </template>
 
 <script setup lang="ts">
-import { ref, onMounted } from 'vue'
-import { useRoute } from 'vue-router'
+import type { components } from '~/types'
 
-const route = useRoute()
+const { locale, t } = useI18n()
+const localePath = useLocalePath()
+const id = useRoute().params.id
+
+const { data: post } = await useAsyncData<components['schemas']['PostDataResponse']>(`forum-post-${id}-${locale.value}`, () => {
+  return $fetch(`/api/v1/Forum/post/${id}`)
+})
+const parsed = computed(() => parseMarkdown(post.value?.data || ''))
+
 const postData = ref<any>({})
 const comments = ref<any[]>([])
 const newComment = ref('')
@@ -168,9 +174,6 @@ const isLiked = ref(false)
 
 // 模拟从后端获取数据
 onMounted(async () => {
-  const id = route.params.id
-  console.log(`正在获取 ID 为 ${id} 的卷宗详情...`)
-
   // 模拟数据填充
   postData.value = {
     id: id,
