@@ -60,7 +60,6 @@ export const useAccountStore = defineStore('useAccountStore', {
       }
     },
     logout() {
-      console.log('Logout')
       this.accessToken = null
       this.refreshToken = null
       this.userId = null
@@ -79,7 +78,6 @@ export const useAccountStore = defineStore('useAccountStore', {
      * 由请求拦截器或定时器调用
      */
     async refreshAccessToken(): Promise<boolean> {
-      console.log('Refresh access token')
       if (this.refreshToken === null) {
         this.logout()
         return false
@@ -107,7 +105,6 @@ export const useAccountStore = defineStore('useAccountStore', {
      */
     async tryRestoreSession() {
       if (!import.meta.client) return false
-      console.log('Trying to restore session')
       this.rememberMe = localStorage.getItem('remember_me') === 'true'
       if (this.rememberMe) {
         // 不直接存 refreshToken 到 state，防止 XSS 窃取，但为了方便刷新动作，也可以暂存

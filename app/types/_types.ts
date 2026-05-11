@@ -11,6 +11,7 @@ export interface paths {
       path?: never
       cookie?: never
     }
+    /** 获取账号信息 */
     get: {
       parameters: {
         query?: never
@@ -61,6 +62,7 @@ export interface paths {
       path?: never
       cookie?: never
     }
+    /** 获取自己信息 */
     get: {
       parameters: {
         query?: never
@@ -111,6 +113,7 @@ export interface paths {
       path?: never
       cookie?: never
     }
+    /** 获取好友统计信息 */
     get: {
       parameters: {
         query?: never
@@ -163,6 +166,7 @@ export interface paths {
     }
     get?: never
     put?: never
+    /** 获取分页全部好友 */
     post: {
       parameters: {
         query?: never
@@ -219,6 +223,7 @@ export interface paths {
     }
     get?: never
     put?: never
+    /** 获取分页最近在线好友 */
     post: {
       parameters: {
         query?: never
@@ -275,6 +280,7 @@ export interface paths {
     }
     get?: never
     put?: never
+    /** 获取分页最近联系好友 */
     post: {
       parameters: {
         query?: never
@@ -329,6 +335,7 @@ export interface paths {
       path?: never
       cookie?: never
     }
+    /** 获取好友请求列表 */
     get: {
       parameters: {
         query?: never
@@ -379,6 +386,7 @@ export interface paths {
       path?: never
       cookie?: never
     }
+    /** 获取好友最近操作(未实装) */
     get: {
       parameters: {
         query?: never
@@ -430,6 +438,7 @@ export interface paths {
       cookie?: never
     }
     get?: never
+    /** 获取处理好友请求 */
     put: {
       parameters: {
         query?: {
@@ -479,6 +488,7 @@ export interface paths {
       cookie?: never
     }
     get?: never
+    /** 发送好友请求 */
     put: {
       parameters: {
         query?: {
@@ -526,6 +536,7 @@ export interface paths {
       path?: never
       cookie?: never
     }
+    /** 获取好友过滤标签 */
     get: {
       parameters: {
         query?: never
@@ -565,6 +576,7 @@ export interface paths {
     }
     get?: never
     put?: never
+    /** 获取用户搜索列表 */
     post: {
       parameters: {
         query?: never
@@ -608,6 +620,7 @@ export interface paths {
       path?: never
       cookie?: never
     }
+    /** 获取文章统计信息 */
     get: {
       parameters: {
         query?: never
@@ -631,6 +644,7 @@ export interface paths {
       }
     }
     put?: never
+    /** 获取文章分页过滤列表 */
     post: {
       parameters: {
         query?: {
@@ -684,6 +698,7 @@ export interface paths {
       path?: never
       cookie?: never
     }
+    /** 获取文章 */
     get: {
       parameters: {
         query?: never
@@ -734,6 +749,7 @@ export interface paths {
       path?: never
       cookie?: never
     }
+    /** 获取文章 */
     get: {
       parameters: {
         query?: never
@@ -780,6 +796,7 @@ export interface paths {
       path?: never
       cookie?: never
     }
+    /** 获取帖子统计信息 */
     get: {
       parameters: {
         query?: never
@@ -817,6 +834,7 @@ export interface paths {
       path?: never
       cookie?: never
     }
+    /** 获取帖子分页列表 */
     get: {
       parameters: {
         query?: {
@@ -835,15 +853,135 @@ export interface paths {
             [name: string]: unknown
           }
           content: {
-            'text/plain': components['schemas']['ForumSplitPageResponse']
-            'application/json': components['schemas']['ForumSplitPageResponse']
-            'text/json': components['schemas']['ForumSplitPageResponse']
+            'text/plain': components['schemas']['PostSlugInfo'][]
+            'application/json': components['schemas']['PostSlugInfo'][]
+            'text/json': components['schemas']['PostSlugInfo'][]
           }
         }
       }
     }
     put?: never
     post?: never
+    delete?: never
+    options?: never
+    head?: never
+    patch?: never
+    trace?: never
+  }
+  '/api/v1/Forum/publish': {
+    parameters: {
+      query?: never
+      header?: never
+      path?: never
+      cookie?: never
+    }
+    get?: never
+    put?: never
+    /** 发布帖子 */
+    post: {
+      parameters: {
+        query?: never
+        header?: never
+        path?: never
+        cookie?: never
+      }
+      requestBody: {
+        content: {
+          'application/json': components['schemas']['PublishPostCommand']
+          'text/json': components['schemas']['PublishPostCommand']
+          'application/*+json': components['schemas']['PublishPostCommand']
+        }
+      }
+      responses: {
+        /** @description Created */
+        201: {
+          headers: {
+            [name: string]: unknown
+          }
+          content?: never
+        }
+      }
+    }
+    delete?: never
+    options?: never
+    head?: never
+    patch?: never
+    trace?: never
+  }
+  '/api/v1/Forum/post/{postId}/comment': {
+    parameters: {
+      query?: never
+      header?: never
+      path?: never
+      cookie?: never
+    }
+    /** 获取评论列表 */
+    get: {
+      parameters: {
+        query?: {
+          page?: number | string
+          pageSize?: number | string
+        }
+        header?: never
+        path: {
+          postId: number
+        }
+        cookie?: never
+      }
+      requestBody?: never
+      responses: {
+        /** @description OK */
+        200: {
+          headers: {
+            [name: string]: unknown
+          }
+          content: {
+            'text/plain': components['schemas']['CommentTreeNode'][]
+            'application/json': components['schemas']['CommentTreeNode'][]
+            'text/json': components['schemas']['CommentTreeNode'][]
+          }
+        }
+        /** @description Not Found */
+        404: {
+          headers: {
+            [name: string]: unknown
+          }
+          content: {
+            'text/plain': components['schemas']['ProblemDetails']
+            'application/json': components['schemas']['ProblemDetails']
+            'text/json': components['schemas']['ProblemDetails']
+          }
+        }
+      }
+    }
+    put?: never
+    /** 帖子发送评论 */
+    post: {
+      parameters: {
+        query?: never
+        header?: never
+        path: {
+          postId: number
+        }
+        cookie?: never
+      }
+      requestBody: {
+        content: {
+          'application/json': components['schemas']['PublishCommentCommand']
+          'text/json': components['schemas']['PublishCommentCommand']
+          'application/*+json': components['schemas']['PublishCommentCommand']
+        }
+      }
+      responses: {
+        /** @description Created */
+        201: {
+          headers: {
+            [name: string]: unknown
+          }
+          content?: never
+        }
+      }
+    }
     delete?: never
     options?: never
     head?: never
@@ -857,6 +995,10 @@ export interface paths {
       path?: never
       cookie?: never
     }
+    /**
+         * 获取帖子具体内容
+         * @description Data是markdown文本,应当使用MDC组件渲染
+         */
     get: {
       parameters: {
         query?: never
@@ -879,6 +1021,17 @@ export interface paths {
             'text/json': components['schemas']['PostDataResponse']
           }
         }
+        /** @description Not Found */
+        404: {
+          headers: {
+            [name: string]: unknown
+          }
+          content: {
+            'text/plain': components['schemas']['ProblemDetails']
+            'application/json': components['schemas']['ProblemDetails']
+            'text/json': components['schemas']['ProblemDetails']
+          }
+        }
       }
     }
     put?: never
@@ -896,6 +1049,7 @@ export interface paths {
       path?: never
       cookie?: never
     }
+    /** 获取帖子简介内容 */
     get: {
       parameters: {
         query?: never
@@ -918,6 +1072,17 @@ export interface paths {
             'text/json': components['schemas']['PostSlugInfo']
           }
         }
+        /** @description Not Found */
+        404: {
+          headers: {
+            [name: string]: unknown
+          }
+          content: {
+            'text/plain': components['schemas']['ProblemDetails']
+            'application/json': components['schemas']['ProblemDetails']
+            'text/json': components['schemas']['ProblemDetails']
+          }
+        }
       }
     }
     put?: never
@@ -928,33 +1093,55 @@ export interface paths {
     patch?: never
     trace?: never
   }
-  '/api/v1/Forum/publish': {
+  '/api/v1/Forum/post/{postId}/comment/{rootCommentId}': {
     parameters: {
       query?: never
       header?: never
       path?: never
       cookie?: never
     }
-    get?: never
-    put?: never
-    post: {
+    /** 获取子评论列表 */
+    get: {
       parameters: {
-        query?: never
+        query?: {
+          page?: number | string
+          pageSize?: number | string
+        }
         header?: never
-        path?: never
+        path: {
+          postId: number
+          rootCommentId: number
+        }
         cookie?: never
       }
       requestBody?: never
       responses: {
-        /** @description Created */
-        201: {
+        /** @description OK */
+        200: {
           headers: {
             [name: string]: unknown
           }
-          content?: never
+          content: {
+            'text/plain': components['schemas']['CommentTreeNode'][]
+            'application/json': components['schemas']['CommentTreeNode'][]
+            'text/json': components['schemas']['CommentTreeNode'][]
+          }
+        }
+        /** @description Not Found */
+        404: {
+          headers: {
+            [name: string]: unknown
+          }
+          content: {
+            'text/plain': components['schemas']['ProblemDetails']
+            'application/json': components['schemas']['ProblemDetails']
+            'text/json': components['schemas']['ProblemDetails']
+          }
         }
       }
     }
+    put?: never
+    post?: never
     delete?: never
     options?: never
     head?: never
@@ -1430,15 +1617,6 @@ export interface components {
       gender?: string
       interest?: string[]
     }
-    AccountUserPublicInfos: {
-      /** Format: int64 */
-      userId: number | string
-      userName: string
-      profile: string
-      location: string
-      gender: components['schemas']['Gender']
-      interest?: string[]
-    }
     ArrayPair: {
       /** Format: int32 */
       length?: number | string
@@ -1481,8 +1659,7 @@ export interface components {
       userId: number | string
       email: string
       username: string
-      /** Format: date-time */
-      createdAt: string
+      createdTime?: string
     }
     AuthResetPasswordCommand: {
       email: string
@@ -1518,10 +1695,18 @@ export interface components {
       /** Format: int32 */
       total?: number | string
     }
-    ForumSplitPageResponse: {
+    CommentTreeNode: {
+      /** Format: int64 */
+      id: number | string
+      /** Format: int64 */
+      authorId: number | string
+      authorName: string
+      data: string
+      isAi?: boolean
+      createdTime?: string
       /** Format: int32 */
-      totalCount: number | string
-      displayedPosts?: components['schemas']['PostSlugInfo'][]
+      childCount?: number | string
+      children?: components['schemas']['CommentTreeNode'][]
     }
     ForumSummaryResponse: {
       hotPostSlugs?: components['schemas']['HotPostSlug'][]
@@ -1546,11 +1731,6 @@ export interface components {
       /** Format: int32 */
       request?: number | string
     }
-    Gender: {
-      /** Format: int32 */
-      value?: number | string
-      code?: null | string
-    }
     HotPostSlug: {
       /** Format: int64 */
       postId: number | string
@@ -1564,19 +1744,17 @@ export interface components {
       /** Format: int64 */
       userId?: number | string
       userName?: string
-      createdAt?: string
+      createdTime?: string
     }
     PostDataResponse: {
       /** Format: int64 */
       id: number | string
       title: string
-      excerpt: string
       isAi?: boolean
       tag: string
       data: string
-      /** Format: date-time */
-      createdAt?: string
-      author: components['schemas']['AccountUserPublicInfos']
+      createdTime?: string
+      author: components['schemas']['AccountPublicInfoResponse']
       stats: components['schemas']['PostStats']
     }
     PostSlugInfo: {
@@ -1586,9 +1764,8 @@ export interface components {
       excerpt: string
       isAi?: boolean
       tag: string
-      /** Format: date-time */
-      createdAt?: string
-      author: components['schemas']['AccountUserPublicInfos']
+      createdTime?: string
+      author: components['schemas']['AccountPublicInfoResponse']
       stats: components['schemas']['PostStats']
     }
     PostStats: {
@@ -1606,6 +1783,20 @@ export interface components {
       status?: null | number | string
       detail?: null | string
       instance?: null | string
+    }
+    PublishCommentCommand: {
+      /** Format: int64 */
+      rootId?: number | string
+      /** Format: int64 */
+      userId?: number | string
+      content?: string
+    }
+    PublishPostCommand: {
+      /** Format: int64 */
+      authorId: number | string
+      title: string
+      isAi?: boolean
+      data: string
     }
     RecentActivityLog: {
       /** Format: int64 */

@@ -476,7 +476,6 @@ const filters = ['all', 'online', 'recent'] as const
 const page = ref(1)
 
 const { data: arrayList, refresh } = await useAsyncData<components['schemas']['SplitFriendsArrayResponse']>(`friends-${locale.value}-${activeFilter.value}`, () => {
-  console.log(activeFilter.value)
   return $authFetch(`/api/v1/Account/friends/${activeFilter.value}`, {
     method: 'POST',
     headers: {

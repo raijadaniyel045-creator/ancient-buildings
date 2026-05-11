@@ -344,7 +344,6 @@ function existRequest(userId: number): boolean {
   return requests.value.find(t => t === userId) !== undefined
 }
 async function sendRequest(userId: number) {
-  console.log(requests.value)
   if (!existRequest(userId)) {
     toast.add({ title: '成功提交' })
     requests.value.push(userId)

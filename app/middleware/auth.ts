@@ -4,12 +4,13 @@ export default defineNuxtRouteMiddleware(async (to, from) => {
   const localePath = useLocalePath()
 
   // 定义需要登录才能访问的页面列表（可根据路由名称或路径匹配）
+  /*
   const protectedRoutes = ['/friends']
   const isProtected = protectedRoutes.some(route => to.path.startsWith(route))
 
   // 如果不是受保护页面，直接放行
   if (!isProtected) return
-
+  */
   if (import.meta.server) {
     return
   }

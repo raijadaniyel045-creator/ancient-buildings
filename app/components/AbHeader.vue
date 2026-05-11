@@ -23,8 +23,9 @@
       />
     </template>
     <template #right>
+      <UColorModeButton />
       <template
-        v-if="!isLogin"
+        v-if="!store.isLoggedIn"
       >
         <UButton
           :to="localePath('/auth/login')"
@@ -40,9 +41,16 @@
         </UButton>
       </template>
       <template v-else>
-        <UColorModeButton />
         <UDropdownMenu :items="menuItems">
-          <UUser :name="userName" />
+          <UUser
+            :name="store.publicInfo.userName"
+            :description="store.publicInfo.profile"
+            :avatar="{
+              src: '/user.png',
+              loading: 'lazy',
+              icon: 'i-lucide-image'
+            }"
+          />
         </UDropdownMenu>
       </template>
       <ULocaleSelect
@@ -61,9 +69,6 @@ import AppLogo from '~/components/AppLogo.vue'
 const { t, locale, locales, setLocale } = useI18n()
 const localePath = useLocalePath()
 const store = useAccountStore()
-
-const isLogin = computed(() => store.isLoggedIn)
-const userName = computed(() => store.publicInfo?.userName)
 
 const items = computed<NavigationMenuItem[]>(() => [
   { label: t('home'), to: localePath('/') },
