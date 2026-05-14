@@ -79,7 +79,7 @@ const items = computed<NavigationMenuItem[]>(() => [
   ] },
   { label: t('forum'), to: localePath('/forum') },
   { label: t('dashboard'), to: localePath('/dashboard') },
-  { label: t('ai'), to: localePath('/ai') }
+  { label: t('ai'), to: localePath('/ai-tutor') }
 ])
 
 const menuItems = computed<DropdownMenuItem[][]>(() => [

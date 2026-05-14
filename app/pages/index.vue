@@ -238,7 +238,7 @@ const features = [
       <div class="relative z-10 max-w-5xl mx-auto text-center px-6">
         <h2 class="text-3xl md:text-5xl font-serif text-[#1A1A1A] leading-[1.8] tracking-[0.1em] font-bold">
           “历史文化遗产是祖先留给我们的，<br class="hidden md:block">我们一定要完整交给后人。”
-          <p class="text-right h-full">
+          <p class="text-right w-full">
             -习语
           </p>
         </h2>
