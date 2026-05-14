@@ -43,8 +43,8 @@
       <template v-else>
         <UDropdownMenu :items="menuItems">
           <UUser
-            :name="store.publicInfo.userName"
-            :description="store.publicInfo.profile"
+            :name="store.publicInfo?.userName"
+            :description="store.publicInfo?.profile"
             :avatar="{
               src: '/user.png',
               loading: 'lazy',
@@ -69,6 +69,7 @@ import AppLogo from '~/components/AppLogo.vue'
 const { t, locale, locales, setLocale } = useI18n()
 const localePath = useLocalePath()
 const store = useAccountStore()
+await store.tryRestoreSession()
 
 const items = computed<NavigationMenuItem[]>(() => [
   { label: t('home'), to: localePath('/') },

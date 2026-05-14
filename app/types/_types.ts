@@ -648,6 +648,7 @@ export interface paths {
     post: {
       parameters: {
         query?: {
+          FilterRed?: boolean
           Page?: number | string
           PageSize?: number | string
           Searches?: string[]
@@ -1675,6 +1676,7 @@ export interface components {
       categories: string[]
       name: string
       desc: string
+      isRed: boolean
       subtitle: string
       id: string
       body: components['schemas']['JsonDocument']
@@ -1683,6 +1685,7 @@ export interface components {
       hash: string
       name: string
       desc: string
+      isRed: boolean
       img: string
       provinces: string[]
       categories: string[]
@@ -1694,6 +1697,8 @@ export interface components {
       dynasties?: components['schemas']['ArrayPair']
       /** Format: int32 */
       total?: number | string
+      /** Format: int32 */
+      red?: number | string
     }
     CommentTreeNode: {
       /** Format: int64 */

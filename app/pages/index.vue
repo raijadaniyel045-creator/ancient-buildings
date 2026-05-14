@@ -9,8 +9,8 @@ const activeFilter = ref<string | null>(null)
 const isSidebarCollapsed = ref(false)
 
 const slides = [
-  { id: 1, title: '故宫建筑群', description: '中国古代木构建筑的巅峰，展现了极为严谨的对称布局与皇家威仪', image: '/images/故宫.jpg', video: '/videos/gugong.mp4', link: '/buildings/id=1' },
-  { id: 2, title: '万里长城', description: '世界上最宏伟的军事防御工程，依山就势，气势磅礴', image: 'https://images.unsplash.com/photo-1508804185872-d7badad00f7d?q=80&w=1920&auto=format&fit=crop', video: '/videos/changcheng.mp4', link: '/buildings/id=2' },
+  { id: 1, title: '万里长城', description: '世界上最宏伟的军事防御工程，依山就势，气势磅礴', image: 'https://images.unsplash.com/photo-1508804185872-d7badad00f7d?q=80&w=1920&auto=format&fit=crop', video: '/videos/changcheng.mp4', link: '/buildings/id=2' },
+  { id: 2, title: '故宫建筑群', description: '中国古代木构建筑的巅峰，展现了极为严谨的对称布局与皇家威仪', image: '/images/故宫.jpg', video: '/videos/gugong.mp4', link: '/buildings/id=1' },
   { id: 3, title: '莫高窟', description: '集建筑、彩塑、壁画为一体的佛教艺术宝库，沙漠中的璀璨明珠', image: '/images/莫高窟.jpg', video: '/videos/mogaoku.mp4', link: '/buildings/id=6' },
   { id: 4, title: '祈年殿与天坛', description: '中国古代祭祀建筑的杰作，三重檐圆攒尖顶体现"天圆地方"的宇宙观', image: '/images/天坛.jpg', video: '/videos/tiantan.mp4', link: '/buildings/id=3' },
   { id: 5, title: '赵州桥', description: '距今一千四百多年，首创敞肩石拱桥结构，世界桥梁史上的奇迹', image: '/images/赵州桥.jpg', video: '/videos/zhaozhouqiao.mp4', link: '/buildings/id=4' },
@@ -238,6 +238,9 @@ const features = [
       <div class="relative z-10 max-w-5xl mx-auto text-center px-6">
         <h2 class="text-3xl md:text-5xl font-serif text-[#1A1A1A] leading-[1.8] tracking-[0.1em] font-bold">
           “历史文化遗产是祖先留给我们的，<br class="hidden md:block">我们一定要完整交给后人。”
+          <p class="text-right h-full">
+            -习语
+          </p>
         </h2>
         <div class="mt-16 flex flex-col items-center gap-6">
           <div class="w-px h-20 bg-[#8B2B2B]/30" />

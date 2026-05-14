@@ -45,18 +45,8 @@ export default defineNuxtConfig({
     routeRules: {
       // 将所有 /api/v1/ 开头的请求代理到后端服务
       '/api/v1/**': {
-        proxy: 'http://nilarea.natapp1.cc/api/v1/**'
+        proxy: 'http://localhost:5000/api/v1/**'
       }
-    }
-  },
-
-  vite: {
-    server: {
-      allowedHosts: [
-        '6f9c5118.r26.cpolar.top',
-        '.cpolar.top',
-        '.cpolar.cn'
-      ]
     }
   },
 

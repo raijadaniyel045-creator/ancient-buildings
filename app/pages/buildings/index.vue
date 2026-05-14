@@ -44,6 +44,24 @@
               重置
             </ULink>
           </div>
+          <template v-if="categoryList.length > 0">
+            <div class="mb-8">
+              <h4 class="text-sm font-bold text-gray-800 mb-4 tracking-widest">
+                建筑类别
+              </h4>
+              <div class="flex flex-wrap gap-2">
+                <ULink
+                  v-for="cate in categoryList.values"
+                  :key="cate"
+                  class="px-3.5 py-1.5 text-sm rounded-full transition-all border"
+                  :class="existTag(cate, 'cate') ? 'bg-[#8b2b2b] border-[#8b2b2b] text-white shadow-md' : 'bg-transparent border-gray-200 text-gray-600 hover:border-gray-400'"
+                  @click="toggleTag(cate, 'cate')"
+                >
+                  {{ t(cate) }}
+                </ULink>
+              </div>
+            </div>
+          </template>
           <template v-if="provinceList.length > 0">
             <div class="mb-8">
               <h4 class="text-sm font-bold text-gray-800 mb-4 tracking-widest">
@@ -80,29 +98,15 @@
               </div>
             </div>
           </template>
-          <template v-if="categoryList.length > 0">
-            <div class="mb-8">
-              <h4 class="text-sm font-bold text-gray-800 mb-4 tracking-widest">
-                建筑类别
-              </h4>
-              <div class="flex flex-wrap gap-2">
-                <ULink
-                  v-for="cate in categoryList.values"
-                  :key="cate"
-                  class="px-3.5 py-1.5 text-sm rounded-full transition-all border"
-                  :class="existTag(cate, 'cate') ? 'bg-[#8b2b2b] border-[#8b2b2b] text-white shadow-md' : 'bg-transparent border-gray-200 text-gray-600 hover:border-gray-400'"
-                  @click="toggleTag(cate, 'cate')"
-                >
-                  {{ t(cate) }}
-                </ULink>
-              </div>
-            </div>
-          </template>
         </UPageAside>
       </template>
       <template #default>
         <UPageBody>
           <div class="mb-4 text-gray-500 font-serif text-sm">
+            <UCheckbox
+              v-model="filterRed"
+              :label="t('只看红色精神相关建筑')"
+            />
             已找到 <span class="text-[#8b2b2b] font-bold text-lg">{{ filter }}</span> 处相关古建筑
           </div>
           <template v-if="filter === 0">
@@ -124,71 +128,11 @@
           </template>
           <template v-else>
             <UPageColumns>
-              <ULink
+              <BuildingSlugCard
                 v-for="b in buildings"
                 :key="b.hash"
-                class="bg-white rounded-xl overflow-hidden border border-[#e8dfcf] shadow-sm hover:shadow-2xl transition-all duration-300 group cursor-pointer flex flex-col h-full"
-                :to="localePath(`/buildings/${b.hash}`)"
-              >
-                <div class="h-56 overflow-hidden relative border-b border-[#e8dfcf]">
-                  <NuxtImg
-                    :src="b.img"
-                    fit="cover"
-                    class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700"
-                    placeholder
-                  />
-                  <div class="absolute inset-0 bg-linear-to-t from-black/80 via-transparent to-transparent opacity-60 group-hover:opacity-90 transition-opacity" />
-
-                  <!-- Badges atop image -->
-                  <div class="absolute top-3 right-3 flex gap-2">
-                    <span
-                      v-for="(c, ci) in b.categories"
-                      :key="c+ci"
-                      class="bg-black/60 text-white text-xs px-2.5 py-1 rounded-sm backdrop-blur-md border border-white/20"
-                    >
-                      {{ t(c) }}
-                    </span>
-                    <span
-                      v-for="(d, di) in b.dynasties"
-                      :key="d+di"
-                      class="bg-amber-600/80 text-white text-xs px-2.5 py-1 rounded-sm backdrop-blur-md border border-amber-400/20"
-                    >
-                      {{ t(d) }}
-                    </span>
-                  </div>
-                  <div class="absolute bottom-3 left-3 flex items-center text-white/90 text-sm font-light z-10 transition-transform group-hover:-translate-y-1">
-                    <UIcon
-                      name="i-lucide-map-pin"
-                      class="w-4 h-4 mr-1 text-red-500"
-                    />
-                    <span
-                      v-for="(p, pi) in b.provinces"
-                      :key="p+pi"
-                      class="mx-0.5"
-                    >
-                      {{ t(p) }}
-                    </span>
-                  </div>
-                </div>
-                <div class="p-5 flex-1 flex flex-col relative bg-[#fcfcfa]">
-                  <h3 class="text-2xl font-bold font-serif text-[#8b2b2b] mb-2 group-hover:text-amber-700 transition-colors">
-                    {{ b.name }}
-                  </h3>
-                  <p class="text-sm text-gray-600 leading-relaxed font-light mb-4 flex-1 line-clamp-3">
-                    {{ b.desc }}
-                  </p>
-
-                  <div class="pt-4 border-t border-gray-100 flex justify-between items-center group-hover:border-amber-100 transition-colors">
-                    <span class="text-[10px] text-gray-400 font-mono">ID: {{ (b.hash as string).substring(0, 6) }}</span>
-                    <span class="text-sm text-[#8b2b2b] font-medium flex items-center gap-1 group-hover:gap-2 transition-all">
-                      查看详情 <UIcon
-                        name="i-lucide-arrow-right"
-                        class="w-3.5 h-3.5"
-                      />
-                    </span>
-                  </div>
-                </div>
-              </ULink>
+                v-bind="b"
+              />
             </UPageColumns>
             <div class="flex justify-center relative p-4 z-1">
               <UPagination
@@ -210,9 +154,8 @@
 </template>
 
 <script setup lang="ts">
+import BuildingSlugCard from '~/components/buildings/BuildingSlugCard.vue'
 import type { components, paths } from '~/types'
-
-const localePath = useLocalePath()
 
 const route = useRoute()
 const router = useRouter()
@@ -226,6 +169,7 @@ type TagValue = {
   name: string
   type: 'prov' | 'cate' | 'dyna' | 'sear'
 }
+const filterRed = ref<boolean>(Boolean(route.query.FilterRed) || false)
 const tags = ref<TagValue[]>([])
 function displayTagValue(tag: TagValue): string {
   return t(tag.name)
@@ -255,6 +199,7 @@ const { data: apiData, refresh } = await useAsyncData<components['schemas']['Spl
       query: {
         Page: page.value,
         PageSize: pageSize.value,
+        FilterRed: filterRed.value,
         Provinces: p.length ? p.join(',') : undefined,
         Dynasties: d.length ? d.join(',') : undefined,
         Categories: c.length ? c.join(',') : undefined,
@@ -263,7 +208,7 @@ const { data: apiData, refresh } = await useAsyncData<components['schemas']['Spl
     })
   },
   {
-    watch: [page, pageSize, tags]
+    watch: [page, pageSize, tags, filterRed]
   })
 
 const buildings = computed<components['schemas']['BuildingSlug'][]>(() => apiData.value?.items || [])
@@ -297,7 +242,9 @@ function updateUrl() {
   const s = tags.value.filter(v => v.type === 'sear').flatMap(v => v.name)
   const c = tags.value.filter(v => v.type === 'cate').flatMap(v => v.name)
   router.replace({
+    path: route.fullPath,
     query: {
+      FilterRed: filterRed.value ?? false,
       Page: page.value,
       PageSize: pageSize.value !== 12 ? pageSize.value : undefined,
       Provinces: p.length ? p.join(',') : undefined,
@@ -307,7 +254,7 @@ function updateUrl() {
     } as paths['/api/v1/Buildings']['post']['parameters']['query']
   })
 }
-watch([page, pageSize, tags], () => {
+watch([page, pageSize, tags, filterRed], () => {
   updateUrl()
 }, { deep: true })
 </script>

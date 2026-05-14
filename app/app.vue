@@ -33,7 +33,4 @@ useSeoMeta({
   ogTitle: title,
   ogDescription: description
 })
-
-const accountStore = useAccountStore()
-await accountStore.tryRestoreSession()
 </script>
