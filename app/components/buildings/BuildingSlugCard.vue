@@ -24,7 +24,7 @@ const props = defineProps<components['schemas']['BuildingSlug']>()
       />
       <div class="absolute inset-0 bg-linear-to-t from-black/80 via-transparent to-transparent opacity-60 group-hover:opacity-90 transition-opacity" />
       <!-- Badges atop image -->
-      <div class="absolute top-3 right-3 flex gap-2">
+      <div class="absolute top-3 right-3 flex flex-wrap gap-2 pl-4">
         <span
           v-for="(c, ci) in props.categories"
           :key="c+ci"
