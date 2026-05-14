@@ -92,24 +92,23 @@ async function onSubmit(event: FormSubmitEvent<Schema>) {
   const state = event.data
   try {
     await store.login({ email: state.email, password: state.password }, state.remember)
-
     toast.add({
       title: '验证通过',
       description: '即将进入档案库...',
       color: 'success',
       icon: 'i-lucide-check-circle'
     })
-
     setTimeout(() => {
       useRouter().push(redirect)
     }, 1000)
-  } catch {
+  } catch (error) {
     toast.add({
       title: '验证失败',
       description: '邮箱或密码不匹配，请重试。',
       color: 'error',
       icon: 'i-lucide-shield-alert'
     })
+    console.error(error)
   } finally {
     loading.value = false
   }

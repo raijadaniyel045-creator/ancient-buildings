@@ -1,5 +1,3 @@
-<script setup lang="ts">
-</script>
 <template>
   <div class="min-h-screen flex flex-col md:flex-row bg-[#FAF8F5] selection:bg-[#8B2B2B]/10 overflow-hidden">
     <aside class="hidden md:flex md:w-[61.8%] relative bg-[#F0EDE9] items-center justify-center p-20 overflow-hidden border-r border-[#EAE3D9]">

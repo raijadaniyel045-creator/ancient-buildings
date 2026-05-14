@@ -11,7 +11,7 @@ export const useAccountStore = defineStore('useAccountStore', () => {
   const userId = ref<number | string | null | undefined>(null)
   const email = ref<string | null | undefined>(null)
 
-  const rememberMe = ref<boolean | null | undefined>(null)
+  const rememberMe = ref<boolean>(false)
 
   const publicInfo = ref<components['schemas']['AccountPublicInfoResponse'] | null | undefined>(null)
 
@@ -28,7 +28,7 @@ export const useAccountStore = defineStore('useAccountStore', () => {
    */
   async function login(credentials: { email: string, password: string }, remember: boolean) {
     rememberMe.value = remember
-    const { data } = await useFetch<components['schemas']['AuthLoginResponse']>('/api/v1/Secure/login', {
+    const data = await $fetch<components['schemas']['AuthLoginResponse']>('/api/v1/Secure/login', {
       method: 'POST',
       body: {
         email: credentials.email,
@@ -36,16 +36,16 @@ export const useAccountStore = defineStore('useAccountStore', () => {
         hash: getMachineHash()
       } as components['schemas']['AuthLoginCommand']
     })
-    userId.value = data.value?.userId
-    email.value = data.value?.email
-    accessToken.value = data.value?.accessToken
-    refreshToken.value = data.value?.refreshToken
+    userId.value = data?.userId
+    email.value = data?.email
+    accessToken.value = data?.accessToken
+    refreshToken.value = data?.refreshToken
     isLoggedIn.value = true
     await getAccount()
     if (import.meta.client) {
       const storage = rememberMe.value ? localStorage : sessionStorage
-      storage.setItem('refresh_token', data.value?.refreshToken || '')
-      storage.setItem('remember_me', String(rememberMe))
+      storage.setItem('refresh_token', data?.refreshToken || '')
+      storage.setItem('remember_me', String(rememberMe.value))
     }
   }
   function logout() {
@@ -56,10 +56,10 @@ export const useAccountStore = defineStore('useAccountStore', () => {
     isLoggedIn.value = false
     publicInfo.value = null
     if (import.meta.client) {
-      localStorage.removeItem('refresh_token')
-      localStorage.removeItem('remember_me')
-      sessionStorage.removeItem('refresh_token')
-      sessionStorage.removeItem('remember_me')
+      localStorage?.removeItem('refresh_token')
+      localStorage?.removeItem('remember_me')
+      sessionStorage?.removeItem('refresh_token')
+      sessionStorage?.removeItem('remember_me')
     }
   }
   /**
@@ -71,22 +71,24 @@ export const useAccountStore = defineStore('useAccountStore', () => {
       logout()
       return false
     }
-    const { data, error } = await useFetch<components['schemas']['RefreshTokenResponse']>('/api/v1/Secure/refresh', {
-      method: 'POST',
-      body: {
-        userId: userId.value,
-        email: email.value,
-        hash: getMachineHash(),
-        refreshToken: refreshToken.value
-      } as components['schemas']['RefreshTokenCommand']
-    })
-    if (error.value) {
+    try {
+      const data = await $fetch<components['schemas']['RefreshTokenResponse']>('/api/v1/Secure/refresh', {
+        method: 'POST',
+        body: {
+          userId: userId.value,
+          email: email.value,
+          hash: getMachineHash(),
+          refreshToken: refreshToken.value
+        } as components['schemas']['RefreshTokenCommand']
+      })
+      accessToken.value = data.accessToken || null
+      await getAccount()
+      return true
+    } catch (error) {
+      console.error(error)
       logout()
       return false
     }
-    accessToken.value = data.value?.accessToken || null
-    await getAccount()
-    return true
   }
   /**
    * 页面初始化时尝试从存储中恢复会话
@@ -95,9 +97,10 @@ export const useAccountStore = defineStore('useAccountStore', () => {
   async function tryRestoreSession() {
     if (!import.meta.client) return false
     rememberMe.value = localStorage.getItem('remember_me') === 'true'
+    const storage = rememberMe.value ? localStorage : sessionStorage
     if (rememberMe.value) {
       // 不直接存 refreshToken 到 state，防止 XSS 窃取，但为了方便刷新动作，也可以暂存
-      const savedRefreshToken = localStorage.getItem('refresh_token')
+      const savedRefreshToken = storage.getItem('refresh_token')
       if (savedRefreshToken === null) return false
       refreshToken.value = savedRefreshToken
       // 尝试用 refreshToken 换取新的 accessToken
@@ -108,7 +111,7 @@ export const useAccountStore = defineStore('useAccountStore', () => {
   async function register(credentials: { username: string, email: string, password: string }, remember: boolean) {
     logout()
     rememberMe.value = remember
-    await useFetch<components['schemas']['AuthRegisterResponse']>('/api/v1/Secure/register', {
+    await $fetch<components['schemas']['AuthRegisterResponse']>('/api/v1/Secure/register', {
       method: 'POST',
       body: {
         username: credentials.username,
@@ -123,10 +126,13 @@ export const useAccountStore = defineStore('useAccountStore', () => {
   }
   async function getAccount(): Promise<components['schemas']['AccountPublicInfoResponse'] | undefined> {
     if (!isLoggedIn.value) return undefined
-    const { data, error } = await useFetch<components['schemas']['AccountPublicInfoResponse']>(`/api/v1/Account/${userId.value}`)
-    if (error.value || data.value === undefined) return undefined
-    publicInfo.value = data.value
-    return data.value
+    try {
+      const data = await $fetch<components['schemas']['AccountPublicInfoResponse']>(`/api/v1/Account/${userId.value}`)
+      publicInfo.value = data
+      return data
+    } catch (error) {
+      console.error(error)
+    }
   }
   return ({
     machineHash,

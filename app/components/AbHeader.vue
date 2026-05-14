@@ -41,17 +41,19 @@
         </UButton>
       </template>
       <template v-else>
-        <UDropdownMenu :items="menuItems">
-          <UUser
-            :name="store.publicInfo?.userName"
-            :description="store.publicInfo?.profile"
-            :avatar="{
-              src: '/user.png',
-              loading: 'lazy',
-              icon: 'i-lucide-image'
-            }"
-          />
-        </UDropdownMenu>
+        <ClientOnly>
+          <UDropdownMenu :items="menuItems">
+            <UUser
+              :name="store.publicInfo?.userName"
+              :description="store.publicInfo?.profile"
+              :avatar="{
+                src: '/user.png',
+                loading: 'lazy',
+                icon: 'i-lucide-image'
+              }"
+            />
+          </UDropdownMenu>
+        </ClientOnly>
       </template>
       <ULocaleSelect
         :model-value="locale"

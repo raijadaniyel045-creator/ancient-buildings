@@ -122,7 +122,6 @@ async function onSubmit(event: FormSubmitEvent<Schema>) {
       email: state.email,
       password: state.password
     }, state.remember)
-
     // 【优化】：成功的 Toast 提示雅化
     toast.add({
       title: '结契成功',
@@ -130,20 +129,18 @@ async function onSubmit(event: FormSubmitEvent<Schema>) {
       color: 'success',
       icon: 'i-lucide-check-circle'
     })
-
     // 延迟跳转，让用户看清成功提示
     setTimeout(() => {
       router.push(localePath('/auth/login'))
     }, 1500)
   } catch (error) {
-    console.log(error)
-    // 【优化】：失败的 Toast 提示
     toast.add({
       title: '结契受阻',
       description: '信息核验未通过，请稍后再试。',
       color: 'error',
       icon: 'i-lucide-x-circle'
     })
+    console.error(error)
   } finally {
     loading.value = false
   }

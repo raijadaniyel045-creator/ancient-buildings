@@ -31,6 +31,7 @@ useSeoMeta({
   title,
   description,
   ogTitle: title,
-  ogDescription: description
+  ogDescription: description,
+  themeColor: 'light'
 })
 </script>
